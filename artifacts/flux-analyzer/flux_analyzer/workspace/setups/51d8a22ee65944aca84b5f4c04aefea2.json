@@ -1,0 +1,321 @@
+{
+  "id": "51d8a22ee65944aca84b5f4c04aefea2",
+  "name": "R&M FLux",
+  "created_at": "2026-10-28T16:18:04.921406+00:00",
+  "created_by": "Niels",
+  "updated_at": "2026-10-28T16:18:15.636867+00:00",
+  "updated_by": "Niels",
+  "current_version": 2,
+  "versions": [
+    {
+      "version": 1,
+      "saved_at": "2026-10-28T16:18:04.921406+00:00",
+      "saved_by": "Niels",
+      "note": "First version",
+      "description": "",
+      "spec": {
+        "spec_version": "2.0",
+        "preset": {
+          "id": "generic_flux",
+          "version": "1.0.0"
+        },
+        "flux_name": "Untitled analysis",
+        "sources": {},
+        "roles": {
+          "value": "Functional_Net",
+          "period": "Period_Name",
+          "scenario": null,
+          "debit": null,
+          "credit": null,
+          "keys": [],
+          "dimensions": [
+            "Country",
+            "Region",
+            "Ibx_Code"
+          ],
+          "driver_text": [
+            "FAH_Line_Description"
+          ]
+        },
+        "value_rules": {
+          "source": "column",
+          "null_as_zero": true,
+          "flip_sign_when": []
+        },
+        "scope": [],
+        "derive": [],
+        "periods": {
+          "calendar": "calendar"
+        },
+        "period_format": "auto",
+        "partial_periods": [],
+        "comparison": {
+          "type": "MoM",
+          "base": {
+            "months": [
+              "2026-06"
+            ]
+          },
+          "current": {
+            "months": [
+              "2026-07"
+            ]
+          }
+        },
+        "joins": [],
+        "classification": null,
+        "measures": {
+          "amount": {
+            "agg": "sum",
+            "col": "{roles.value}"
+          }
+        },
+        "views": [
+          {
+            "name": "By country",
+            "keys": [
+              "Country",
+              "Region",
+              "Ibx_Code"
+            ],
+            "measures": [
+              "amount"
+            ],
+            "compare": true
+          }
+        ],
+        "flags": [],
+        "gates": [],
+        "sections": null,
+        "decompose": null,
+        "drivers": {
+          "materiality": {
+            "mode": "abs",
+            "abs": 300000
+          },
+          "top_n": 15,
+          "others_label": "Other items",
+          "view": "By country",
+          "measure": "amount"
+        },
+        "drill": {
+          "top_n": 5,
+          "group_by": "{roles.driver_text}"
+        },
+        "commentary": {
+          "units": "M",
+          "decimals": 1,
+          "verify_tag": "[TO VERIFY]",
+          "sign_style": "plus_minus",
+          "currency_symbol": "$",
+          "forbidden_terms": [],
+          "max_line_words": 35
+        },
+        "controls": [
+          {
+            "id": "required_columns",
+            "severity": "stop"
+          },
+          {
+            "id": "periods_present",
+            "severity": "stop"
+          },
+          {
+            "id": "no_duplicate_periods_across_files",
+            "severity": "stop"
+          },
+          {
+            "id": "new_or_removed_members",
+            "severity": "warn"
+          },
+          {
+            "id": "drivers_reconcile",
+            "severity": "stop"
+          },
+          {
+            "id": "flags_sum_to_rows",
+            "severity": "stop"
+          },
+          {
+            "id": "sections_reconcile",
+            "severity": "stop"
+          },
+          {
+            "id": "join_unmatched_keys",
+            "severity": "warn"
+          },
+          {
+            "id": "join_fanout",
+            "severity": "stop"
+          },
+          {
+            "id": "classification_coverage",
+            "severity": "warn",
+            "params": {
+              "minimum_percentage": 95
+            }
+          },
+          {
+            "id": "partial_period_used",
+            "severity": "warn"
+          }
+        ]
+      }
+    },
+    {
+      "version": 2,
+      "saved_at": "2026-10-28T16:18:15.635452+00:00",
+      "saved_by": "Niels",
+      "note": "",
+      "description": "",
+      "spec": {
+        "spec_version": "2.0",
+        "preset": {
+          "id": "generic_flux",
+          "version": "1.0.0"
+        },
+        "flux_name": "Untitled analysis",
+        "sources": {},
+        "roles": {
+          "value": "Functional_Net",
+          "period": "Period_Name",
+          "scenario": null,
+          "debit": null,
+          "credit": null,
+          "keys": [],
+          "dimensions": [
+            "Country",
+            "Region",
+            "Ibx_Code"
+          ],
+          "driver_text": [
+            "FAH_Line_Description"
+          ]
+        },
+        "value_rules": {
+          "source": "column",
+          "null_as_zero": true,
+          "flip_sign_when": []
+        },
+        "scope": [],
+        "derive": [],
+        "periods": {
+          "calendar": "calendar"
+        },
+        "period_format": "auto",
+        "partial_periods": [],
+        "comparison": {
+          "type": "MoM",
+          "base": {
+            "months": [
+              "2026-06"
+            ]
+          },
+          "current": {
+            "months": [
+              "2026-07"
+            ]
+          }
+        },
+        "joins": [],
+        "classification": null,
+        "measures": {
+          "amount": {
+            "agg": "sum",
+            "col": "{roles.value}"
+          }
+        },
+        "views": [
+          {
+            "name": "By country",
+            "keys": [
+              "Country",
+              "Region",
+              "Ibx_Code"
+            ],
+            "measures": [
+              "amount"
+            ],
+            "compare": true
+          }
+        ],
+        "flags": [],
+        "gates": [],
+        "sections": null,
+        "decompose": null,
+        "drivers": {
+          "materiality": {
+            "mode": "abs",
+            "abs": 300000
+          },
+          "top_n": 15,
+          "others_label": "Other items",
+          "view": "By country",
+          "measure": "amount"
+        },
+        "drill": {
+          "top_n": 5,
+          "group_by": "{roles.driver_text}"
+        },
+        "commentary": {
+          "units": "M",
+          "decimals": 1,
+          "verify_tag": "[TO VERIFY]",
+          "sign_style": "plus_minus",
+          "currency_symbol": "$",
+          "forbidden_terms": [],
+          "max_line_words": 35
+        },
+        "controls": [
+          {
+            "id": "required_columns",
+            "severity": "stop"
+          },
+          {
+            "id": "periods_present",
+            "severity": "stop"
+          },
+          {
+            "id": "no_duplicate_periods_across_files",
+            "severity": "stop"
+          },
+          {
+            "id": "new_or_removed_members",
+            "severity": "warn"
+          },
+          {
+            "id": "drivers_reconcile",
+            "severity": "stop"
+          },
+          {
+            "id": "flags_sum_to_rows",
+            "severity": "stop"
+          },
+          {
+            "id": "sections_reconcile",
+            "severity": "stop"
+          },
+          {
+            "id": "join_unmatched_keys",
+            "severity": "warn"
+          },
+          {
+            "id": "join_fanout",
+            "severity": "stop"
+          },
+          {
+            "id": "classification_coverage",
+            "severity": "warn",
+            "params": {
+              "minimum_percentage": 95
+            }
+          },
+          {
+            "id": "partial_period_used",
+            "severity": "warn"
+          }
+        ]
+      }
+    }
+  ]
+}

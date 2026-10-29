@@ -1,0 +1,5821 @@
+{
+  "project_id": "08c0416334f24c7ebdb6c10965e979bc",
+  "step": "review",
+  "sources": [
+    {
+      "id": "ac5eebc0dfc04704b1acf505d5cd613d",
+      "name": "Sample_GL_2026.csv",
+      "stored": "7db47e6448324d7c824a6f638040749a.csv",
+      "size": 3377,
+      "sheets": [
+        "(csv)"
+      ],
+      "defined": true,
+      "role": "primary",
+      "columns": [
+        "Period_Name",
+        "Functional_Net",
+        "Country",
+        "Account",
+        "Region",
+        "Po_Number",
+        "FAH_Line_Description",
+        "FAH_Event_Type",
+        "Accounted_Dr",
+        "Accounted_Cr"
+      ],
+      "n_rows": 34,
+      "definition": {
+        "sheet": "(csv)",
+        "header_row": 1,
+        "start_col": "A",
+        "end_col": null,
+        "role": "primary",
+        "name": "Sample_GL_2026",
+        "combine_sheets": [],
+        "tag_column": null
+      },
+      "sample_data": true
+    },
+    {
+      "id": "d76b2f3164d44a9a8214f2a56a64b2db",
+      "name": "Sample_Open_PO.xlsx",
+      "stored": "03c119e6e7ab41148956f9aad5dea93f.xlsx",
+      "size": 4894,
+      "sheets": [
+        "Open PO Report "
+      ],
+      "defined": true,
+      "role": "lookup",
+      "columns": [
+        "PO Num",
+        "GAO Comment"
+      ],
+      "n_rows": 2,
+      "definition": {
+        "sheet": "Open PO Report ",
+        "header_row": 1,
+        "start_col": "A",
+        "end_col": null,
+        "role": "lookup",
+        "name": "open_po",
+        "combine_sheets": [],
+        "tag_column": null
+      },
+      "sample_data": true
+    }
+  ],
+  "sample_data": true,
+  "spec": {
+    "spec_version": "2.0",
+    "preset": {
+      "id": "rm_flux",
+      "version": "1.0.0"
+    },
+    "flux_name": "Example — R&M QoQ",
+    "sources": {
+      "lookups": {
+        "open_po": {
+          "files": [
+            {
+              "file": "Sample_Open_PO.xlsx",
+              "sheet": "Open PO Report ",
+              "header_row": 1,
+              "start_col": "A",
+              "end_col": null
+            }
+          ]
+        }
+      },
+      "primary": {
+        "files": [
+          {
+            "file": "Sample_GL_2026.csv",
+            "sheet": "(csv)",
+            "header_row": 1,
+            "start_col": "A",
+            "end_col": null
+          }
+        ],
+        "union": {
+          "mode": "stack",
+          "tag_column": null
+        }
+      }
+    },
+    "roles": {
+      "value": "Functional_Net",
+      "period": "Period_Name",
+      "scenario": null,
+      "debit": "Accounted_Dr",
+      "credit": "Accounted_Cr",
+      "keys": [
+        "Base_PO"
+      ],
+      "dimensions": [
+        "Country",
+        "Account"
+      ],
+      "driver_text": [
+        "FAH_Line_Description"
+      ]
+    },
+    "value_rules": {
+      "source": "column",
+      "flip_sign_when": [],
+      "null_as_zero": true
+    },
+    "scope": [
+      {
+        "col": "Account",
+        "op": "startswith",
+        "val": "54"
+      }
+    ],
+    "derive": [
+      {
+        "default": "Operational",
+        "name": "Bucket",
+        "rules": [
+          {
+            "then": "Accrual - Reversal",
+            "when": {
+              "col": "FAH_Event_Type",
+              "op": "contains",
+              "val": "Reversal"
+            }
+          },
+          {
+            "then": "Accrual - Current",
+            "when": {
+              "col": "FAH_Event_Type",
+              "op": "contains",
+              "val": "Current"
+            }
+          }
+        ],
+        "type": "rules"
+      },
+      {
+        "default": "UNMATCHED",
+        "name": "Base_PO",
+        "pattern": "(\\d{6,})",
+        "source": [
+          "Po_Number",
+          "FAH_Line_Description"
+        ],
+        "strip_suffix": "_V\\d+",
+        "type": "regex_extract"
+      }
+    ],
+    "periods": {
+      "calendar": "calendar"
+    },
+    "period_format": "MON-YY",
+    "partial_periods": [],
+    "comparison": {
+      "type": "QoQ",
+      "base": {
+        "months": [
+          "2026-01",
+          "2026-02",
+          "2026-03"
+        ]
+      },
+      "current": {
+        "months": [
+          "2026-04",
+          "2026-05",
+          "2026-06"
+        ]
+      }
+    },
+    "joins": [],
+    "classification": null,
+    "measures": {
+      "M1_base": {
+        "agg": "sum",
+        "col": "{roles.value}",
+        "filter": [
+          {
+            "col": "{roles.period}",
+            "op": "eq",
+            "val": "{base.first_month}"
+          },
+          {
+            "col": "Bucket",
+            "op": "eq",
+            "val": "Accrual - Current"
+          }
+        ],
+        "slice": "none"
+      },
+      "M1_curr": {
+        "agg": "sum",
+        "col": "{roles.value}",
+        "filter": [
+          {
+            "col": "{roles.period}",
+            "op": "eq",
+            "val": "{current.first_month}"
+          },
+          {
+            "col": "Bucket",
+            "op": "in",
+            "val": [
+              "Accrual - Current",
+              "Accrual - Reversal"
+            ]
+          }
+        ],
+        "slice": "none"
+      },
+      "amount": {
+        "agg": "sum",
+        "col": "{roles.value}"
+      }
+    },
+    "views": [
+      {
+        "name": "by_country_account",
+        "keys": [
+          "Country",
+          "Account"
+        ],
+        "measures": [
+          "amount"
+        ],
+        "compare": true
+      },
+      {
+        "name": "po",
+        "keys": [
+          "Base_PO"
+        ],
+        "measures": [
+          "M1_base",
+          "M1_curr"
+        ],
+        "compare": false,
+        "joins": [
+          {
+            "lookup": "open_po",
+            "left_on": "Base_PO",
+            "right_on": "PO Num",
+            "fields": {
+              "in_open_po": {
+                "type": "exists"
+              },
+              "gao_booked": {
+                "type": "exists_where",
+                "filter": [
+                  {
+                    "col": "GAO Comment",
+                    "op": "startswith",
+                    "val": "GAO"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "flags": [
+      {
+        "default": "Consistent within $5k",
+        "name": "Observation_Flag",
+        "ordered": [
+          {
+            "if": "M1_base == 0 and M1_curr == 0",
+            "label": "No M1 accrual activity"
+          },
+          {
+            "if": "abs(M1_curr - M1_base) > 5000",
+            "label": "Material movement > $5k"
+          }
+        ],
+        "view": "po"
+      }
+    ],
+    "gates": [
+      {
+        "view": "po",
+        "name": "Exception",
+        "if": "gao_booked and Observation_Flag == 'Material movement > $5k'"
+      }
+    ],
+    "sections": null,
+    "decompose": null,
+    "drivers": {
+      "materiality": {
+        "mode": "abs",
+        "abs": 300000
+      },
+      "top_n": 15,
+      "others_label": "Other items",
+      "measure": "amount",
+      "view": "by_country_account"
+    },
+    "drill": {
+      "top_n": 5,
+      "group_by": "{roles.driver_text}"
+    },
+    "commentary": {
+      "units": "M",
+      "decimals": 1,
+      "verify_tag": "[TO VERIFY]",
+      "sign_style": "plus_minus",
+      "currency_symbol": "$",
+      "max_line_words": 35,
+      "style": "largest_first"
+    },
+    "controls": [
+      {
+        "id": "required_columns",
+        "severity": "stop"
+      },
+      {
+        "id": "periods_present",
+        "severity": "stop"
+      },
+      {
+        "id": "no_duplicate_periods_across_files",
+        "severity": "stop"
+      },
+      {
+        "id": "debit_minus_credit_equals_value",
+        "severity": "warn",
+        "params": {
+          "debit": "Accounted_Dr",
+          "credit": "Accounted_Cr"
+        }
+      },
+      {
+        "id": "new_or_removed_members",
+        "severity": "warn"
+      },
+      {
+        "id": "drivers_reconcile",
+        "severity": "stop"
+      },
+      {
+        "id": "sections_reconcile",
+        "severity": "stop",
+        "tolerance": 0.01
+      },
+      {
+        "id": "flags_sum_to_rows",
+        "severity": "stop"
+      },
+      {
+        "id": "join_unmatched_keys",
+        "severity": "warn"
+      },
+      {
+        "id": "join_fanout",
+        "severity": "stop"
+      },
+      {
+        "id": "classification_coverage",
+        "severity": "warn",
+        "params": {
+          "minimum_percentage": 95
+        }
+      },
+      {
+        "id": "partial_period_used",
+        "severity": "warn"
+      }
+    ]
+  },
+  "runs": [
+    {
+      "id": "b1224e6ff7df497f9ff85ecaa688b2b6",
+      "name": "Repairs and Maintenance Variance",
+      "created": "2026-10-28T10:08:17.696658+00:00",
+      "status": "complete",
+      "delta": 1499935.45,
+      "run_stamp": {
+        "run_id": "b1224e6ff7df497f9ff85ecaa688b2b6",
+        "created": "2026-10-28T10:08:17.696658+00:00",
+        "engine_version": "2.0",
+        "spec_sha256": "434aa37ca11dd6545929487103a6b78f2e848f2c37c01358618514fe91e1ce9d",
+        "preset": {
+          "id": "rm_flux",
+          "version": "1.0.0"
+        },
+        "input_files": [
+          {
+            "name": "Sample_GL_2026.csv",
+            "sha256": "0136e4a15d177b4fc05eae2908fe6afed79ef71a1ee4028333e677ccf807b1bd",
+            "role": "primary",
+            "definition": {
+              "sheet": "(csv)",
+              "header_row": 1,
+              "start_col": "A",
+              "end_col": null,
+              "role": "primary",
+              "name": "Sample_GL_2026",
+              "combine_sheets": [],
+              "tag_column": null
+            }
+          },
+          {
+            "name": "Sample_Open_PO.xlsx",
+            "sha256": "c40a7a191cd3cfbfdc787ed6370bc69188e398050b32a70cd4ebd90d14475e91",
+            "role": "lookup",
+            "definition": {
+              "sheet": "Open PO Report ",
+              "header_row": 1,
+              "start_col": "A",
+              "end_col": null,
+              "role": "lookup",
+              "name": "open_po",
+              "combine_sheets": [],
+              "tag_column": null
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "latest_proposal": null,
+  "controls": [],
+  "result": {
+    "name": "Repairs and Maintenance Variance",
+    "base": 9480021.57,
+    "current": 10979957.02,
+    "delta": 1499935.45,
+    "delta_pct": 15.822067902742123,
+    "n_drivers": 4,
+    "n_exceptions": 0,
+    "drivers": [
+      {
+        "driver_id": "d1",
+        "label": "United Kingdom / 54100",
+        "dimensions": {
+          "Country": "United Kingdom",
+          "Account": "54100"
+        },
+        "base": 2850000.0,
+        "current": 3840000.0,
+        "delta": 990000.0,
+        "flags": [
+          "Observation_Flag: No M1 accrual activity (1)"
+        ],
+        "delta_fmt": "+$1.0M",
+        "top_texts": [
+          {
+            "text": "Data centre cooling maintenance",
+            "delta_fmt": "+$1.0M"
+          }
+        ],
+        "n_lines": 6,
+        "flags_summary": {}
+      },
+      {
+        "driver_id": "d2",
+        "label": "Germany / 54100",
+        "dimensions": {
+          "Country": "Germany",
+          "Account": "54100"
+        },
+        "base": 1860000.0,
+        "current": 2730000.0,
+        "delta": 870000.0,
+        "flags": [
+          "Observation_Flag: No M1 accrual activity (1)"
+        ],
+        "delta_fmt": "+$0.9M",
+        "top_texts": [
+          {
+            "text": "Emergency generator servicing",
+            "delta_fmt": "+$0.9M"
+          }
+        ],
+        "n_lines": 6,
+        "flags_summary": {}
+      },
+      {
+        "driver_id": "d3",
+        "label": "Netherlands / 54100",
+        "dimensions": {
+          "Country": "Netherlands",
+          "Account": "54100"
+        },
+        "base": 2220021.57,
+        "current": 1619957.02,
+        "delta": -600064.55,
+        "flags": [
+          "Observation_Flag: No M1 accrual activity (1)",
+          "Observation_Flag: Consistent within $5k (1)"
+        ],
+        "delta_fmt": "-$0.6M",
+        "top_texts": [
+          {
+            "text": "Preventive maintenance contract",
+            "delta_fmt": "-$0.6M"
+          },
+          {
+            "text": "Cooling accrual — synthetic golden rule example",
+            "delta_fmt": "-$64.55"
+          }
+        ],
+        "n_lines": 10,
+        "flags_summary": {}
+      },
+      {
+        "driver_id": "others",
+        "label": "Other items",
+        "dimensions": {},
+        "base": 2550000.0,
+        "current": 2790000.0,
+        "delta": 240000.0,
+        "excluded_dimensions": [
+          {
+            "Country": "United Kingdom",
+            "Account": "54100"
+          },
+          {
+            "Country": "Germany",
+            "Account": "54100"
+          },
+          {
+            "Country": "Netherlands",
+            "Account": "54100"
+          }
+        ],
+        "flags": [
+          "Observation_Flag: No M1 accrual activity (2)"
+        ],
+        "delta_fmt": "+$0.2M",
+        "top_texts": [
+          {
+            "text": "Fire safety maintenance",
+            "delta_fmt": "+$0.2M"
+          },
+          {
+            "text": "Electrical inspection",
+            "delta_fmt": "+$0.1M"
+          }
+        ],
+        "n_lines": 12,
+        "flags_summary": {}
+      }
+    ],
+    "views": {
+      "by_country_account": [
+        {
+          "Country": "United Kingdom",
+          "Account": "54100",
+          "amount_base": 2850000.0,
+          "amount_current": 3840000.0,
+          "amount_delta": 990000.0,
+          "amount_delta_pct": 34.73684210526316
+        },
+        {
+          "Country": "Netherlands",
+          "Account": "54100",
+          "amount_base": 2220021.57,
+          "amount_current": 1619957.02,
+          "amount_delta": -600064.55,
+          "amount_delta_pct": -27.029672058546712
+        },
+        {
+          "Country": "Germany",
+          "Account": "54100",
+          "amount_base": 1860000.0,
+          "amount_current": 2730000.0,
+          "amount_delta": 870000.0,
+          "amount_delta_pct": 46.774193548387096
+        },
+        {
+          "Country": "France",
+          "Account": "54100",
+          "amount_base": 1470000.0,
+          "amount_current": 1560000.0,
+          "amount_delta": 90000.0,
+          "amount_delta_pct": 6.122448979591836
+        },
+        {
+          "Country": "Spain",
+          "Account": "54100",
+          "amount_base": 1080000.0,
+          "amount_current": 1230000.0,
+          "amount_delta": 150000.0,
+          "amount_delta_pct": 13.88888888888889
+        }
+      ],
+      "po": [
+        {
+          "Base_PO": "700001",
+          "M1_base": 0.0,
+          "M1_curr": 0.0,
+          "gao_booked": false,
+          "in_open_po": true,
+          "Observation_Flag": "No M1 accrual activity"
+        },
+        {
+          "Base_PO": "700002",
+          "M1_base": 0.0,
+          "M1_curr": 0.0,
+          "gao_booked": false,
+          "in_open_po": false,
+          "Observation_Flag": "No M1 accrual activity"
+        },
+        {
+          "Base_PO": "700003",
+          "M1_base": 0.0,
+          "M1_curr": 0.0,
+          "gao_booked": false,
+          "in_open_po": false,
+          "Observation_Flag": "No M1 accrual activity"
+        },
+        {
+          "Base_PO": "700004",
+          "M1_base": 0.0,
+          "M1_curr": 0.0,
+          "gao_booked": false,
+          "in_open_po": false,
+          "Observation_Flag": "No M1 accrual activity"
+        },
+        {
+          "Base_PO": "700005",
+          "M1_base": 0.0,
+          "M1_curr": 0.0,
+          "gao_booked": false,
+          "in_open_po": false,
+          "Observation_Flag": "No M1 accrual activity"
+        },
+        {
+          "Base_PO": "800001",
+          "M1_base": 1835.16,
+          "M1_curr": -42.98,
+          "gao_booked": true,
+          "in_open_po": true,
+          "Observation_Flag": "Consistent within $5k"
+        }
+      ]
+    },
+    "drills": {
+      "d1": [
+        {
+          "text": "Data centre cooling maintenance",
+          "base": 2850000.0,
+          "current": 3840000.0,
+          "delta": 990000.0,
+          "n_lines": 6
+        }
+      ],
+      "d2": [
+        {
+          "text": "Emergency generator servicing",
+          "base": 1860000.0,
+          "current": 2730000.0,
+          "delta": 870000.0,
+          "n_lines": 6
+        }
+      ],
+      "d3": [
+        {
+          "text": "Preventive maintenance contract",
+          "base": 2220000.0,
+          "current": 1620000.0,
+          "delta": -600000.0,
+          "n_lines": 6
+        },
+        {
+          "text": "Cooling accrual — synthetic golden rule example",
+          "base": 21.57,
+          "current": -42.98,
+          "delta": -64.55,
+          "n_lines": 4
+        }
+      ],
+      "others": [
+        {
+          "text": "Fire safety maintenance",
+          "base": 1080000.0,
+          "current": 1230000.0,
+          "delta": 150000.0,
+          "n_lines": 6
+        },
+        {
+          "text": "Electrical inspection",
+          "base": 1470000.0,
+          "current": 1560000.0,
+          "delta": 90000.0,
+          "n_lines": 6
+        }
+      ]
+    },
+    "flags": [
+      {
+        "view": "po",
+        "Base_PO": "700001",
+        "M1_base": 0.0,
+        "M1_curr": 0.0,
+        "gao_booked": false,
+        "in_open_po": true,
+        "Observation_Flag": "No M1 accrual activity"
+      },
+      {
+        "view": "po",
+        "Base_PO": "700002",
+        "M1_base": 0.0,
+        "M1_curr": 0.0,
+        "gao_booked": false,
+        "in_open_po": false,
+        "Observation_Flag": "No M1 accrual activity"
+      },
+      {
+        "view": "po",
+        "Base_PO": "700003",
+        "M1_base": 0.0,
+        "M1_curr": 0.0,
+        "gao_booked": false,
+        "in_open_po": false,
+        "Observation_Flag": "No M1 accrual activity"
+      },
+      {
+        "view": "po",
+        "Base_PO": "700004",
+        "M1_base": 0.0,
+        "M1_curr": 0.0,
+        "gao_booked": false,
+        "in_open_po": false,
+        "Observation_Flag": "No M1 accrual activity"
+      },
+      {
+        "view": "po",
+        "Base_PO": "700005",
+        "M1_base": 0.0,
+        "M1_curr": 0.0,
+        "gao_booked": false,
+        "in_open_po": false,
+        "Observation_Flag": "No M1 accrual activity"
+      },
+      {
+        "view": "po",
+        "Base_PO": "800001",
+        "M1_base": 1835.16,
+        "M1_curr": -42.98,
+        "gao_booked": true,
+        "in_open_po": true,
+        "Observation_Flag": "Consistent within $5k"
+      }
+    ],
+    "exceptions": [],
+    "sections": [],
+    "controls": [
+      {
+        "id": "required_columns",
+        "status": "pass",
+        "message": "All required columns are available.",
+        "details": {
+          "missing": []
+        }
+      },
+      {
+        "id": "periods_present",
+        "status": "pass",
+        "message": "Both comparison slices contain data.",
+        "details": {
+          "missing": [],
+          "rows": {
+            "base": 17,
+            "current": 17
+          }
+        }
+      },
+      {
+        "id": "no_duplicate_periods_across_files",
+        "status": "pass",
+        "message": "No periods overlap across stacked sources.",
+        "details": {
+          "periods": []
+        }
+      },
+      {
+        "id": "new_or_removed_members",
+        "status": "pass",
+        "message": "Dimension membership is consistent.",
+        "details": {}
+      },
+      {
+        "id": "debit_minus_credit_equals_value",
+        "status": "pass",
+        "message": "Debit less credit matches value.",
+        "details": {
+          "n_rows": 0
+        }
+      },
+      {
+        "id": "join_unmatched_keys",
+        "status": "warn",
+        "message": "Some source keys had no lookup match.",
+        "details": {
+          "open_po": {
+            "keys": [
+              "('700002',)",
+              "('700003',)",
+              "('700004',)",
+              "('700005',)"
+            ],
+            "rows": 24,
+            "value": 13770000.0
+          }
+        }
+      },
+      {
+        "id": "join_fanout",
+        "status": "pass",
+        "message": "Lookup joins preserve one row per source row.",
+        "details": {}
+      },
+      {
+        "id": "classification_coverage",
+        "status": "pass",
+        "message": "Classification coverage meets the configured minimum.",
+        "details": {
+          "matched": 34,
+          "total": 34,
+          "coverage": 100.0,
+          "review_count": 0,
+          "fallback": "Other / General Maintenance",
+          "row_coverage": 100.0,
+          "value_coverage": 100.0,
+          "total_abs_value": 20467301.09,
+          "classified_abs_value": 20467301.09,
+          "unreviewed_rows": 0
+        }
+      },
+      {
+        "id": "partial_period_used",
+        "status": "pass",
+        "message": "No detected partial months are selected.",
+        "details": {
+          "months": [],
+          "row_counts": {}
+        }
+      },
+      {
+        "id": "drivers_reconcile",
+        "status": "pass",
+        "message": "Drivers and other items reconcile to the movement.",
+        "details": {}
+      },
+      {
+        "id": "flags_sum_to_rows",
+        "status": "pass",
+        "message": "Flag counts reconcile to view rows.",
+        "details": {}
+      },
+      {
+        "id": "sections_reconcile",
+        "status": "pass",
+        "message": "No section split configured.",
+        "details": {}
+      }
+    ],
+    "spec": {
+      "spec_version": "2.0",
+      "preset": {
+        "id": "rm_flux",
+        "version": "1.0.0"
+      },
+      "flux_name": "Repairs and Maintenance Variance",
+      "sources": {
+        "lookups": {
+          "open_po": {
+            "files": [
+              {
+                "file": "Sample_Open_PO.xlsx",
+                "sheet": "Open PO Report ",
+                "header_row": 1,
+                "start_col": "A",
+                "end_col": null
+              }
+            ]
+          }
+        },
+        "primary": {
+          "files": [
+            {
+              "file": "Sample_GL_2026.csv",
+              "sheet": "(csv)",
+              "header_row": 1,
+              "start_col": "A",
+              "end_col": null
+            }
+          ],
+          "union": {
+            "mode": "stack",
+            "tag_column": null
+          }
+        }
+      },
+      "roles": {
+        "value": "Functional_Net",
+        "period": "Period_Name",
+        "scenario": null,
+        "debit": "Accounted_Dr",
+        "credit": "Accounted_Cr",
+        "keys": [
+          "Base_PO"
+        ],
+        "dimensions": [
+          "Country",
+          "Account"
+        ],
+        "driver_text": [
+          "FAH_Line_Description"
+        ]
+      },
+      "value_rules": {
+        "source": "column",
+        "flip_sign_when": []
+      },
+      "scope": [
+        {
+          "col": "Account",
+          "op": "startswith",
+          "val": "54"
+        }
+      ],
+      "derive": [
+        {
+          "default": "Operational",
+          "name": "Bucket",
+          "rules": [
+            {
+              "then": "Accrual - Reversal",
+              "when": {
+                "col": "FAH_Event_Type",
+                "op": "contains",
+                "val": "Reversal"
+              }
+            },
+            {
+              "then": "Accrual - Current",
+              "when": {
+                "col": "FAH_Event_Type",
+                "op": "contains",
+                "val": "Current"
+              }
+            }
+          ],
+          "type": "rules"
+        },
+        {
+          "default": "UNMATCHED",
+          "name": "Base_PO",
+          "pattern": "(\\d{6,})",
+          "source": [
+            "Po_Number",
+            "FAH_Line_Description"
+          ],
+          "strip_suffix": "_V\\d+",
+          "type": "regex_extract"
+        }
+      ],
+      "periods": {
+        "calendar": "calendar"
+      },
+      "period_format": "MON-YY",
+      "partial_periods": [],
+      "comparison": {
+        "type": "QoQ",
+        "base": {
+          "months": [
+            "2026-01",
+            "2026-02",
+            "2026-03"
+          ]
+        },
+        "current": {
+          "months": [
+            "2026-04",
+            "2026-05",
+            "2026-06"
+          ]
+        }
+      },
+      "joins": [
+        {
+          "columns": [
+            "GAO Comment"
+          ],
+          "dedupe_right": "error",
+          "how": "left",
+          "key_normalise": [
+            "trim",
+            "upper",
+            "lstrip_zeros"
+          ],
+          "on": [
+            {
+              "left": "Base_PO",
+              "right": "PO Num"
+            }
+          ],
+          "optional": true,
+          "prefix": "po_",
+          "source": "open_po"
+        }
+      ],
+      "classification": {
+        "case_sensitive": false,
+        "fallback": "Other / General Maintenance",
+        "first_match": true,
+        "review_flags": [],
+        "rules": [
+          {
+            "category": "Chillers & Cooling Plant",
+            "keyword": "chlr",
+            "match": "contains",
+            "reviewed": true
+          },
+          {
+            "category": "Chillers & Cooling Plant",
+            "keyword": "cooling",
+            "match": "contains",
+            "reviewed": true
+          },
+          {
+            "category": "Preventive Maintenance",
+            "keyword": "preventive",
+            "match": "contains",
+            "reviewed": true
+          },
+          {
+            "category": "Emergency Repairs",
+            "keyword": "emergency",
+            "match": "contains",
+            "reviewed": true
+          },
+          {
+            "category": "Electrical",
+            "keyword": "electrical",
+            "match": "contains",
+            "reviewed": true
+          },
+          {
+            "category": "Fire & Safety",
+            "keyword": "fire",
+            "match": "contains",
+            "reviewed": true
+          }
+        ],
+        "source_cols": [
+          "FAH_Line_Description"
+        ],
+        "target_col": "Category"
+      },
+      "measures": {
+        "M1_base": {
+          "agg": "sum",
+          "col": "{roles.value}",
+          "filter": [
+            {
+              "col": "__month",
+              "op": "eq",
+              "val": "{base.first_month}"
+            },
+            {
+              "col": "Bucket",
+              "op": "eq",
+              "val": "Accrual - Current"
+            }
+          ],
+          "slice": "base"
+        },
+        "M1_curr": {
+          "agg": "sum",
+          "col": "{roles.value}",
+          "filter": [
+            {
+              "col": "__month",
+              "op": "eq",
+              "val": "{current.first_month}"
+            },
+            {
+              "col": "Bucket",
+              "op": "in",
+              "val": [
+                "Accrual - Current",
+                "Accrual - Reversal"
+              ]
+            }
+          ],
+          "slice": "current"
+        },
+        "amount": {
+          "agg": "sum",
+          "col": "{roles.value}"
+        }
+      },
+      "views": [
+        {
+          "compare": true,
+          "keys": [
+            "Country",
+            "Account"
+          ],
+          "measures": [
+            "amount"
+          ],
+          "name": "by_country_account"
+        },
+        {
+          "compare": false,
+          "joins": [
+            {
+              "fields": {
+                "gao_booked": {
+                  "filter": [
+                    {
+                      "col": "GAO Comment",
+                      "op": "startswith",
+                      "val": "GAO"
+                    }
+                  ],
+                  "type": "exists_where"
+                },
+                "in_open_po": {
+                  "type": "exists"
+                }
+              },
+              "key_normalise": [
+                "trim",
+                "upper",
+                "lstrip_zeros"
+              ],
+              "left_on": "Base_PO",
+              "lookup": "open_po",
+              "optional": true,
+              "right_on": "PO Num"
+            }
+          ],
+          "keys": [
+            "Base_PO"
+          ],
+          "measures": [
+            "M1_base",
+            "M1_curr"
+          ],
+          "name": "po"
+        }
+      ],
+      "flags": [
+        {
+          "default": "Consistent within $5k",
+          "name": "Observation_Flag",
+          "ordered": [
+            {
+              "if": "M1_base == 0 and M1_curr == 0",
+              "label": "No M1 accrual activity"
+            },
+            {
+              "if": "abs(M1_curr - M1_base) > 5000",
+              "label": "Material movement > $5k"
+            }
+          ],
+          "view": "po"
+        }
+      ],
+      "gates": [
+        {
+          "if": "gao_booked and Observation_Flag == 'Material movement > $5k'",
+          "name": "GAO material movement",
+          "view": "po"
+        }
+      ],
+      "sections": null,
+      "decompose": null,
+      "drivers": {
+        "materiality": {
+          "mode": "abs",
+          "abs": 300000
+        },
+        "top_n": 15,
+        "others_label": "Other items",
+        "measure": "amount",
+        "view": "by_country_account"
+      },
+      "drill": {
+        "top_n": 5,
+        "group_by": "{roles.driver_text}"
+      },
+      "commentary": {
+        "units": "M",
+        "decimals": 1,
+        "verify_tag": "[TO VERIFY]",
+        "sign_style": "plus_minus",
+        "currency_symbol": "$",
+        "forbidden_terms": [],
+        "max_line_words": 35,
+        "style": "largest_first"
+      },
+      "controls": [
+        {
+          "id": "required_columns",
+          "severity": "stop"
+        },
+        {
+          "id": "periods_present",
+          "severity": "stop"
+        },
+        {
+          "id": "no_duplicate_periods_across_files",
+          "severity": "stop"
+        },
+        {
+          "id": "new_or_removed_members",
+          "severity": "warn"
+        },
+        {
+          "id": "drivers_reconcile",
+          "severity": "stop"
+        },
+        {
+          "id": "flags_sum_to_rows",
+          "severity": "stop"
+        },
+        {
+          "id": "sections_reconcile",
+          "severity": "stop",
+          "tolerance": 0.01
+        },
+        {
+          "id": "debit_minus_credit_equals_value",
+          "severity": "warn"
+        },
+        {
+          "id": "join_unmatched_keys",
+          "severity": "warn"
+        },
+        {
+          "id": "join_fanout",
+          "severity": "stop"
+        },
+        {
+          "id": "classification_coverage",
+          "params": {
+            "minimum_percentage": 95
+          },
+          "severity": "warn"
+        },
+        {
+          "id": "partial_period_used",
+          "severity": "warn"
+        }
+      ]
+    },
+    "evidence": {
+      "flux_name": "Repairs and Maintenance Variance",
+      "drivers": [
+        {
+          "driver_id": "d1",
+          "label": "United Kingdom / 54100",
+          "dimensions": {
+            "Country": "United Kingdom",
+            "Account": "54100"
+          },
+          "base": 2850000.0,
+          "current": 3840000.0,
+          "delta": 990000.0,
+          "delta_fmt": "+$1.0M",
+          "top_texts": [
+            {
+              "text": "Data centre cooling maintenance",
+              "delta_fmt": "+$1.0M"
+            }
+          ],
+          "n_lines": 6,
+          "flags_summary": {}
+        },
+        {
+          "driver_id": "d2",
+          "label": "Germany / 54100",
+          "dimensions": {
+            "Country": "Germany",
+            "Account": "54100"
+          },
+          "base": 1860000.0,
+          "current": 2730000.0,
+          "delta": 870000.0,
+          "delta_fmt": "+$0.9M",
+          "top_texts": [
+            {
+              "text": "Emergency generator servicing",
+              "delta_fmt": "+$0.9M"
+            }
+          ],
+          "n_lines": 6,
+          "flags_summary": {}
+        },
+        {
+          "driver_id": "d3",
+          "label": "Netherlands / 54100",
+          "dimensions": {
+            "Country": "Netherlands",
+            "Account": "54100"
+          },
+          "base": 2220021.57,
+          "current": 1619957.02,
+          "delta": -600064.55,
+          "delta_fmt": "-$0.6M",
+          "top_texts": [
+            {
+              "text": "Preventive maintenance contract",
+              "delta_fmt": "-$0.6M"
+            },
+            {
+              "text": "Cooling accrual — synthetic golden rule example",
+              "delta_fmt": "-$64.55"
+            }
+          ],
+          "n_lines": 10,
+          "flags_summary": {}
+        },
+        {
+          "driver_id": "others",
+          "label": "Other items",
+          "dimensions": {},
+          "base": 2550000.0,
+          "current": 2790000.0,
+          "delta": 240000.0,
+          "delta_fmt": "+$0.2M",
+          "top_texts": [
+            {
+              "text": "Fire safety maintenance",
+              "delta_fmt": "+$0.2M"
+            },
+            {
+              "text": "Electrical inspection",
+              "delta_fmt": "+$0.1M"
+            }
+          ],
+          "n_lines": 12,
+          "flags_summary": {}
+        }
+      ],
+      "sections": [],
+      "commentary_rules": {
+        "units": "M",
+        "decimals": 1,
+        "verify_tag": "[TO VERIFY]",
+        "sign_style": "plus_minus",
+        "currency_symbol": "$",
+        "forbidden_terms": [],
+        "max_line_words": 35,
+        "style": "largest_first"
+      },
+      "headline_hint": null
+    },
+    "materiality_threshold": 300000.0,
+    "classification": {
+      "matched": 34,
+      "total": 34,
+      "coverage": 100.0,
+      "review_count": 0,
+      "fallback": "Other / General Maintenance",
+      "row_coverage": 100.0,
+      "value_coverage": 100.0,
+      "total_abs_value": 20467301.09,
+      "classified_abs_value": 20467301.09,
+      "unreviewed_rows": 0
+    },
+    "classification_review": [
+      {
+        "text": "Cooling accrual — synthetic golden rule example",
+        "category": "Chillers & Cooling Plant",
+        "reviewed": true,
+        "rows": 4,
+        "abs_value": 7301.09
+      },
+      {
+        "text": "Data centre cooling maintenance",
+        "category": "Chillers & Cooling Plant",
+        "reviewed": true,
+        "rows": 6,
+        "abs_value": 6690000.0
+      },
+      {
+        "text": "Electrical inspection",
+        "category": "Electrical",
+        "reviewed": true,
+        "rows": 6,
+        "abs_value": 3030000.0
+      },
+      {
+        "text": "Emergency generator servicing",
+        "category": "Emergency Repairs",
+        "reviewed": true,
+        "rows": 6,
+        "abs_value": 4590000.0
+      },
+      {
+        "text": "Fire safety maintenance",
+        "category": "Fire & Safety",
+        "reviewed": true,
+        "rows": 6,
+        "abs_value": 2310000.0
+      },
+      {
+        "text": "Preventive maintenance contract",
+        "category": "Preventive Maintenance",
+        "reviewed": true,
+        "rows": 6,
+        "abs_value": 3840000.0
+      }
+    ],
+    "join_audit": [
+      {
+        "lookup": "open_po",
+        "unmatched_keys": [
+          "('700002',)",
+          "('700003',)",
+          "('700004',)",
+          "('700005',)"
+        ],
+        "unmatched_rows": 24,
+        "unmatched_value": 13770000.0,
+        "duplicate_keys": [],
+        "fanout": false,
+        "deduplicated_keys": [],
+        "severity": "warn"
+      }
+    ],
+    "monthly_row_counts": {
+      "2026-01": 7,
+      "2026-02": 5,
+      "2026-03": 5,
+      "2026-04": 7,
+      "2026-05": 5,
+      "2026-06": 5
+    },
+    "partial_months_used": [],
+    "warnings": [
+      "Some source keys had no lookup match."
+    ],
+    "id": "b1224e6ff7df497f9ff85ecaa688b2b6",
+    "created": "2026-10-28T10:08:17.696658+00:00",
+    "run_stamp": {
+      "run_id": "b1224e6ff7df497f9ff85ecaa688b2b6",
+      "created": "2026-10-28T10:08:17.696658+00:00",
+      "engine_version": "2.0",
+      "spec_sha256": "434aa37ca11dd6545929487103a6b78f2e848f2c37c01358618514fe91e1ce9d",
+      "preset": {
+        "id": "rm_flux",
+        "version": "1.0.0"
+      },
+      "input_files": [
+        {
+          "name": "Sample_GL_2026.csv",
+          "sha256": "0136e4a15d177b4fc05eae2908fe6afed79ef71a1ee4028333e677ccf807b1bd",
+          "role": "primary",
+          "definition": {
+            "sheet": "(csv)",
+            "header_row": 1,
+            "start_col": "A",
+            "end_col": null,
+            "role": "primary",
+            "name": "Sample_GL_2026",
+            "combine_sheets": [],
+            "tag_column": null
+          }
+        },
+        {
+          "name": "Sample_Open_PO.xlsx",
+          "sha256": "c40a7a191cd3cfbfdc787ed6370bc69188e398050b32a70cd4ebd90d14475e91",
+          "role": "lookup",
+          "definition": {
+            "sheet": "Open PO Report ",
+            "header_row": 1,
+            "start_col": "A",
+            "end_col": null,
+            "role": "lookup",
+            "name": "open_po",
+            "combine_sheets": [],
+            "tag_column": null
+          }
+        }
+      ]
+    },
+    "change_log": [
+      {
+        "timestamp": "2026-10-28T10:00:51.623981+00:00",
+        "actor": "user",
+        "reason": "Updated uploaded source definitions",
+        "path": "/sources/lookups",
+        "op": "add",
+        "from": null,
+        "to": {}
+      },
+      {
+        "timestamp": "2026-10-28T10:00:51.623981+00:00",
+        "actor": "user",
+        "reason": "Updated uploaded source definitions",
+        "path": "/sources/primary",
+        "op": "add",
+        "from": null,
+        "to": {
+          "files": [
+            {
+              "file": "Sample_GL_2026.csv",
+              "sheet": "(csv)",
+              "header_row": 1,
+              "start_col": "A",
+              "end_col": null
+            }
+          ],
+          "union": {
+            "mode": "stack",
+            "tag_column": null
+          }
+        }
+      },
+      {
+        "timestamp": "2026-10-28T10:00:58.434943+00:00",
+        "actor": "user",
+        "reason": "Updated uploaded source definitions",
+        "path": "/sources/lookups/open_po",
+        "op": "add",
+        "from": null,
+        "to": {
+          "files": [
+            {
+              "file": "Sample_Open_PO.xlsx",
+              "sheet": "Open PO Report ",
+              "header_row": 1,
+              "start_col": "A",
+              "end_col": null
+            }
+          ]
+        }
+      },
+      {
+        "timestamp": "2026-10-28T10:03:27.568329+00:00",
+        "actor": "user",
+        "reason": "Accepted reviewed detect_flux suggestion",
+        "path": "/classification",
+        "op": "replace",
+        "from": null,
+        "to": {
+          "case_sensitive": false,
+          "fallback": "Other / General Maintenance",
+          "first_match": true,
+          "review_flags": [],
+          "rules": [
+            {
+              "category": "Chillers & Cooling Plant",
+              "keyword": "chlr",
+              "match": "contains",
+              "reviewed": true
+            },
+            {
+              "category": "Chillers & Cooling Plant",
+              "keyword": "cooling",
+              "match": "contains",
+              "reviewed": true
+            },
+            {
+              "category": "Preventive Maintenance",
+              "keyword": "preventive",
+              "match": "contains",
+              "reviewed": true
+            },
+            {
+              "category": "Emergency Repairs",
+              "keyword": "emergency",
+              "match": "contains",
+              "reviewed": true
+            },
+            {
+              "category": "Electrical",
+              "keyword": "electrical",
+              "match": "contains",
+              "reviewed": true
+            },
+            {
+              "category": "Fire & Safety",
+              "keyword": "fire",
+              "match": "contains",
+              "reviewed": true
+            }
+          ],
+          "source_cols": [
+            "FAH_Line_Description"
+          ],
+          "target_col": "Category"
+        }
+      },
+      {
+        "timestamp": "2026-10-28T10:03:27.568329+00:00",
+        "actor": "user",
+        "reason": "Accepted reviewed detect_flux suggestion",
+        "path": "/commentary/style",
+        "op": "add",
+        "from": null,
+        "to": "largest_first"
+      },
+      {
+        "timestamp": "2026-10-28T10:03:27.568329+00:00",
+        "actor": "user",
+        "reason": "Accepted reviewed detect_flux suggestion",
+        "path": "/comparison/base/months",
+        "op": "replace",
+        "from": [],
+        "to": [
+          "2026-01",
+          "2026-02",
+          "2026-03"
+        ]
+      },
+      {
+        "timestamp": "2026-10-28T10:03:27.568329+00:00",
+        "actor": "user",
+        "reason": "Accepted reviewed detect_flux suggestion",
+        "path": "/comparison/current/months",
+        "op": "replace",
+        "from": [],
+        "to": [
+          "2026-04",
+          "2026-05",
+          "2026-06"
+        ]
+      },
+      {
+        "timestamp": "2026-10-28T10:03:27.568329+00:00",
+        "actor": "user",
+        "reason": "Accepted reviewed detect_flux suggestion",
+        "path": "/controls",
+        "op": "replace",
+        "from": [
+          {
+            "id": "required_columns",
+            "severity": "stop"
+          },
+          {
+            "id": "periods_present",
+            "severity": "stop"
+          },
+          {
+            "id": "no_duplicate_periods_across_files",
+            "severity": "stop"
+          },
+          {
+            "id": "new_or_removed_members",
+            "severity": "warn"
+          },
+          {
+            "id": "drivers_reconcile",
+            "severity": "stop"
+          },
+          {
+            "id": "flags_sum_to_rows",
+            "severity": "stop"
+          },
+          {
+            "id": "sections_reconcile",
+            "severity": "stop"
+          },
+          {
+            "id": "join_unmatched_keys",
+            "severity": "warn"
+          },
+          {
+            "id": "join_fanout",
+            "severity": "stop"
+          },
+          {
+            "id": "classification_coverage",
+            "severity": "warn",
+            "params": {
+              "minimum_percentage": 95
+            }
+          },
+          {
+            "id": "partial_period_used",
+            "severity": "warn"
+          }
+        ],
+        "to": [
+          {
+            "id": "required_columns",
+            "severity": "stop"
+          },
+          {
+            "id": "periods_present",
+            "severity": "stop"
+          },
+          {
+            "id": "no_duplicate_periods_across_files",
+            "severity": "stop"
+          },
+          {
+            "id": "new_or_removed_members",
+            "severity": "warn"
+          },
+          {
+            "id": "drivers_reconcile",
+            "severity": "stop"
+          },
+          {
+            "id": "flags_sum_to_rows",
+            "severity": "stop"
+          },
+          {
+            "id": "sections_reconcile",
+            "severity": "stop",
+            "tolerance": 0.01
+          },
+          {
+            "id": "debit_minus_credit_equals_value",
+            "severity": "warn"
+          },
+          {
+            "id": "join_unmatched_keys",
+            "severity": "warn"
+          },
+          {
+            "id": "join_fanout",
+            "severity": "stop"
+          },
+          {
+            "id": "classification_coverage",
+            "params": {
+              "minimum_percentage": 95
+            },
+            "severity": "warn"
+          },
+          {
+            "id": "partial_period_used",
+            "severity": "warn"
+          }
+        ]
+      },
+      {
+        "timestamp": "2026-10-28T10:03:27.568329+00:00",
+        "actor": "user",
+        "reason": "Accepted reviewed detect_flux suggestion",
+        "path": "/derive",
+        "op": "replace",
+        "from": [],
+        "to": [
+          {
+            "default": "Operational",
+            "name": "Bucket",
+            "rules": [
+              {
+                "then": "Accrual - Reversal",
+                "when": {
+                  "col": "FAH_Event_Type",
+                  "op": "contains",
+                  "val": "Reversal"
+                }
+              },
+              {
+                "then": "Accrual - Current",
+                "when": {
+                  "col": "FAH_Event_Type",
+                  "op": "contains",
+                  "val": "Current"
+                }
+              }
+            ],
+            "type": "rules"
+          },
+          {
+            "default": "UNMATCHED",
+            "name": "Base_PO",
+            "pattern": "(\\d{6,})",
+            "source": [
+              "Po_Number",
+              "FAH_Line_Description"
+            ],
+            "strip_suffix": "_V\\d+",
+            "type": "regex_extract"
+          }
+        ]
+      },
+      {
+        "timestamp": "2026-10-28T10:03:27.568329+00:00",
+        "actor": "user",
+        "reason": "Accepted reviewed detect_flux suggestion",
+        "path": "/drill/group_by",
+        "op": "add",
+        "from": null,
+        "to": "{roles.driver_text}"
+      },
+      {
+        "timestamp": "2026-10-28T10:03:27.568329+00:00",
+        "actor": "user",
+        "reason": "Accepted reviewed detect_flux suggestion",
+        "path": "/drivers/measure",
+        "op": "add",
+        "from": null,
+        "to": "amount"
+      },
+      {
+        "timestamp": "2026-10-28T10:03:27.568329+00:00",
+        "actor": "user",
+        "reason": "Accepted reviewed detect_flux suggestion",
+        "path": "/drivers/view",
+        "op": "add",
+        "from": null,
+        "to": "by_country_account"
+      },
+      {
+        "timestamp": "2026-10-28T10:03:27.568329+00:00",
+        "actor": "user",
+        "reason": "Accepted reviewed detect_flux suggestion",
+        "path": "/flags",
+        "op": "replace",
+        "from": [],
+        "to": [
+          {
+            "default": "Consistent within $5k",
+            "name": "Observation_Flag",
+            "ordered": [
+              {
+                "if": "M1_base == 0 and M1_curr == 0",
+                "label": "No M1 accrual activity"
+              },
+              {
+                "if": "abs(M1_curr - M1_base) > 5000",
+                "label": "Material movement > $5k"
+              }
+            ],
+            "view": "po"
+          }
+        ]
+      },
+      {
+        "timestamp": "2026-10-28T10:03:27.568329+00:00",
+        "actor": "user",
+        "reason": "Accepted reviewed detect_flux suggestion",
+        "path": "/flux_name",
+        "op": "replace",
+        "from": "Untitled analysis",
+        "to": "Repairs and Maintenance Variance"
+      },
+      {
+        "timestamp": "2026-10-28T10:03:27.568329+00:00",
+        "actor": "user",
+        "reason": "Accepted reviewed detect_flux suggestion",
+        "path": "/gates",
+        "op": "replace",
+        "from": [],
+        "to": [
+          {
+            "if": "gao_booked and Observation_Flag == 'Material movement > $5k'",
+            "name": "GAO material movement",
+            "view": "po"
+          }
+        ]
+      },
+      {
+        "timestamp": "2026-10-28T10:03:27.568329+00:00",
+        "actor": "user",
+        "reason": "Accepted reviewed detect_flux suggestion",
+        "path": "/joins",
+        "op": "replace",
+        "from": [],
+        "to": [
+          {
+            "columns": [
+              "GAO Comment"
+            ],
+            "dedupe_right": "error",
+            "how": "left",
+            "key_normalise": [
+              "trim",
+              "upper",
+              "lstrip_zeros"
+            ],
+            "on": [
+              {
+                "left": "Base_PO",
+                "right": "PO Num"
+              }
+            ],
+            "optional": true,
+            "prefix": "po_",
+            "source": "open_po"
+          }
+        ]
+      },
+      {
+        "timestamp": "2026-10-28T10:03:27.568329+00:00",
+        "actor": "user",
+        "reason": "Accepted reviewed detect_flux suggestion",
+        "path": "/measures/M1_base",
+        "op": "add",
+        "from": null,
+        "to": {
+          "agg": "sum",
+          "col": "{roles.value}",
+          "filter": [
+            {
+              "col": "__month",
+              "op": "eq",
+              "val": "{base.first_month}"
+            },
+            {
+              "col": "Bucket",
+              "op": "eq",
+              "val": "Accrual - Current"
+            }
+          ],
+          "slice": "base"
+        }
+      },
+      {
+        "timestamp": "2026-10-28T10:03:27.568329+00:00",
+        "actor": "user",
+        "reason": "Accepted reviewed detect_flux suggestion",
+        "path": "/measures/M1_curr",
+        "op": "add",
+        "from": null,
+        "to": {
+          "agg": "sum",
+          "col": "{roles.value}",
+          "filter": [
+            {
+              "col": "__month",
+              "op": "eq",
+              "val": "{current.first_month}"
+            },
+            {
+              "col": "Bucket",
+              "op": "in",
+              "val": [
+                "Accrual - Current",
+                "Accrual - Reversal"
+              ]
+            }
+          ],
+          "slice": "current"
+        }
+      },
+      {
+        "timestamp": "2026-10-28T10:03:27.568329+00:00",
+        "actor": "user",
+        "reason": "Accepted reviewed detect_flux suggestion",
+        "path": "/measures/amount",
+        "op": "add",
+        "from": null,
+        "to": {
+          "agg": "sum",
+          "col": "{roles.value}"
+        }
+      },
+      {
+        "timestamp": "2026-10-28T10:03:27.568329+00:00",
+        "actor": "user",
+        "reason": "Accepted reviewed detect_flux suggestion",
+        "path": "/period_format",
+        "op": "replace",
+        "from": "auto",
+        "to": "MON-YY"
+      },
+      {
+        "timestamp": "2026-10-28T10:03:27.568329+00:00",
+        "actor": "user",
+        "reason": "Accepted reviewed detect_flux suggestion",
+        "path": "/preset/id",
+        "op": "replace",
+        "from": "generic_flux",
+        "to": "rm_flux"
+      },
+      {
+        "timestamp": "2026-10-28T10:03:27.568329+00:00",
+        "actor": "user",
+        "reason": "Accepted reviewed detect_flux suggestion",
+        "path": "/roles/credit",
+        "op": "replace",
+        "from": null,
+        "to": "Accounted_Cr"
+      },
+      {
+        "timestamp": "2026-10-28T10:03:27.568329+00:00",
+        "actor": "user",
+        "reason": "Accepted reviewed detect_flux suggestion",
+        "path": "/roles/debit",
+        "op": "replace",
+        "from": null,
+        "to": "Accounted_Dr"
+      },
+      {
+        "timestamp": "2026-10-28T10:03:27.568329+00:00",
+        "actor": "user",
+        "reason": "Accepted reviewed detect_flux suggestion",
+        "path": "/roles/dimensions",
+        "op": "replace",
+        "from": [],
+        "to": [
+          "Country",
+          "Account"
+        ]
+      },
+      {
+        "timestamp": "2026-10-28T10:03:27.568329+00:00",
+        "actor": "user",
+        "reason": "Accepted reviewed detect_flux suggestion",
+        "path": "/roles/driver_text",
+        "op": "replace",
+        "from": [],
+        "to": [
+          "FAH_Line_Description"
+        ]
+      },
+      {
+        "timestamp": "2026-10-28T10:03:27.568329+00:00",
+        "actor": "user",
+        "reason": "Accepted reviewed detect_flux suggestion",
+        "path": "/roles/keys",
+        "op": "replace",
+        "from": [],
+        "to": [
+          "Base_PO"
+        ]
+      },
+      {
+        "timestamp": "2026-10-28T10:03:27.568329+00:00",
+        "actor": "user",
+        "reason": "Accepted reviewed detect_flux suggestion",
+        "path": "/roles/period",
+        "op": "replace",
+        "from": null,
+        "to": "Period_Name"
+      },
+      {
+        "timestamp": "2026-10-28T10:03:27.568329+00:00",
+        "actor": "user",
+        "reason": "Accepted reviewed detect_flux suggestion",
+        "path": "/roles/value",
+        "op": "replace",
+        "from": null,
+        "to": "Functional_Net"
+      },
+      {
+        "timestamp": "2026-10-28T10:03:27.568329+00:00",
+        "actor": "user",
+        "reason": "Accepted reviewed detect_flux suggestion",
+        "path": "/scope",
+        "op": "replace",
+        "from": [],
+        "to": [
+          {
+            "col": "Account",
+            "op": "startswith",
+            "val": "54"
+          }
+        ]
+      },
+      {
+        "timestamp": "2026-10-28T10:03:27.568329+00:00",
+        "actor": "user",
+        "reason": "Accepted reviewed detect_flux suggestion",
+        "path": "/value_rules/null_as_zero",
+        "op": "remove",
+        "from": true,
+        "to": null
+      },
+      {
+        "timestamp": "2026-10-28T10:03:27.568329+00:00",
+        "actor": "user",
+        "reason": "Accepted reviewed detect_flux suggestion",
+        "path": "/views",
+        "op": "replace",
+        "from": [],
+        "to": [
+          {
+            "compare": true,
+            "keys": [
+              "Country",
+              "Account"
+            ],
+            "measures": [
+              "amount"
+            ],
+            "name": "by_country_account"
+          },
+          {
+            "compare": false,
+            "joins": [
+              {
+                "fields": {
+                  "gao_booked": {
+                    "filter": [
+                      {
+                        "col": "GAO Comment",
+                        "op": "startswith",
+                        "val": "GAO"
+                      }
+                    ],
+                    "type": "exists_where"
+                  },
+                  "in_open_po": {
+                    "type": "exists"
+                  }
+                },
+                "key_normalise": [
+                  "trim",
+                  "upper",
+                  "lstrip_zeros"
+                ],
+                "left_on": "Base_PO",
+                "lookup": "open_po",
+                "optional": true,
+                "right_on": "PO Num"
+              }
+            ],
+            "keys": [
+              "Base_PO"
+            ],
+            "measures": [
+              "M1_base",
+              "M1_curr"
+            ],
+            "name": "po"
+          }
+        ]
+      }
+    ],
+    "agent_logs": [
+      {
+        "transport_attempt": {
+          "request_id": "6201f667-283b-459b-9c85-bfdf2390db80",
+          "step": "detect_flux",
+          "envelope_size": 4876,
+          "duration": 12.623,
+          "status": "repair",
+          "response": "```json\n{\n  \"request_id\": \"6201f667-283b-459b-9c85-bfdf2390db80\",\n  \"step\": \"detect_flux\",\n  \"status\": \"ok\",\n  \"proposal\": {\n    \"preset\": \"rm_flux\",\n    \"flux_name\": \"Repairs and Maintenance Variance\",\n    \"required_sources\": [\"primary\"],\n    \"optional_sources\": [\"open_po\"]\n  },\n  \"patch\": [],\n  \"summary\": \"I selected the Repairs and maintenance preset based on the headers in the primary source.\",\n  \"changes\": [\n    {\n      \"setting\": \"Flux Preset\",\n      \"from\": \"Generic variance\",\n      \"to\": \"Repairs and maintenance\",\n      \"reason\": \"Headers include FAH_Line_Description and Po_Number which match R&M data.\"\n    }\n  ],\n  \"confidence\": \"high\",\n  \"rationale\": \"The headers contain specific R&M markers like FAH_Line_Description and Po_Number.\",\n  \"questions\": [],\n  \"warnings\": []\n}\n```"
+        }
+      },
+      {
+        "transport_attempt": {
+          "request_id": "6201f667-283b-459b-9c85-bfdf2390db80",
+          "step": "repair",
+          "envelope_size": 4269,
+          "duration": 6.666,
+          "status": "ok",
+          "response": "{\n  \"request_id\": \"6201f667-283b-459b-9c85-bfdf2390db80\",\n  \"step\": \"detect_flux\",\n  \"status\": \"ok\",\n  \"proposal\": {\n    \"preset_id\": \"rm_flux\",\n    \"flux_name\": \"Repairs and Maintenance Variance\",\n    \"required_sources\": [\"primary\"],\n    \"optional_sources\": [\"open_po\"]\n  },\n  \"patch\": [],\n  \"summary\": \"I selected the Repairs and maintenance preset based on the headers in the primary source.\",\n  \"changes\": [\n    {\n      \"setting\": \"Flux Preset\",\n      \"from\": \"Generic variance\",\n      \"to\": \"Repairs and maintenance\",\n      \"reason\": \"Headers include FAH_Line_Description and Po_Number which match R&M data.\"\n    }\n  ],\n  \"confidence\": \"high\",\n  \"rationale\": \"The headers contain specific R&M markers like FAH_Line_Description and Po_Number.\",\n  \"questions\": [],\n  \"warnings\": []\n}"
+        }
+      },
+      {
+        "transport_attempt": {
+          "request_id": "ac5ebfd0-f2c7-456c-989e-1107a23e06f4",
+          "step": "map_columns",
+          "envelope_size": 8410,
+          "duration": 9.642,
+          "status": "repair",
+          "response": "{\n  \"request_id\": \"ac5ebfd0-f2c7-456c-989e-1107a23e06f4\",\n  \"step\": \"map_columns\",\n  \"status\": \"ok\",\n  \"proposal\": {\n    \"roles\": {\n      \"value\": \"Functional_Net\",\n      \"period\": \"Period_Name\",\n      \"scenario\": null,\n      \"debit\": \"Accounted_Dr\",\n      \"credit\": \"Accounted_Cr\",\n      \"keys\": [\n        \"Base_PO\"\n      ],\n      \"dimensions\": [\n        \"Country\",\n        \"Account\"\n      ],\n      \"driver_text\": [\n        \"FAH_Line_Description\"\n      ]\n    },\n    \"value_rules\": {\n      \"source\": \"column\",\n      \"flip_sign_when\": []\n    },\n    \"unmapped\": [\n      \"Region\",\n      \"Po_Number\",\n      \"FAH_Event_Type\"\n    ]\n  },\n  \"patch\": [],\n  \"summary\": \"I mapped the columns to their standard roles, using Functional_Net for values and Period_Name for periods.\",\n  \"changes\": [\n    {\n      \"setting\": \"Column Mapping\",\n      \"from\": \"not set\",\n      \"to\": \"Functional_Net, Period_Name, Country, Account, Accounted_Dr, Accounted_Cr\",\n      \"reason\": \"Profile matches standard R&M schema\"\n    }\n  ],\n  \"confidence\": \"high\",\n  \"rationale\": \"The column profiles align cleanly with the required roles for the Repairs and Maintenance preset.\",\n  \"questions\": [],\n  \"warnings\": []\n}"
+        }
+      },
+      {
+        "transport_attempt": {
+          "request_id": "ac5ebfd0-f2c7-456c-989e-1107a23e06f4",
+          "step": "repair",
+          "envelope_size": 8601,
+          "duration": 5.511,
+          "status": "ok",
+          "response": "```json\n{\n  \"request_id\": \"ac5ebfd0-f2c7-456c-989e-1107a23e06f4\",\n  \"step\": \"map_columns\",\n  \"status\": \"ok\",\n  \"proposal\": {\n    \"roles\": {\n      \"value\": \"Functional_Net\",\n      \"period\": \"Period_Name\",\n      \"scenario\": null,\n      \"debit\": \"Accounted_Dr\",\n      \"credit\": \"Accounted_Cr\",\n      \"keys\": [\n        \"Base_PO\"\n      ],\n      \"dimensions\": [\n        \"Country\",\n        \"Account\"\n      ],\n      \"driver_text\": [\n        \"FAH_Line_Description\"\n      ]\n    },\n    \"unmapped\": [\n      \"Region\",\n      \"Po_Number\",\n      \"FAH_Event_Type\"\n    ]\n  },\n  \"patch\": [],\n  \"summary\": \"I mapped the columns to their standard roles, using Functional_Net for values and Period_Name for periods.\",\n  \"changes\": [\n    {\n      \"setting\": \"Column Mapping\",\n      \"from\": \"not set\",\n      \"to\": \"Functional_Net, Period_Name, Country, Account, Accounted_Dr, Accounted_Cr\",\n      \"reason\": \"Profile matches standard R&M schema\"\n    }\n  ],\n  \"confidence\": \"high\",\n  \"rationale\": \"The column profiles align cleanly with the required roles for the Repairs and Maintenance preset, complying with the map_columns schema.\",\n  \"questions\": [],\n  \"warnings\": []\n}\n```"
+        }
+      }
+    ],
+    "commentary": {
+      "text": "+$1.0M — United Kingdom / 54100. [TO VERIFY] Confirm the business cause.\n\n+$0.9M — Germany / 54100. [TO VERIFY] Confirm the business cause.\n\n-$0.6M — Netherlands / 54100. [TO VERIFY] Confirm the business cause.\n\n+$0.2M — Other items. [TO VERIFY] Confirm the business cause.",
+      "lines": [
+        {
+          "driver_id": "d1",
+          "text": "+$1.0M — United Kingdom / 54100. [TO VERIFY] Confirm the business cause."
+        },
+        {
+          "driver_id": "d2",
+          "text": "+$0.9M — Germany / 54100. [TO VERIFY] Confirm the business cause."
+        },
+        {
+          "driver_id": "d3",
+          "text": "-$0.6M — Netherlands / 54100. [TO VERIFY] Confirm the business cause."
+        },
+        {
+          "driver_id": "others",
+          "text": "+$0.2M — Other items. [TO VERIFY] Confirm the business cause."
+        }
+      ],
+      "headline": "",
+      "issues": [],
+      "validation": {
+        "ok": true,
+        "issues": [],
+        "line_results": [
+          {
+            "driver_id": "d1",
+            "ok": true,
+            "issues": []
+          },
+          {
+            "driver_id": "d2",
+            "ok": true,
+            "issues": []
+          },
+          {
+            "driver_id": "d3",
+            "ok": true,
+            "issues": []
+          },
+          {
+            "driver_id": "others",
+            "ok": true,
+            "issues": []
+          }
+        ]
+      },
+      "verified": true,
+      "mock": false,
+      "source": "deterministic_evidence"
+    }
+  },
+  "change_log": [
+    {
+      "timestamp": "2026-10-28T10:00:51.623981+00:00",
+      "actor": "user",
+      "reason": "Updated uploaded source definitions",
+      "path": "/sources/lookups",
+      "op": "add",
+      "from": null,
+      "to": {}
+    },
+    {
+      "timestamp": "2026-10-28T10:00:51.623981+00:00",
+      "actor": "user",
+      "reason": "Updated uploaded source definitions",
+      "path": "/sources/primary",
+      "op": "add",
+      "from": null,
+      "to": {
+        "files": [
+          {
+            "file": "Sample_GL_2026.csv",
+            "sheet": "(csv)",
+            "header_row": 1,
+            "start_col": "A",
+            "end_col": null
+          }
+        ],
+        "union": {
+          "mode": "stack",
+          "tag_column": null
+        }
+      }
+    },
+    {
+      "timestamp": "2026-10-28T10:00:58.434943+00:00",
+      "actor": "user",
+      "reason": "Updated uploaded source definitions",
+      "path": "/sources/lookups/open_po",
+      "op": "add",
+      "from": null,
+      "to": {
+        "files": [
+          {
+            "file": "Sample_Open_PO.xlsx",
+            "sheet": "Open PO Report ",
+            "header_row": 1,
+            "start_col": "A",
+            "end_col": null
+          }
+        ]
+      }
+    },
+    {
+      "timestamp": "2026-10-28T10:03:27.568329+00:00",
+      "actor": "user",
+      "reason": "Accepted reviewed detect_flux suggestion",
+      "path": "/classification",
+      "op": "replace",
+      "from": null,
+      "to": {
+        "case_sensitive": false,
+        "fallback": "Other / General Maintenance",
+        "first_match": true,
+        "review_flags": [],
+        "rules": [
+          {
+            "category": "Chillers & Cooling Plant",
+            "keyword": "chlr",
+            "match": "contains",
+            "reviewed": true
+          },
+          {
+            "category": "Chillers & Cooling Plant",
+            "keyword": "cooling",
+            "match": "contains",
+            "reviewed": true
+          },
+          {
+            "category": "Preventive Maintenance",
+            "keyword": "preventive",
+            "match": "contains",
+            "reviewed": true
+          },
+          {
+            "category": "Emergency Repairs",
+            "keyword": "emergency",
+            "match": "contains",
+            "reviewed": true
+          },
+          {
+            "category": "Electrical",
+            "keyword": "electrical",
+            "match": "contains",
+            "reviewed": true
+          },
+          {
+            "category": "Fire & Safety",
+            "keyword": "fire",
+            "match": "contains",
+            "reviewed": true
+          }
+        ],
+        "source_cols": [
+          "FAH_Line_Description"
+        ],
+        "target_col": "Category"
+      }
+    },
+    {
+      "timestamp": "2026-10-28T10:03:27.568329+00:00",
+      "actor": "user",
+      "reason": "Accepted reviewed detect_flux suggestion",
+      "path": "/commentary/style",
+      "op": "add",
+      "from": null,
+      "to": "largest_first"
+    },
+    {
+      "timestamp": "2026-10-28T10:03:27.568329+00:00",
+      "actor": "user",
+      "reason": "Accepted reviewed detect_flux suggestion",
+      "path": "/comparison/base/months",
+      "op": "replace",
+      "from": [],
+      "to": [
+        "2026-01",
+        "2026-02",
+        "2026-03"
+      ]
+    },
+    {
+      "timestamp": "2026-10-28T10:03:27.568329+00:00",
+      "actor": "user",
+      "reason": "Accepted reviewed detect_flux suggestion",
+      "path": "/comparison/current/months",
+      "op": "replace",
+      "from": [],
+      "to": [
+        "2026-04",
+        "2026-05",
+        "2026-06"
+      ]
+    },
+    {
+      "timestamp": "2026-10-28T10:03:27.568329+00:00",
+      "actor": "user",
+      "reason": "Accepted reviewed detect_flux suggestion",
+      "path": "/controls",
+      "op": "replace",
+      "from": [
+        {
+          "id": "required_columns",
+          "severity": "stop"
+        },
+        {
+          "id": "periods_present",
+          "severity": "stop"
+        },
+        {
+          "id": "no_duplicate_periods_across_files",
+          "severity": "stop"
+        },
+        {
+          "id": "new_or_removed_members",
+          "severity": "warn"
+        },
+        {
+          "id": "drivers_reconcile",
+          "severity": "stop"
+        },
+        {
+          "id": "flags_sum_to_rows",
+          "severity": "stop"
+        },
+        {
+          "id": "sections_reconcile",
+          "severity": "stop"
+        },
+        {
+          "id": "join_unmatched_keys",
+          "severity": "warn"
+        },
+        {
+          "id": "join_fanout",
+          "severity": "stop"
+        },
+        {
+          "id": "classification_coverage",
+          "severity": "warn",
+          "params": {
+            "minimum_percentage": 95
+          }
+        },
+        {
+          "id": "partial_period_used",
+          "severity": "warn"
+        }
+      ],
+      "to": [
+        {
+          "id": "required_columns",
+          "severity": "stop"
+        },
+        {
+          "id": "periods_present",
+          "severity": "stop"
+        },
+        {
+          "id": "no_duplicate_periods_across_files",
+          "severity": "stop"
+        },
+        {
+          "id": "new_or_removed_members",
+          "severity": "warn"
+        },
+        {
+          "id": "drivers_reconcile",
+          "severity": "stop"
+        },
+        {
+          "id": "flags_sum_to_rows",
+          "severity": "stop"
+        },
+        {
+          "id": "sections_reconcile",
+          "severity": "stop",
+          "tolerance": 0.01
+        },
+        {
+          "id": "debit_minus_credit_equals_value",
+          "severity": "warn"
+        },
+        {
+          "id": "join_unmatched_keys",
+          "severity": "warn"
+        },
+        {
+          "id": "join_fanout",
+          "severity": "stop"
+        },
+        {
+          "id": "classification_coverage",
+          "params": {
+            "minimum_percentage": 95
+          },
+          "severity": "warn"
+        },
+        {
+          "id": "partial_period_used",
+          "severity": "warn"
+        }
+      ]
+    },
+    {
+      "timestamp": "2026-10-28T10:03:27.568329+00:00",
+      "actor": "user",
+      "reason": "Accepted reviewed detect_flux suggestion",
+      "path": "/derive",
+      "op": "replace",
+      "from": [],
+      "to": [
+        {
+          "default": "Operational",
+          "name": "Bucket",
+          "rules": [
+            {
+              "then": "Accrual - Reversal",
+              "when": {
+                "col": "FAH_Event_Type",
+                "op": "contains",
+                "val": "Reversal"
+              }
+            },
+            {
+              "then": "Accrual - Current",
+              "when": {
+                "col": "FAH_Event_Type",
+                "op": "contains",
+                "val": "Current"
+              }
+            }
+          ],
+          "type": "rules"
+        },
+        {
+          "default": "UNMATCHED",
+          "name": "Base_PO",
+          "pattern": "(\\d{6,})",
+          "source": [
+            "Po_Number",
+            "FAH_Line_Description"
+          ],
+          "strip_suffix": "_V\\d+",
+          "type": "regex_extract"
+        }
+      ]
+    },
+    {
+      "timestamp": "2026-10-28T10:03:27.568329+00:00",
+      "actor": "user",
+      "reason": "Accepted reviewed detect_flux suggestion",
+      "path": "/drill/group_by",
+      "op": "add",
+      "from": null,
+      "to": "{roles.driver_text}"
+    },
+    {
+      "timestamp": "2026-10-28T10:03:27.568329+00:00",
+      "actor": "user",
+      "reason": "Accepted reviewed detect_flux suggestion",
+      "path": "/drivers/measure",
+      "op": "add",
+      "from": null,
+      "to": "amount"
+    },
+    {
+      "timestamp": "2026-10-28T10:03:27.568329+00:00",
+      "actor": "user",
+      "reason": "Accepted reviewed detect_flux suggestion",
+      "path": "/drivers/view",
+      "op": "add",
+      "from": null,
+      "to": "by_country_account"
+    },
+    {
+      "timestamp": "2026-10-28T10:03:27.568329+00:00",
+      "actor": "user",
+      "reason": "Accepted reviewed detect_flux suggestion",
+      "path": "/flags",
+      "op": "replace",
+      "from": [],
+      "to": [
+        {
+          "default": "Consistent within $5k",
+          "name": "Observation_Flag",
+          "ordered": [
+            {
+              "if": "M1_base == 0 and M1_curr == 0",
+              "label": "No M1 accrual activity"
+            },
+            {
+              "if": "abs(M1_curr - M1_base) > 5000",
+              "label": "Material movement > $5k"
+            }
+          ],
+          "view": "po"
+        }
+      ]
+    },
+    {
+      "timestamp": "2026-10-28T10:03:27.568329+00:00",
+      "actor": "user",
+      "reason": "Accepted reviewed detect_flux suggestion",
+      "path": "/flux_name",
+      "op": "replace",
+      "from": "Untitled analysis",
+      "to": "Repairs and Maintenance Variance"
+    },
+    {
+      "timestamp": "2026-10-28T10:03:27.568329+00:00",
+      "actor": "user",
+      "reason": "Accepted reviewed detect_flux suggestion",
+      "path": "/gates",
+      "op": "replace",
+      "from": [],
+      "to": [
+        {
+          "if": "gao_booked and Observation_Flag == 'Material movement > $5k'",
+          "name": "GAO material movement",
+          "view": "po"
+        }
+      ]
+    },
+    {
+      "timestamp": "2026-10-28T10:03:27.568329+00:00",
+      "actor": "user",
+      "reason": "Accepted reviewed detect_flux suggestion",
+      "path": "/joins",
+      "op": "replace",
+      "from": [],
+      "to": [
+        {
+          "columns": [
+            "GAO Comment"
+          ],
+          "dedupe_right": "error",
+          "how": "left",
+          "key_normalise": [
+            "trim",
+            "upper",
+            "lstrip_zeros"
+          ],
+          "on": [
+            {
+              "left": "Base_PO",
+              "right": "PO Num"
+            }
+          ],
+          "optional": true,
+          "prefix": "po_",
+          "source": "open_po"
+        }
+      ]
+    },
+    {
+      "timestamp": "2026-10-28T10:03:27.568329+00:00",
+      "actor": "user",
+      "reason": "Accepted reviewed detect_flux suggestion",
+      "path": "/measures/M1_base",
+      "op": "add",
+      "from": null,
+      "to": {
+        "agg": "sum",
+        "col": "{roles.value}",
+        "filter": [
+          {
+            "col": "__month",
+            "op": "eq",
+            "val": "{base.first_month}"
+          },
+          {
+            "col": "Bucket",
+            "op": "eq",
+            "val": "Accrual - Current"
+          }
+        ],
+        "slice": "base"
+      }
+    },
+    {
+      "timestamp": "2026-10-28T10:03:27.568329+00:00",
+      "actor": "user",
+      "reason": "Accepted reviewed detect_flux suggestion",
+      "path": "/measures/M1_curr",
+      "op": "add",
+      "from": null,
+      "to": {
+        "agg": "sum",
+        "col": "{roles.value}",
+        "filter": [
+          {
+            "col": "__month",
+            "op": "eq",
+            "val": "{current.first_month}"
+          },
+          {
+            "col": "Bucket",
+            "op": "in",
+            "val": [
+              "Accrual - Current",
+              "Accrual - Reversal"
+            ]
+          }
+        ],
+        "slice": "current"
+      }
+    },
+    {
+      "timestamp": "2026-10-28T10:03:27.568329+00:00",
+      "actor": "user",
+      "reason": "Accepted reviewed detect_flux suggestion",
+      "path": "/measures/amount",
+      "op": "add",
+      "from": null,
+      "to": {
+        "agg": "sum",
+        "col": "{roles.value}"
+      }
+    },
+    {
+      "timestamp": "2026-10-28T10:03:27.568329+00:00",
+      "actor": "user",
+      "reason": "Accepted reviewed detect_flux suggestion",
+      "path": "/period_format",
+      "op": "replace",
+      "from": "auto",
+      "to": "MON-YY"
+    },
+    {
+      "timestamp": "2026-10-28T10:03:27.568329+00:00",
+      "actor": "user",
+      "reason": "Accepted reviewed detect_flux suggestion",
+      "path": "/preset/id",
+      "op": "replace",
+      "from": "generic_flux",
+      "to": "rm_flux"
+    },
+    {
+      "timestamp": "2026-10-28T10:03:27.568329+00:00",
+      "actor": "user",
+      "reason": "Accepted reviewed detect_flux suggestion",
+      "path": "/roles/credit",
+      "op": "replace",
+      "from": null,
+      "to": "Accounted_Cr"
+    },
+    {
+      "timestamp": "2026-10-28T10:03:27.568329+00:00",
+      "actor": "user",
+      "reason": "Accepted reviewed detect_flux suggestion",
+      "path": "/roles/debit",
+      "op": "replace",
+      "from": null,
+      "to": "Accounted_Dr"
+    },
+    {
+      "timestamp": "2026-10-28T10:03:27.568329+00:00",
+      "actor": "user",
+      "reason": "Accepted reviewed detect_flux suggestion",
+      "path": "/roles/dimensions",
+      "op": "replace",
+      "from": [],
+      "to": [
+        "Country",
+        "Account"
+      ]
+    },
+    {
+      "timestamp": "2026-10-28T10:03:27.568329+00:00",
+      "actor": "user",
+      "reason": "Accepted reviewed detect_flux suggestion",
+      "path": "/roles/driver_text",
+      "op": "replace",
+      "from": [],
+      "to": [
+        "FAH_Line_Description"
+      ]
+    },
+    {
+      "timestamp": "2026-10-28T10:03:27.568329+00:00",
+      "actor": "user",
+      "reason": "Accepted reviewed detect_flux suggestion",
+      "path": "/roles/keys",
+      "op": "replace",
+      "from": [],
+      "to": [
+        "Base_PO"
+      ]
+    },
+    {
+      "timestamp": "2026-10-28T10:03:27.568329+00:00",
+      "actor": "user",
+      "reason": "Accepted reviewed detect_flux suggestion",
+      "path": "/roles/period",
+      "op": "replace",
+      "from": null,
+      "to": "Period_Name"
+    },
+    {
+      "timestamp": "2026-10-28T10:03:27.568329+00:00",
+      "actor": "user",
+      "reason": "Accepted reviewed detect_flux suggestion",
+      "path": "/roles/value",
+      "op": "replace",
+      "from": null,
+      "to": "Functional_Net"
+    },
+    {
+      "timestamp": "2026-10-28T10:03:27.568329+00:00",
+      "actor": "user",
+      "reason": "Accepted reviewed detect_flux suggestion",
+      "path": "/scope",
+      "op": "replace",
+      "from": [],
+      "to": [
+        {
+          "col": "Account",
+          "op": "startswith",
+          "val": "54"
+        }
+      ]
+    },
+    {
+      "timestamp": "2026-10-28T10:03:27.568329+00:00",
+      "actor": "user",
+      "reason": "Accepted reviewed detect_flux suggestion",
+      "path": "/value_rules/null_as_zero",
+      "op": "remove",
+      "from": true,
+      "to": null
+    },
+    {
+      "timestamp": "2026-10-28T10:03:27.568329+00:00",
+      "actor": "user",
+      "reason": "Accepted reviewed detect_flux suggestion",
+      "path": "/views",
+      "op": "replace",
+      "from": [],
+      "to": [
+        {
+          "compare": true,
+          "keys": [
+            "Country",
+            "Account"
+          ],
+          "measures": [
+            "amount"
+          ],
+          "name": "by_country_account"
+        },
+        {
+          "compare": false,
+          "joins": [
+            {
+              "fields": {
+                "gao_booked": {
+                  "filter": [
+                    {
+                      "col": "GAO Comment",
+                      "op": "startswith",
+                      "val": "GAO"
+                    }
+                  ],
+                  "type": "exists_where"
+                },
+                "in_open_po": {
+                  "type": "exists"
+                }
+              },
+              "key_normalise": [
+                "trim",
+                "upper",
+                "lstrip_zeros"
+              ],
+              "left_on": "Base_PO",
+              "lookup": "open_po",
+              "optional": true,
+              "right_on": "PO Num"
+            }
+          ],
+          "keys": [
+            "Base_PO"
+          ],
+          "measures": [
+            "M1_base",
+            "M1_curr"
+          ],
+          "name": "po"
+        }
+      ]
+    },
+    {
+      "timestamp": "2026-10-28T10:13:06.196888+00:00",
+      "actor": "preset",
+      "reason": "Loaded a saved FluxSpec",
+      "path": "/classification",
+      "op": "replace",
+      "from": {
+        "case_sensitive": false,
+        "fallback": "Other / General Maintenance",
+        "first_match": true,
+        "review_flags": [],
+        "rules": [
+          {
+            "category": "Chillers & Cooling Plant",
+            "keyword": "chlr",
+            "match": "contains",
+            "reviewed": true
+          },
+          {
+            "category": "Chillers & Cooling Plant",
+            "keyword": "cooling",
+            "match": "contains",
+            "reviewed": true
+          },
+          {
+            "category": "Preventive Maintenance",
+            "keyword": "preventive",
+            "match": "contains",
+            "reviewed": true
+          },
+          {
+            "category": "Emergency Repairs",
+            "keyword": "emergency",
+            "match": "contains",
+            "reviewed": true
+          },
+          {
+            "category": "Electrical",
+            "keyword": "electrical",
+            "match": "contains",
+            "reviewed": true
+          },
+          {
+            "category": "Fire & Safety",
+            "keyword": "fire",
+            "match": "contains",
+            "reviewed": true
+          }
+        ],
+        "source_cols": [
+          "FAH_Line_Description"
+        ],
+        "target_col": "Category"
+      },
+      "to": null
+    },
+    {
+      "timestamp": "2026-10-28T10:13:06.196888+00:00",
+      "actor": "preset",
+      "reason": "Loaded a saved FluxSpec",
+      "path": "/commentary/forbidden_terms",
+      "op": "remove",
+      "from": [],
+      "to": null
+    },
+    {
+      "timestamp": "2026-10-28T10:13:06.196888+00:00",
+      "actor": "preset",
+      "reason": "Loaded a saved FluxSpec",
+      "path": "/controls",
+      "op": "replace",
+      "from": [
+        {
+          "id": "required_columns",
+          "severity": "stop"
+        },
+        {
+          "id": "periods_present",
+          "severity": "stop"
+        },
+        {
+          "id": "no_duplicate_periods_across_files",
+          "severity": "stop"
+        },
+        {
+          "id": "new_or_removed_members",
+          "severity": "warn"
+        },
+        {
+          "id": "drivers_reconcile",
+          "severity": "stop"
+        },
+        {
+          "id": "flags_sum_to_rows",
+          "severity": "stop"
+        },
+        {
+          "id": "sections_reconcile",
+          "severity": "stop",
+          "tolerance": 0.01
+        },
+        {
+          "id": "debit_minus_credit_equals_value",
+          "severity": "warn"
+        },
+        {
+          "id": "join_unmatched_keys",
+          "severity": "warn"
+        },
+        {
+          "id": "join_fanout",
+          "severity": "stop"
+        },
+        {
+          "id": "classification_coverage",
+          "params": {
+            "minimum_percentage": 95
+          },
+          "severity": "warn"
+        },
+        {
+          "id": "partial_period_used",
+          "severity": "warn"
+        }
+      ],
+      "to": [
+        {
+          "id": "required_columns",
+          "severity": "stop"
+        },
+        {
+          "id": "periods_present",
+          "severity": "stop"
+        },
+        {
+          "id": "no_duplicate_periods_across_files",
+          "severity": "stop"
+        },
+        {
+          "id": "debit_minus_credit_equals_value",
+          "severity": "warn",
+          "params": {
+            "debit": "Accounted_Dr",
+            "credit": "Accounted_Cr"
+          }
+        },
+        {
+          "id": "new_or_removed_members",
+          "severity": "warn"
+        },
+        {
+          "id": "drivers_reconcile",
+          "severity": "stop"
+        },
+        {
+          "id": "sections_reconcile",
+          "severity": "stop",
+          "tolerance": 0.01
+        },
+        {
+          "id": "flags_sum_to_rows",
+          "severity": "stop"
+        },
+        {
+          "id": "join_unmatched_keys",
+          "severity": "warn"
+        },
+        {
+          "id": "join_fanout",
+          "severity": "stop"
+        },
+        {
+          "id": "classification_coverage",
+          "severity": "warn",
+          "params": {
+            "minimum_percentage": 95
+          }
+        },
+        {
+          "id": "partial_period_used",
+          "severity": "warn"
+        }
+      ]
+    },
+    {
+      "timestamp": "2026-10-28T10:13:06.196888+00:00",
+      "actor": "preset",
+      "reason": "Loaded a saved FluxSpec",
+      "path": "/flux_name",
+      "op": "replace",
+      "from": "Repairs and Maintenance Variance",
+      "to": "Example — R&M QoQ"
+    },
+    {
+      "timestamp": "2026-10-28T10:13:06.196888+00:00",
+      "actor": "preset",
+      "reason": "Loaded a saved FluxSpec",
+      "path": "/gates",
+      "op": "replace",
+      "from": [
+        {
+          "if": "gao_booked and Observation_Flag == 'Material movement > $5k'",
+          "name": "GAO material movement",
+          "view": "po"
+        }
+      ],
+      "to": [
+        {
+          "view": "po",
+          "name": "Exception",
+          "if": "gao_booked and Observation_Flag == 'Material movement > $5k'"
+        }
+      ]
+    },
+    {
+      "timestamp": "2026-10-28T10:13:06.196888+00:00",
+      "actor": "preset",
+      "reason": "Loaded a saved FluxSpec",
+      "path": "/joins",
+      "op": "replace",
+      "from": [
+        {
+          "columns": [
+            "GAO Comment"
+          ],
+          "dedupe_right": "error",
+          "how": "left",
+          "key_normalise": [
+            "trim",
+            "upper",
+            "lstrip_zeros"
+          ],
+          "on": [
+            {
+              "left": "Base_PO",
+              "right": "PO Num"
+            }
+          ],
+          "optional": true,
+          "prefix": "po_",
+          "source": "open_po"
+        }
+      ],
+      "to": []
+    },
+    {
+      "timestamp": "2026-10-28T10:13:06.196888+00:00",
+      "actor": "preset",
+      "reason": "Loaded a saved FluxSpec",
+      "path": "/measures/M1_base/filter",
+      "op": "replace",
+      "from": [
+        {
+          "col": "__month",
+          "op": "eq",
+          "val": "{base.first_month}"
+        },
+        {
+          "col": "Bucket",
+          "op": "eq",
+          "val": "Accrual - Current"
+        }
+      ],
+      "to": [
+        {
+          "col": "{roles.period}",
+          "op": "eq",
+          "val": "{base.first_month}"
+        },
+        {
+          "col": "Bucket",
+          "op": "eq",
+          "val": "Accrual - Current"
+        }
+      ]
+    },
+    {
+      "timestamp": "2026-10-28T10:13:06.196888+00:00",
+      "actor": "preset",
+      "reason": "Loaded a saved FluxSpec",
+      "path": "/measures/M1_base/slice",
+      "op": "replace",
+      "from": "base",
+      "to": "none"
+    },
+    {
+      "timestamp": "2026-10-28T10:13:06.196888+00:00",
+      "actor": "preset",
+      "reason": "Loaded a saved FluxSpec",
+      "path": "/measures/M1_curr/filter",
+      "op": "replace",
+      "from": [
+        {
+          "col": "__month",
+          "op": "eq",
+          "val": "{current.first_month}"
+        },
+        {
+          "col": "Bucket",
+          "op": "in",
+          "val": [
+            "Accrual - Current",
+            "Accrual - Reversal"
+          ]
+        }
+      ],
+      "to": [
+        {
+          "col": "{roles.period}",
+          "op": "eq",
+          "val": "{current.first_month}"
+        },
+        {
+          "col": "Bucket",
+          "op": "in",
+          "val": [
+            "Accrual - Current",
+            "Accrual - Reversal"
+          ]
+        }
+      ]
+    },
+    {
+      "timestamp": "2026-10-28T10:13:06.196888+00:00",
+      "actor": "preset",
+      "reason": "Loaded a saved FluxSpec",
+      "path": "/measures/M1_curr/slice",
+      "op": "replace",
+      "from": "current",
+      "to": "none"
+    },
+    {
+      "timestamp": "2026-10-28T10:13:06.196888+00:00",
+      "actor": "preset",
+      "reason": "Loaded a saved FluxSpec",
+      "path": "/sources/lookups",
+      "op": "remove",
+      "from": {
+        "open_po": {
+          "files": [
+            {
+              "file": "Sample_Open_PO.xlsx",
+              "sheet": "Open PO Report ",
+              "header_row": 1,
+              "start_col": "A",
+              "end_col": null
+            }
+          ]
+        }
+      },
+      "to": null
+    },
+    {
+      "timestamp": "2026-10-28T10:13:06.196888+00:00",
+      "actor": "preset",
+      "reason": "Loaded a saved FluxSpec",
+      "path": "/sources/primary",
+      "op": "remove",
+      "from": {
+        "files": [
+          {
+            "file": "Sample_GL_2026.csv",
+            "sheet": "(csv)",
+            "header_row": 1,
+            "start_col": "A",
+            "end_col": null
+          }
+        ],
+        "union": {
+          "mode": "stack",
+          "tag_column": null
+        }
+      },
+      "to": null
+    },
+    {
+      "timestamp": "2026-10-28T10:13:06.196888+00:00",
+      "actor": "preset",
+      "reason": "Loaded a saved FluxSpec",
+      "path": "/value_rules/null_as_zero",
+      "op": "add",
+      "from": null,
+      "to": true
+    },
+    {
+      "timestamp": "2026-10-28T10:13:06.196888+00:00",
+      "actor": "preset",
+      "reason": "Loaded a saved FluxSpec",
+      "path": "/views",
+      "op": "replace",
+      "from": [
+        {
+          "compare": true,
+          "keys": [
+            "Country",
+            "Account"
+          ],
+          "measures": [
+            "amount"
+          ],
+          "name": "by_country_account"
+        },
+        {
+          "compare": false,
+          "joins": [
+            {
+              "fields": {
+                "gao_booked": {
+                  "filter": [
+                    {
+                      "col": "GAO Comment",
+                      "op": "startswith",
+                      "val": "GAO"
+                    }
+                  ],
+                  "type": "exists_where"
+                },
+                "in_open_po": {
+                  "type": "exists"
+                }
+              },
+              "key_normalise": [
+                "trim",
+                "upper",
+                "lstrip_zeros"
+              ],
+              "left_on": "Base_PO",
+              "lookup": "open_po",
+              "optional": true,
+              "right_on": "PO Num"
+            }
+          ],
+          "keys": [
+            "Base_PO"
+          ],
+          "measures": [
+            "M1_base",
+            "M1_curr"
+          ],
+          "name": "po"
+        }
+      ],
+      "to": [
+        {
+          "name": "by_country_account",
+          "keys": [
+            "Country",
+            "Account"
+          ],
+          "measures": [
+            "amount"
+          ],
+          "compare": true
+        },
+        {
+          "name": "po",
+          "keys": [
+            "Base_PO"
+          ],
+          "measures": [
+            "M1_base",
+            "M1_curr"
+          ],
+          "compare": false,
+          "joins": [
+            {
+              "lookup": "open_po",
+              "left_on": "Base_PO",
+              "right_on": "PO Num",
+              "fields": {
+                "in_open_po": {
+                  "type": "exists"
+                },
+                "gao_booked": {
+                  "type": "exists_where",
+                  "filter": [
+                    {
+                      "col": "GAO Comment",
+                      "op": "startswith",
+                      "val": "GAO"
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "timestamp": "2026-10-28T10:13:06.197977+00:00",
+      "actor": "user",
+      "reason": "Updated uploaded source definitions",
+      "path": "/sources/lookups",
+      "op": "add",
+      "from": null,
+      "to": {
+        "open_po": {
+          "files": [
+            {
+              "file": "Sample_Open_PO.xlsx",
+              "sheet": "Open PO Report ",
+              "header_row": 1,
+              "start_col": "A",
+              "end_col": null
+            }
+          ]
+        }
+      }
+    },
+    {
+      "timestamp": "2026-10-28T10:13:06.197977+00:00",
+      "actor": "user",
+      "reason": "Updated uploaded source definitions",
+      "path": "/sources/primary",
+      "op": "add",
+      "from": null,
+      "to": {
+        "files": [
+          {
+            "file": "Sample_GL_2026.csv",
+            "sheet": "(csv)",
+            "header_row": 1,
+            "start_col": "A",
+            "end_col": null
+          }
+        ],
+        "union": {
+          "mode": "stack",
+          "tag_column": null
+        }
+      }
+    }
+  ],
+  "undo_stack": [
+    {
+      "before": {
+        "spec_version": "2.0",
+        "preset": {
+          "id": "generic_flux",
+          "version": "1.0.0"
+        },
+        "flux_name": "Untitled analysis",
+        "sources": {},
+        "roles": {
+          "value": null,
+          "period": null,
+          "scenario": null,
+          "debit": null,
+          "credit": null,
+          "keys": [],
+          "dimensions": [],
+          "driver_text": []
+        },
+        "value_rules": {
+          "source": "column",
+          "null_as_zero": true,
+          "flip_sign_when": []
+        },
+        "scope": [],
+        "derive": [],
+        "periods": {
+          "calendar": "calendar"
+        },
+        "period_format": "auto",
+        "partial_periods": [],
+        "comparison": {
+          "type": "QoQ",
+          "base": {
+            "months": []
+          },
+          "current": {
+            "months": []
+          }
+        },
+        "joins": [],
+        "classification": null,
+        "measures": {},
+        "views": [],
+        "flags": [],
+        "gates": [],
+        "sections": null,
+        "decompose": null,
+        "drivers": {
+          "materiality": {
+            "mode": "abs",
+            "abs": 300000
+          },
+          "top_n": 15,
+          "others_label": "Other items"
+        },
+        "drill": {
+          "top_n": 5
+        },
+        "commentary": {
+          "units": "M",
+          "decimals": 1,
+          "verify_tag": "[TO VERIFY]",
+          "sign_style": "plus_minus",
+          "currency_symbol": "$",
+          "forbidden_terms": [],
+          "max_line_words": 35
+        },
+        "controls": [
+          {
+            "id": "required_columns",
+            "severity": "stop"
+          },
+          {
+            "id": "periods_present",
+            "severity": "stop"
+          },
+          {
+            "id": "no_duplicate_periods_across_files",
+            "severity": "stop"
+          },
+          {
+            "id": "new_or_removed_members",
+            "severity": "warn"
+          },
+          {
+            "id": "drivers_reconcile",
+            "severity": "stop"
+          },
+          {
+            "id": "flags_sum_to_rows",
+            "severity": "stop"
+          },
+          {
+            "id": "sections_reconcile",
+            "severity": "stop"
+          },
+          {
+            "id": "join_unmatched_keys",
+            "severity": "warn"
+          },
+          {
+            "id": "join_fanout",
+            "severity": "stop"
+          },
+          {
+            "id": "classification_coverage",
+            "severity": "warn",
+            "params": {
+              "minimum_percentage": 95
+            }
+          },
+          {
+            "id": "partial_period_used",
+            "severity": "warn"
+          }
+        ]
+      },
+      "after": {
+        "spec_version": "2.0",
+        "preset": {
+          "id": "generic_flux",
+          "version": "1.0.0"
+        },
+        "flux_name": "Untitled analysis",
+        "sources": {
+          "lookups": {},
+          "primary": {
+            "files": [
+              {
+                "file": "Sample_GL_2026.csv",
+                "sheet": "(csv)",
+                "header_row": 1,
+                "start_col": "A",
+                "end_col": null
+              }
+            ],
+            "union": {
+              "mode": "stack",
+              "tag_column": null
+            }
+          }
+        },
+        "roles": {
+          "value": null,
+          "period": null,
+          "scenario": null,
+          "debit": null,
+          "credit": null,
+          "keys": [],
+          "dimensions": [],
+          "driver_text": []
+        },
+        "value_rules": {
+          "source": "column",
+          "null_as_zero": true,
+          "flip_sign_when": []
+        },
+        "scope": [],
+        "derive": [],
+        "periods": {
+          "calendar": "calendar"
+        },
+        "period_format": "auto",
+        "partial_periods": [],
+        "comparison": {
+          "type": "QoQ",
+          "base": {
+            "months": []
+          },
+          "current": {
+            "months": []
+          }
+        },
+        "joins": [],
+        "classification": null,
+        "measures": {},
+        "views": [],
+        "flags": [],
+        "gates": [],
+        "sections": null,
+        "decompose": null,
+        "drivers": {
+          "materiality": {
+            "mode": "abs",
+            "abs": 300000
+          },
+          "top_n": 15,
+          "others_label": "Other items"
+        },
+        "drill": {
+          "top_n": 5
+        },
+        "commentary": {
+          "units": "M",
+          "decimals": 1,
+          "verify_tag": "[TO VERIFY]",
+          "sign_style": "plus_minus",
+          "currency_symbol": "$",
+          "forbidden_terms": [],
+          "max_line_words": 35
+        },
+        "controls": [
+          {
+            "id": "required_columns",
+            "severity": "stop"
+          },
+          {
+            "id": "periods_present",
+            "severity": "stop"
+          },
+          {
+            "id": "no_duplicate_periods_across_files",
+            "severity": "stop"
+          },
+          {
+            "id": "new_or_removed_members",
+            "severity": "warn"
+          },
+          {
+            "id": "drivers_reconcile",
+            "severity": "stop"
+          },
+          {
+            "id": "flags_sum_to_rows",
+            "severity": "stop"
+          },
+          {
+            "id": "sections_reconcile",
+            "severity": "stop"
+          },
+          {
+            "id": "join_unmatched_keys",
+            "severity": "warn"
+          },
+          {
+            "id": "join_fanout",
+            "severity": "stop"
+          },
+          {
+            "id": "classification_coverage",
+            "severity": "warn",
+            "params": {
+              "minimum_percentage": 95
+            }
+          },
+          {
+            "id": "partial_period_used",
+            "severity": "warn"
+          }
+        ]
+      },
+      "actor": "user",
+      "reason": "Updated uploaded source definitions"
+    },
+    {
+      "before": {
+        "spec_version": "2.0",
+        "preset": {
+          "id": "generic_flux",
+          "version": "1.0.0"
+        },
+        "flux_name": "Untitled analysis",
+        "sources": {
+          "lookups": {},
+          "primary": {
+            "files": [
+              {
+                "file": "Sample_GL_2026.csv",
+                "sheet": "(csv)",
+                "header_row": 1,
+                "start_col": "A",
+                "end_col": null
+              }
+            ],
+            "union": {
+              "mode": "stack",
+              "tag_column": null
+            }
+          }
+        },
+        "roles": {
+          "value": null,
+          "period": null,
+          "scenario": null,
+          "debit": null,
+          "credit": null,
+          "keys": [],
+          "dimensions": [],
+          "driver_text": []
+        },
+        "value_rules": {
+          "source": "column",
+          "null_as_zero": true,
+          "flip_sign_when": []
+        },
+        "scope": [],
+        "derive": [],
+        "periods": {
+          "calendar": "calendar"
+        },
+        "period_format": "auto",
+        "partial_periods": [],
+        "comparison": {
+          "type": "QoQ",
+          "base": {
+            "months": []
+          },
+          "current": {
+            "months": []
+          }
+        },
+        "joins": [],
+        "classification": null,
+        "measures": {},
+        "views": [],
+        "flags": [],
+        "gates": [],
+        "sections": null,
+        "decompose": null,
+        "drivers": {
+          "materiality": {
+            "mode": "abs",
+            "abs": 300000
+          },
+          "top_n": 15,
+          "others_label": "Other items"
+        },
+        "drill": {
+          "top_n": 5
+        },
+        "commentary": {
+          "units": "M",
+          "decimals": 1,
+          "verify_tag": "[TO VERIFY]",
+          "sign_style": "plus_minus",
+          "currency_symbol": "$",
+          "forbidden_terms": [],
+          "max_line_words": 35
+        },
+        "controls": [
+          {
+            "id": "required_columns",
+            "severity": "stop"
+          },
+          {
+            "id": "periods_present",
+            "severity": "stop"
+          },
+          {
+            "id": "no_duplicate_periods_across_files",
+            "severity": "stop"
+          },
+          {
+            "id": "new_or_removed_members",
+            "severity": "warn"
+          },
+          {
+            "id": "drivers_reconcile",
+            "severity": "stop"
+          },
+          {
+            "id": "flags_sum_to_rows",
+            "severity": "stop"
+          },
+          {
+            "id": "sections_reconcile",
+            "severity": "stop"
+          },
+          {
+            "id": "join_unmatched_keys",
+            "severity": "warn"
+          },
+          {
+            "id": "join_fanout",
+            "severity": "stop"
+          },
+          {
+            "id": "classification_coverage",
+            "severity": "warn",
+            "params": {
+              "minimum_percentage": 95
+            }
+          },
+          {
+            "id": "partial_period_used",
+            "severity": "warn"
+          }
+        ]
+      },
+      "after": {
+        "spec_version": "2.0",
+        "preset": {
+          "id": "generic_flux",
+          "version": "1.0.0"
+        },
+        "flux_name": "Untitled analysis",
+        "sources": {
+          "lookups": {
+            "open_po": {
+              "files": [
+                {
+                  "file": "Sample_Open_PO.xlsx",
+                  "sheet": "Open PO Report ",
+                  "header_row": 1,
+                  "start_col": "A",
+                  "end_col": null
+                }
+              ]
+            }
+          },
+          "primary": {
+            "files": [
+              {
+                "file": "Sample_GL_2026.csv",
+                "sheet": "(csv)",
+                "header_row": 1,
+                "start_col": "A",
+                "end_col": null
+              }
+            ],
+            "union": {
+              "mode": "stack",
+              "tag_column": null
+            }
+          }
+        },
+        "roles": {
+          "value": null,
+          "period": null,
+          "scenario": null,
+          "debit": null,
+          "credit": null,
+          "keys": [],
+          "dimensions": [],
+          "driver_text": []
+        },
+        "value_rules": {
+          "source": "column",
+          "null_as_zero": true,
+          "flip_sign_when": []
+        },
+        "scope": [],
+        "derive": [],
+        "periods": {
+          "calendar": "calendar"
+        },
+        "period_format": "auto",
+        "partial_periods": [],
+        "comparison": {
+          "type": "QoQ",
+          "base": {
+            "months": []
+          },
+          "current": {
+            "months": []
+          }
+        },
+        "joins": [],
+        "classification": null,
+        "measures": {},
+        "views": [],
+        "flags": [],
+        "gates": [],
+        "sections": null,
+        "decompose": null,
+        "drivers": {
+          "materiality": {
+            "mode": "abs",
+            "abs": 300000
+          },
+          "top_n": 15,
+          "others_label": "Other items"
+        },
+        "drill": {
+          "top_n": 5
+        },
+        "commentary": {
+          "units": "M",
+          "decimals": 1,
+          "verify_tag": "[TO VERIFY]",
+          "sign_style": "plus_minus",
+          "currency_symbol": "$",
+          "forbidden_terms": [],
+          "max_line_words": 35
+        },
+        "controls": [
+          {
+            "id": "required_columns",
+            "severity": "stop"
+          },
+          {
+            "id": "periods_present",
+            "severity": "stop"
+          },
+          {
+            "id": "no_duplicate_periods_across_files",
+            "severity": "stop"
+          },
+          {
+            "id": "new_or_removed_members",
+            "severity": "warn"
+          },
+          {
+            "id": "drivers_reconcile",
+            "severity": "stop"
+          },
+          {
+            "id": "flags_sum_to_rows",
+            "severity": "stop"
+          },
+          {
+            "id": "sections_reconcile",
+            "severity": "stop"
+          },
+          {
+            "id": "join_unmatched_keys",
+            "severity": "warn"
+          },
+          {
+            "id": "join_fanout",
+            "severity": "stop"
+          },
+          {
+            "id": "classification_coverage",
+            "severity": "warn",
+            "params": {
+              "minimum_percentage": 95
+            }
+          },
+          {
+            "id": "partial_period_used",
+            "severity": "warn"
+          }
+        ]
+      },
+      "actor": "user",
+      "reason": "Updated uploaded source definitions"
+    },
+    {
+      "before": {
+        "spec_version": "2.0",
+        "preset": {
+          "id": "generic_flux",
+          "version": "1.0.0"
+        },
+        "flux_name": "Untitled analysis",
+        "sources": {
+          "lookups": {
+            "open_po": {
+              "files": [
+                {
+                  "file": "Sample_Open_PO.xlsx",
+                  "sheet": "Open PO Report ",
+                  "header_row": 1,
+                  "start_col": "A",
+                  "end_col": null
+                }
+              ]
+            }
+          },
+          "primary": {
+            "files": [
+              {
+                "file": "Sample_GL_2026.csv",
+                "sheet": "(csv)",
+                "header_row": 1,
+                "start_col": "A",
+                "end_col": null
+              }
+            ],
+            "union": {
+              "mode": "stack",
+              "tag_column": null
+            }
+          }
+        },
+        "roles": {
+          "value": null,
+          "period": null,
+          "scenario": null,
+          "debit": null,
+          "credit": null,
+          "keys": [],
+          "dimensions": [],
+          "driver_text": []
+        },
+        "value_rules": {
+          "source": "column",
+          "null_as_zero": true,
+          "flip_sign_when": []
+        },
+        "scope": [],
+        "derive": [],
+        "periods": {
+          "calendar": "calendar"
+        },
+        "period_format": "auto",
+        "partial_periods": [],
+        "comparison": {
+          "type": "QoQ",
+          "base": {
+            "months": []
+          },
+          "current": {
+            "months": []
+          }
+        },
+        "joins": [],
+        "classification": null,
+        "measures": {},
+        "views": [],
+        "flags": [],
+        "gates": [],
+        "sections": null,
+        "decompose": null,
+        "drivers": {
+          "materiality": {
+            "mode": "abs",
+            "abs": 300000
+          },
+          "top_n": 15,
+          "others_label": "Other items"
+        },
+        "drill": {
+          "top_n": 5
+        },
+        "commentary": {
+          "units": "M",
+          "decimals": 1,
+          "verify_tag": "[TO VERIFY]",
+          "sign_style": "plus_minus",
+          "currency_symbol": "$",
+          "forbidden_terms": [],
+          "max_line_words": 35
+        },
+        "controls": [
+          {
+            "id": "required_columns",
+            "severity": "stop"
+          },
+          {
+            "id": "periods_present",
+            "severity": "stop"
+          },
+          {
+            "id": "no_duplicate_periods_across_files",
+            "severity": "stop"
+          },
+          {
+            "id": "new_or_removed_members",
+            "severity": "warn"
+          },
+          {
+            "id": "drivers_reconcile",
+            "severity": "stop"
+          },
+          {
+            "id": "flags_sum_to_rows",
+            "severity": "stop"
+          },
+          {
+            "id": "sections_reconcile",
+            "severity": "stop"
+          },
+          {
+            "id": "join_unmatched_keys",
+            "severity": "warn"
+          },
+          {
+            "id": "join_fanout",
+            "severity": "stop"
+          },
+          {
+            "id": "classification_coverage",
+            "severity": "warn",
+            "params": {
+              "minimum_percentage": 95
+            }
+          },
+          {
+            "id": "partial_period_used",
+            "severity": "warn"
+          }
+        ]
+      },
+      "after": {
+        "spec_version": "2.0",
+        "preset": {
+          "id": "rm_flux",
+          "version": "1.0.0"
+        },
+        "flux_name": "Repairs and Maintenance Variance",
+        "sources": {
+          "lookups": {
+            "open_po": {
+              "files": [
+                {
+                  "file": "Sample_Open_PO.xlsx",
+                  "sheet": "Open PO Report ",
+                  "header_row": 1,
+                  "start_col": "A",
+                  "end_col": null
+                }
+              ]
+            }
+          },
+          "primary": {
+            "files": [
+              {
+                "file": "Sample_GL_2026.csv",
+                "sheet": "(csv)",
+                "header_row": 1,
+                "start_col": "A",
+                "end_col": null
+              }
+            ],
+            "union": {
+              "mode": "stack",
+              "tag_column": null
+            }
+          }
+        },
+        "roles": {
+          "value": "Functional_Net",
+          "period": "Period_Name",
+          "scenario": null,
+          "debit": "Accounted_Dr",
+          "credit": "Accounted_Cr",
+          "keys": [
+            "Base_PO"
+          ],
+          "dimensions": [
+            "Country",
+            "Account"
+          ],
+          "driver_text": [
+            "FAH_Line_Description"
+          ]
+        },
+        "value_rules": {
+          "source": "column",
+          "flip_sign_when": []
+        },
+        "scope": [
+          {
+            "col": "Account",
+            "op": "startswith",
+            "val": "54"
+          }
+        ],
+        "derive": [
+          {
+            "default": "Operational",
+            "name": "Bucket",
+            "rules": [
+              {
+                "then": "Accrual - Reversal",
+                "when": {
+                  "col": "FAH_Event_Type",
+                  "op": "contains",
+                  "val": "Reversal"
+                }
+              },
+              {
+                "then": "Accrual - Current",
+                "when": {
+                  "col": "FAH_Event_Type",
+                  "op": "contains",
+                  "val": "Current"
+                }
+              }
+            ],
+            "type": "rules"
+          },
+          {
+            "default": "UNMATCHED",
+            "name": "Base_PO",
+            "pattern": "(\\d{6,})",
+            "source": [
+              "Po_Number",
+              "FAH_Line_Description"
+            ],
+            "strip_suffix": "_V\\d+",
+            "type": "regex_extract"
+          }
+        ],
+        "periods": {
+          "calendar": "calendar"
+        },
+        "period_format": "MON-YY",
+        "partial_periods": [],
+        "comparison": {
+          "type": "QoQ",
+          "base": {
+            "months": [
+              "2026-01",
+              "2026-02",
+              "2026-03"
+            ]
+          },
+          "current": {
+            "months": [
+              "2026-04",
+              "2026-05",
+              "2026-06"
+            ]
+          }
+        },
+        "joins": [
+          {
+            "columns": [
+              "GAO Comment"
+            ],
+            "dedupe_right": "error",
+            "how": "left",
+            "key_normalise": [
+              "trim",
+              "upper",
+              "lstrip_zeros"
+            ],
+            "on": [
+              {
+                "left": "Base_PO",
+                "right": "PO Num"
+              }
+            ],
+            "optional": true,
+            "prefix": "po_",
+            "source": "open_po"
+          }
+        ],
+        "classification": {
+          "case_sensitive": false,
+          "fallback": "Other / General Maintenance",
+          "first_match": true,
+          "review_flags": [],
+          "rules": [
+            {
+              "category": "Chillers & Cooling Plant",
+              "keyword": "chlr",
+              "match": "contains",
+              "reviewed": true
+            },
+            {
+              "category": "Chillers & Cooling Plant",
+              "keyword": "cooling",
+              "match": "contains",
+              "reviewed": true
+            },
+            {
+              "category": "Preventive Maintenance",
+              "keyword": "preventive",
+              "match": "contains",
+              "reviewed": true
+            },
+            {
+              "category": "Emergency Repairs",
+              "keyword": "emergency",
+              "match": "contains",
+              "reviewed": true
+            },
+            {
+              "category": "Electrical",
+              "keyword": "electrical",
+              "match": "contains",
+              "reviewed": true
+            },
+            {
+              "category": "Fire & Safety",
+              "keyword": "fire",
+              "match": "contains",
+              "reviewed": true
+            }
+          ],
+          "source_cols": [
+            "FAH_Line_Description"
+          ],
+          "target_col": "Category"
+        },
+        "measures": {
+          "M1_base": {
+            "agg": "sum",
+            "col": "{roles.value}",
+            "filter": [
+              {
+                "col": "__month",
+                "op": "eq",
+                "val": "{base.first_month}"
+              },
+              {
+                "col": "Bucket",
+                "op": "eq",
+                "val": "Accrual - Current"
+              }
+            ],
+            "slice": "base"
+          },
+          "M1_curr": {
+            "agg": "sum",
+            "col": "{roles.value}",
+            "filter": [
+              {
+                "col": "__month",
+                "op": "eq",
+                "val": "{current.first_month}"
+              },
+              {
+                "col": "Bucket",
+                "op": "in",
+                "val": [
+                  "Accrual - Current",
+                  "Accrual - Reversal"
+                ]
+              }
+            ],
+            "slice": "current"
+          },
+          "amount": {
+            "agg": "sum",
+            "col": "{roles.value}"
+          }
+        },
+        "views": [
+          {
+            "compare": true,
+            "keys": [
+              "Country",
+              "Account"
+            ],
+            "measures": [
+              "amount"
+            ],
+            "name": "by_country_account"
+          },
+          {
+            "compare": false,
+            "joins": [
+              {
+                "fields": {
+                  "gao_booked": {
+                    "filter": [
+                      {
+                        "col": "GAO Comment",
+                        "op": "startswith",
+                        "val": "GAO"
+                      }
+                    ],
+                    "type": "exists_where"
+                  },
+                  "in_open_po": {
+                    "type": "exists"
+                  }
+                },
+                "key_normalise": [
+                  "trim",
+                  "upper",
+                  "lstrip_zeros"
+                ],
+                "left_on": "Base_PO",
+                "lookup": "open_po",
+                "optional": true,
+                "right_on": "PO Num"
+              }
+            ],
+            "keys": [
+              "Base_PO"
+            ],
+            "measures": [
+              "M1_base",
+              "M1_curr"
+            ],
+            "name": "po"
+          }
+        ],
+        "flags": [
+          {
+            "default": "Consistent within $5k",
+            "name": "Observation_Flag",
+            "ordered": [
+              {
+                "if": "M1_base == 0 and M1_curr == 0",
+                "label": "No M1 accrual activity"
+              },
+              {
+                "if": "abs(M1_curr - M1_base) > 5000",
+                "label": "Material movement > $5k"
+              }
+            ],
+            "view": "po"
+          }
+        ],
+        "gates": [
+          {
+            "if": "gao_booked and Observation_Flag == 'Material movement > $5k'",
+            "name": "GAO material movement",
+            "view": "po"
+          }
+        ],
+        "sections": null,
+        "decompose": null,
+        "drivers": {
+          "materiality": {
+            "mode": "abs",
+            "abs": 300000
+          },
+          "top_n": 15,
+          "others_label": "Other items",
+          "measure": "amount",
+          "view": "by_country_account"
+        },
+        "drill": {
+          "top_n": 5,
+          "group_by": "{roles.driver_text}"
+        },
+        "commentary": {
+          "units": "M",
+          "decimals": 1,
+          "verify_tag": "[TO VERIFY]",
+          "sign_style": "plus_minus",
+          "currency_symbol": "$",
+          "forbidden_terms": [],
+          "max_line_words": 35,
+          "style": "largest_first"
+        },
+        "controls": [
+          {
+            "id": "required_columns",
+            "severity": "stop"
+          },
+          {
+            "id": "periods_present",
+            "severity": "stop"
+          },
+          {
+            "id": "no_duplicate_periods_across_files",
+            "severity": "stop"
+          },
+          {
+            "id": "new_or_removed_members",
+            "severity": "warn"
+          },
+          {
+            "id": "drivers_reconcile",
+            "severity": "stop"
+          },
+          {
+            "id": "flags_sum_to_rows",
+            "severity": "stop"
+          },
+          {
+            "id": "sections_reconcile",
+            "severity": "stop",
+            "tolerance": 0.01
+          },
+          {
+            "id": "debit_minus_credit_equals_value",
+            "severity": "warn"
+          },
+          {
+            "id": "join_unmatched_keys",
+            "severity": "warn"
+          },
+          {
+            "id": "join_fanout",
+            "severity": "stop"
+          },
+          {
+            "id": "classification_coverage",
+            "params": {
+              "minimum_percentage": 95
+            },
+            "severity": "warn"
+          },
+          {
+            "id": "partial_period_used",
+            "severity": "warn"
+          }
+        ]
+      },
+      "actor": "user",
+      "reason": "Accepted reviewed detect_flux suggestion"
+    },
+    {
+      "before": {
+        "spec_version": "2.0",
+        "preset": {
+          "id": "rm_flux",
+          "version": "1.0.0"
+        },
+        "flux_name": "Repairs and Maintenance Variance",
+        "sources": {
+          "lookups": {
+            "open_po": {
+              "files": [
+                {
+                  "file": "Sample_Open_PO.xlsx",
+                  "sheet": "Open PO Report ",
+                  "header_row": 1,
+                  "start_col": "A",
+                  "end_col": null
+                }
+              ]
+            }
+          },
+          "primary": {
+            "files": [
+              {
+                "file": "Sample_GL_2026.csv",
+                "sheet": "(csv)",
+                "header_row": 1,
+                "start_col": "A",
+                "end_col": null
+              }
+            ],
+            "union": {
+              "mode": "stack",
+              "tag_column": null
+            }
+          }
+        },
+        "roles": {
+          "value": "Functional_Net",
+          "period": "Period_Name",
+          "scenario": null,
+          "debit": "Accounted_Dr",
+          "credit": "Accounted_Cr",
+          "keys": [
+            "Base_PO"
+          ],
+          "dimensions": [
+            "Country",
+            "Account"
+          ],
+          "driver_text": [
+            "FAH_Line_Description"
+          ]
+        },
+        "value_rules": {
+          "source": "column",
+          "flip_sign_when": []
+        },
+        "scope": [
+          {
+            "col": "Account",
+            "op": "startswith",
+            "val": "54"
+          }
+        ],
+        "derive": [
+          {
+            "default": "Operational",
+            "name": "Bucket",
+            "rules": [
+              {
+                "then": "Accrual - Reversal",
+                "when": {
+                  "col": "FAH_Event_Type",
+                  "op": "contains",
+                  "val": "Reversal"
+                }
+              },
+              {
+                "then": "Accrual - Current",
+                "when": {
+                  "col": "FAH_Event_Type",
+                  "op": "contains",
+                  "val": "Current"
+                }
+              }
+            ],
+            "type": "rules"
+          },
+          {
+            "default": "UNMATCHED",
+            "name": "Base_PO",
+            "pattern": "(\\d{6,})",
+            "source": [
+              "Po_Number",
+              "FAH_Line_Description"
+            ],
+            "strip_suffix": "_V\\d+",
+            "type": "regex_extract"
+          }
+        ],
+        "periods": {
+          "calendar": "calendar"
+        },
+        "period_format": "MON-YY",
+        "partial_periods": [],
+        "comparison": {
+          "type": "QoQ",
+          "base": {
+            "months": [
+              "2026-01",
+              "2026-02",
+              "2026-03"
+            ]
+          },
+          "current": {
+            "months": [
+              "2026-04",
+              "2026-05",
+              "2026-06"
+            ]
+          }
+        },
+        "joins": [
+          {
+            "columns": [
+              "GAO Comment"
+            ],
+            "dedupe_right": "error",
+            "how": "left",
+            "key_normalise": [
+              "trim",
+              "upper",
+              "lstrip_zeros"
+            ],
+            "on": [
+              {
+                "left": "Base_PO",
+                "right": "PO Num"
+              }
+            ],
+            "optional": true,
+            "prefix": "po_",
+            "source": "open_po"
+          }
+        ],
+        "classification": {
+          "case_sensitive": false,
+          "fallback": "Other / General Maintenance",
+          "first_match": true,
+          "review_flags": [],
+          "rules": [
+            {
+              "category": "Chillers & Cooling Plant",
+              "keyword": "chlr",
+              "match": "contains",
+              "reviewed": true
+            },
+            {
+              "category": "Chillers & Cooling Plant",
+              "keyword": "cooling",
+              "match": "contains",
+              "reviewed": true
+            },
+            {
+              "category": "Preventive Maintenance",
+              "keyword": "preventive",
+              "match": "contains",
+              "reviewed": true
+            },
+            {
+              "category": "Emergency Repairs",
+              "keyword": "emergency",
+              "match": "contains",
+              "reviewed": true
+            },
+            {
+              "category": "Electrical",
+              "keyword": "electrical",
+              "match": "contains",
+              "reviewed": true
+            },
+            {
+              "category": "Fire & Safety",
+              "keyword": "fire",
+              "match": "contains",
+              "reviewed": true
+            }
+          ],
+          "source_cols": [
+            "FAH_Line_Description"
+          ],
+          "target_col": "Category"
+        },
+        "measures": {
+          "M1_base": {
+            "agg": "sum",
+            "col": "{roles.value}",
+            "filter": [
+              {
+                "col": "__month",
+                "op": "eq",
+                "val": "{base.first_month}"
+              },
+              {
+                "col": "Bucket",
+                "op": "eq",
+                "val": "Accrual - Current"
+              }
+            ],
+            "slice": "base"
+          },
+          "M1_curr": {
+            "agg": "sum",
+            "col": "{roles.value}",
+            "filter": [
+              {
+                "col": "__month",
+                "op": "eq",
+                "val": "{current.first_month}"
+              },
+              {
+                "col": "Bucket",
+                "op": "in",
+                "val": [
+                  "Accrual - Current",
+                  "Accrual - Reversal"
+                ]
+              }
+            ],
+            "slice": "current"
+          },
+          "amount": {
+            "agg": "sum",
+            "col": "{roles.value}"
+          }
+        },
+        "views": [
+          {
+            "compare": true,
+            "keys": [
+              "Country",
+              "Account"
+            ],
+            "measures": [
+              "amount"
+            ],
+            "name": "by_country_account"
+          },
+          {
+            "compare": false,
+            "joins": [
+              {
+                "fields": {
+                  "gao_booked": {
+                    "filter": [
+                      {
+                        "col": "GAO Comment",
+                        "op": "startswith",
+                        "val": "GAO"
+                      }
+                    ],
+                    "type": "exists_where"
+                  },
+                  "in_open_po": {
+                    "type": "exists"
+                  }
+                },
+                "key_normalise": [
+                  "trim",
+                  "upper",
+                  "lstrip_zeros"
+                ],
+                "left_on": "Base_PO",
+                "lookup": "open_po",
+                "optional": true,
+                "right_on": "PO Num"
+              }
+            ],
+            "keys": [
+              "Base_PO"
+            ],
+            "measures": [
+              "M1_base",
+              "M1_curr"
+            ],
+            "name": "po"
+          }
+        ],
+        "flags": [
+          {
+            "default": "Consistent within $5k",
+            "name": "Observation_Flag",
+            "ordered": [
+              {
+                "if": "M1_base == 0 and M1_curr == 0",
+                "label": "No M1 accrual activity"
+              },
+              {
+                "if": "abs(M1_curr - M1_base) > 5000",
+                "label": "Material movement > $5k"
+              }
+            ],
+            "view": "po"
+          }
+        ],
+        "gates": [
+          {
+            "if": "gao_booked and Observation_Flag == 'Material movement > $5k'",
+            "name": "GAO material movement",
+            "view": "po"
+          }
+        ],
+        "sections": null,
+        "decompose": null,
+        "drivers": {
+          "materiality": {
+            "mode": "abs",
+            "abs": 300000
+          },
+          "top_n": 15,
+          "others_label": "Other items",
+          "measure": "amount",
+          "view": "by_country_account"
+        },
+        "drill": {
+          "top_n": 5,
+          "group_by": "{roles.driver_text}"
+        },
+        "commentary": {
+          "units": "M",
+          "decimals": 1,
+          "verify_tag": "[TO VERIFY]",
+          "sign_style": "plus_minus",
+          "currency_symbol": "$",
+          "forbidden_terms": [],
+          "max_line_words": 35,
+          "style": "largest_first"
+        },
+        "controls": [
+          {
+            "id": "required_columns",
+            "severity": "stop"
+          },
+          {
+            "id": "periods_present",
+            "severity": "stop"
+          },
+          {
+            "id": "no_duplicate_periods_across_files",
+            "severity": "stop"
+          },
+          {
+            "id": "new_or_removed_members",
+            "severity": "warn"
+          },
+          {
+            "id": "drivers_reconcile",
+            "severity": "stop"
+          },
+          {
+            "id": "flags_sum_to_rows",
+            "severity": "stop"
+          },
+          {
+            "id": "sections_reconcile",
+            "severity": "stop",
+            "tolerance": 0.01
+          },
+          {
+            "id": "debit_minus_credit_equals_value",
+            "severity": "warn"
+          },
+          {
+            "id": "join_unmatched_keys",
+            "severity": "warn"
+          },
+          {
+            "id": "join_fanout",
+            "severity": "stop"
+          },
+          {
+            "id": "classification_coverage",
+            "params": {
+              "minimum_percentage": 95
+            },
+            "severity": "warn"
+          },
+          {
+            "id": "partial_period_used",
+            "severity": "warn"
+          }
+        ]
+      },
+      "after": {
+        "spec_version": "2.0",
+        "preset": {
+          "id": "rm_flux",
+          "version": "1.0.0"
+        },
+        "flux_name": "Example — R&M QoQ",
+        "sources": {},
+        "roles": {
+          "value": "Functional_Net",
+          "period": "Period_Name",
+          "scenario": null,
+          "debit": "Accounted_Dr",
+          "credit": "Accounted_Cr",
+          "keys": [
+            "Base_PO"
+          ],
+          "dimensions": [
+            "Country",
+            "Account"
+          ],
+          "driver_text": [
+            "FAH_Line_Description"
+          ]
+        },
+        "value_rules": {
+          "source": "column",
+          "flip_sign_when": [],
+          "null_as_zero": true
+        },
+        "scope": [
+          {
+            "col": "Account",
+            "op": "startswith",
+            "val": "54"
+          }
+        ],
+        "derive": [
+          {
+            "default": "Operational",
+            "name": "Bucket",
+            "rules": [
+              {
+                "then": "Accrual - Reversal",
+                "when": {
+                  "col": "FAH_Event_Type",
+                  "op": "contains",
+                  "val": "Reversal"
+                }
+              },
+              {
+                "then": "Accrual - Current",
+                "when": {
+                  "col": "FAH_Event_Type",
+                  "op": "contains",
+                  "val": "Current"
+                }
+              }
+            ],
+            "type": "rules"
+          },
+          {
+            "default": "UNMATCHED",
+            "name": "Base_PO",
+            "pattern": "(\\d{6,})",
+            "source": [
+              "Po_Number",
+              "FAH_Line_Description"
+            ],
+            "strip_suffix": "_V\\d+",
+            "type": "regex_extract"
+          }
+        ],
+        "periods": {
+          "calendar": "calendar"
+        },
+        "period_format": "MON-YY",
+        "partial_periods": [],
+        "comparison": {
+          "type": "QoQ",
+          "base": {
+            "months": [
+              "2026-01",
+              "2026-02",
+              "2026-03"
+            ]
+          },
+          "current": {
+            "months": [
+              "2026-04",
+              "2026-05",
+              "2026-06"
+            ]
+          }
+        },
+        "joins": [],
+        "classification": null,
+        "measures": {
+          "M1_base": {
+            "agg": "sum",
+            "col": "{roles.value}",
+            "filter": [
+              {
+                "col": "{roles.period}",
+                "op": "eq",
+                "val": "{base.first_month}"
+              },
+              {
+                "col": "Bucket",
+                "op": "eq",
+                "val": "Accrual - Current"
+              }
+            ],
+            "slice": "none"
+          },
+          "M1_curr": {
+            "agg": "sum",
+            "col": "{roles.value}",
+            "filter": [
+              {
+                "col": "{roles.period}",
+                "op": "eq",
+                "val": "{current.first_month}"
+              },
+              {
+                "col": "Bucket",
+                "op": "in",
+                "val": [
+                  "Accrual - Current",
+                  "Accrual - Reversal"
+                ]
+              }
+            ],
+            "slice": "none"
+          },
+          "amount": {
+            "agg": "sum",
+            "col": "{roles.value}"
+          }
+        },
+        "views": [
+          {
+            "name": "by_country_account",
+            "keys": [
+              "Country",
+              "Account"
+            ],
+            "measures": [
+              "amount"
+            ],
+            "compare": true
+          },
+          {
+            "name": "po",
+            "keys": [
+              "Base_PO"
+            ],
+            "measures": [
+              "M1_base",
+              "M1_curr"
+            ],
+            "compare": false,
+            "joins": [
+              {
+                "lookup": "open_po",
+                "left_on": "Base_PO",
+                "right_on": "PO Num",
+                "fields": {
+                  "in_open_po": {
+                    "type": "exists"
+                  },
+                  "gao_booked": {
+                    "type": "exists_where",
+                    "filter": [
+                      {
+                        "col": "GAO Comment",
+                        "op": "startswith",
+                        "val": "GAO"
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "flags": [
+          {
+            "default": "Consistent within $5k",
+            "name": "Observation_Flag",
+            "ordered": [
+              {
+                "if": "M1_base == 0 and M1_curr == 0",
+                "label": "No M1 accrual activity"
+              },
+              {
+                "if": "abs(M1_curr - M1_base) > 5000",
+                "label": "Material movement > $5k"
+              }
+            ],
+            "view": "po"
+          }
+        ],
+        "gates": [
+          {
+            "view": "po",
+            "name": "Exception",
+            "if": "gao_booked and Observation_Flag == 'Material movement > $5k'"
+          }
+        ],
+        "sections": null,
+        "decompose": null,
+        "drivers": {
+          "materiality": {
+            "mode": "abs",
+            "abs": 300000
+          },
+          "top_n": 15,
+          "others_label": "Other items",
+          "measure": "amount",
+          "view": "by_country_account"
+        },
+        "drill": {
+          "top_n": 5,
+          "group_by": "{roles.driver_text}"
+        },
+        "commentary": {
+          "units": "M",
+          "decimals": 1,
+          "verify_tag": "[TO VERIFY]",
+          "sign_style": "plus_minus",
+          "currency_symbol": "$",
+          "max_line_words": 35,
+          "style": "largest_first"
+        },
+        "controls": [
+          {
+            "id": "required_columns",
+            "severity": "stop"
+          },
+          {
+            "id": "periods_present",
+            "severity": "stop"
+          },
+          {
+            "id": "no_duplicate_periods_across_files",
+            "severity": "stop"
+          },
+          {
+            "id": "debit_minus_credit_equals_value",
+            "severity": "warn",
+            "params": {
+              "debit": "Accounted_Dr",
+              "credit": "Accounted_Cr"
+            }
+          },
+          {
+            "id": "new_or_removed_members",
+            "severity": "warn"
+          },
+          {
+            "id": "drivers_reconcile",
+            "severity": "stop"
+          },
+          {
+            "id": "sections_reconcile",
+            "severity": "stop",
+            "tolerance": 0.01
+          },
+          {
+            "id": "flags_sum_to_rows",
+            "severity": "stop"
+          },
+          {
+            "id": "join_unmatched_keys",
+            "severity": "warn"
+          },
+          {
+            "id": "join_fanout",
+            "severity": "stop"
+          },
+          {
+            "id": "classification_coverage",
+            "severity": "warn",
+            "params": {
+              "minimum_percentage": 95
+            }
+          },
+          {
+            "id": "partial_period_used",
+            "severity": "warn"
+          }
+        ]
+      },
+      "actor": "preset",
+      "reason": "Loaded a saved FluxSpec"
+    },
+    {
+      "before": {
+        "spec_version": "2.0",
+        "preset": {
+          "id": "rm_flux",
+          "version": "1.0.0"
+        },
+        "flux_name": "Example — R&M QoQ",
+        "sources": {},
+        "roles": {
+          "value": "Functional_Net",
+          "period": "Period_Name",
+          "scenario": null,
+          "debit": "Accounted_Dr",
+          "credit": "Accounted_Cr",
+          "keys": [
+            "Base_PO"
+          ],
+          "dimensions": [
+            "Country",
+            "Account"
+          ],
+          "driver_text": [
+            "FAH_Line_Description"
+          ]
+        },
+        "value_rules": {
+          "source": "column",
+          "flip_sign_when": [],
+          "null_as_zero": true
+        },
+        "scope": [
+          {
+            "col": "Account",
+            "op": "startswith",
+            "val": "54"
+          }
+        ],
+        "derive": [
+          {
+            "default": "Operational",
+            "name": "Bucket",
+            "rules": [
+              {
+                "then": "Accrual - Reversal",
+                "when": {
+                  "col": "FAH_Event_Type",
+                  "op": "contains",
+                  "val": "Reversal"
+                }
+              },
+              {
+                "then": "Accrual - Current",
+                "when": {
+                  "col": "FAH_Event_Type",
+                  "op": "contains",
+                  "val": "Current"
+                }
+              }
+            ],
+            "type": "rules"
+          },
+          {
+            "default": "UNMATCHED",
+            "name": "Base_PO",
+            "pattern": "(\\d{6,})",
+            "source": [
+              "Po_Number",
+              "FAH_Line_Description"
+            ],
+            "strip_suffix": "_V\\d+",
+            "type": "regex_extract"
+          }
+        ],
+        "periods": {
+          "calendar": "calendar"
+        },
+        "period_format": "MON-YY",
+        "partial_periods": [],
+        "comparison": {
+          "type": "QoQ",
+          "base": {
+            "months": [
+              "2026-01",
+              "2026-02",
+              "2026-03"
+            ]
+          },
+          "current": {
+            "months": [
+              "2026-04",
+              "2026-05",
+              "2026-06"
+            ]
+          }
+        },
+        "joins": [],
+        "classification": null,
+        "measures": {
+          "M1_base": {
+            "agg": "sum",
+            "col": "{roles.value}",
+            "filter": [
+              {
+                "col": "{roles.period}",
+                "op": "eq",
+                "val": "{base.first_month}"
+              },
+              {
+                "col": "Bucket",
+                "op": "eq",
+                "val": "Accrual - Current"
+              }
+            ],
+            "slice": "none"
+          },
+          "M1_curr": {
+            "agg": "sum",
+            "col": "{roles.value}",
+            "filter": [
+              {
+                "col": "{roles.period}",
+                "op": "eq",
+                "val": "{current.first_month}"
+              },
+              {
+                "col": "Bucket",
+                "op": "in",
+                "val": [
+                  "Accrual - Current",
+                  "Accrual - Reversal"
+                ]
+              }
+            ],
+            "slice": "none"
+          },
+          "amount": {
+            "agg": "sum",
+            "col": "{roles.value}"
+          }
+        },
+        "views": [
+          {
+            "name": "by_country_account",
+            "keys": [
+              "Country",
+              "Account"
+            ],
+            "measures": [
+              "amount"
+            ],
+            "compare": true
+          },
+          {
+            "name": "po",
+            "keys": [
+              "Base_PO"
+            ],
+            "measures": [
+              "M1_base",
+              "M1_curr"
+            ],
+            "compare": false,
+            "joins": [
+              {
+                "lookup": "open_po",
+                "left_on": "Base_PO",
+                "right_on": "PO Num",
+                "fields": {
+                  "in_open_po": {
+                    "type": "exists"
+                  },
+                  "gao_booked": {
+                    "type": "exists_where",
+                    "filter": [
+                      {
+                        "col": "GAO Comment",
+                        "op": "startswith",
+                        "val": "GAO"
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "flags": [
+          {
+            "default": "Consistent within $5k",
+            "name": "Observation_Flag",
+            "ordered": [
+              {
+                "if": "M1_base == 0 and M1_curr == 0",
+                "label": "No M1 accrual activity"
+              },
+              {
+                "if": "abs(M1_curr - M1_base) > 5000",
+                "label": "Material movement > $5k"
+              }
+            ],
+            "view": "po"
+          }
+        ],
+        "gates": [
+          {
+            "view": "po",
+            "name": "Exception",
+            "if": "gao_booked and Observation_Flag == 'Material movement > $5k'"
+          }
+        ],
+        "sections": null,
+        "decompose": null,
+        "drivers": {
+          "materiality": {
+            "mode": "abs",
+            "abs": 300000
+          },
+          "top_n": 15,
+          "others_label": "Other items",
+          "measure": "amount",
+          "view": "by_country_account"
+        },
+        "drill": {
+          "top_n": 5,
+          "group_by": "{roles.driver_text}"
+        },
+        "commentary": {
+          "units": "M",
+          "decimals": 1,
+          "verify_tag": "[TO VERIFY]",
+          "sign_style": "plus_minus",
+          "currency_symbol": "$",
+          "max_line_words": 35,
+          "style": "largest_first"
+        },
+        "controls": [
+          {
+            "id": "required_columns",
+            "severity": "stop"
+          },
+          {
+            "id": "periods_present",
+            "severity": "stop"
+          },
+          {
+            "id": "no_duplicate_periods_across_files",
+            "severity": "stop"
+          },
+          {
+            "id": "debit_minus_credit_equals_value",
+            "severity": "warn",
+            "params": {
+              "debit": "Accounted_Dr",
+              "credit": "Accounted_Cr"
+            }
+          },
+          {
+            "id": "new_or_removed_members",
+            "severity": "warn"
+          },
+          {
+            "id": "drivers_reconcile",
+            "severity": "stop"
+          },
+          {
+            "id": "sections_reconcile",
+            "severity": "stop",
+            "tolerance": 0.01
+          },
+          {
+            "id": "flags_sum_to_rows",
+            "severity": "stop"
+          },
+          {
+            "id": "join_unmatched_keys",
+            "severity": "warn"
+          },
+          {
+            "id": "join_fanout",
+            "severity": "stop"
+          },
+          {
+            "id": "classification_coverage",
+            "severity": "warn",
+            "params": {
+              "minimum_percentage": 95
+            }
+          },
+          {
+            "id": "partial_period_used",
+            "severity": "warn"
+          }
+        ]
+      },
+      "after": {
+        "spec_version": "2.0",
+        "preset": {
+          "id": "rm_flux",
+          "version": "1.0.0"
+        },
+        "flux_name": "Example — R&M QoQ",
+        "sources": {
+          "lookups": {
+            "open_po": {
+              "files": [
+                {
+                  "file": "Sample_Open_PO.xlsx",
+                  "sheet": "Open PO Report ",
+                  "header_row": 1,
+                  "start_col": "A",
+                  "end_col": null
+                }
+              ]
+            }
+          },
+          "primary": {
+            "files": [
+              {
+                "file": "Sample_GL_2026.csv",
+                "sheet": "(csv)",
+                "header_row": 1,
+                "start_col": "A",
+                "end_col": null
+              }
+            ],
+            "union": {
+              "mode": "stack",
+              "tag_column": null
+            }
+          }
+        },
+        "roles": {
+          "value": "Functional_Net",
+          "period": "Period_Name",
+          "scenario": null,
+          "debit": "Accounted_Dr",
+          "credit": "Accounted_Cr",
+          "keys": [
+            "Base_PO"
+          ],
+          "dimensions": [
+            "Country",
+            "Account"
+          ],
+          "driver_text": [
+            "FAH_Line_Description"
+          ]
+        },
+        "value_rules": {
+          "source": "column",
+          "flip_sign_when": [],
+          "null_as_zero": true
+        },
+        "scope": [
+          {
+            "col": "Account",
+            "op": "startswith",
+            "val": "54"
+          }
+        ],
+        "derive": [
+          {
+            "default": "Operational",
+            "name": "Bucket",
+            "rules": [
+              {
+                "then": "Accrual - Reversal",
+                "when": {
+                  "col": "FAH_Event_Type",
+                  "op": "contains",
+                  "val": "Reversal"
+                }
+              },
+              {
+                "then": "Accrual - Current",
+                "when": {
+                  "col": "FAH_Event_Type",
+                  "op": "contains",
+                  "val": "Current"
+                }
+              }
+            ],
+            "type": "rules"
+          },
+          {
+            "default": "UNMATCHED",
+            "name": "Base_PO",
+            "pattern": "(\\d{6,})",
+            "source": [
+              "Po_Number",
+              "FAH_Line_Description"
+            ],
+            "strip_suffix": "_V\\d+",
+            "type": "regex_extract"
+          }
+        ],
+        "periods": {
+          "calendar": "calendar"
+        },
+        "period_format": "MON-YY",
+        "partial_periods": [],
+        "comparison": {
+          "type": "QoQ",
+          "base": {
+            "months": [
+              "2026-01",
+              "2026-02",
+              "2026-03"
+            ]
+          },
+          "current": {
+            "months": [
+              "2026-04",
+              "2026-05",
+              "2026-06"
+            ]
+          }
+        },
+        "joins": [],
+        "classification": null,
+        "measures": {
+          "M1_base": {
+            "agg": "sum",
+            "col": "{roles.value}",
+            "filter": [
+              {
+                "col": "{roles.period}",
+                "op": "eq",
+                "val": "{base.first_month}"
+              },
+              {
+                "col": "Bucket",
+                "op": "eq",
+                "val": "Accrual - Current"
+              }
+            ],
+            "slice": "none"
+          },
+          "M1_curr": {
+            "agg": "sum",
+            "col": "{roles.value}",
+            "filter": [
+              {
+                "col": "{roles.period}",
+                "op": "eq",
+                "val": "{current.first_month}"
+              },
+              {
+                "col": "Bucket",
+                "op": "in",
+                "val": [
+                  "Accrual - Current",
+                  "Accrual - Reversal"
+                ]
+              }
+            ],
+            "slice": "none"
+          },
+          "amount": {
+            "agg": "sum",
+            "col": "{roles.value}"
+          }
+        },
+        "views": [
+          {
+            "name": "by_country_account",
+            "keys": [
+              "Country",
+              "Account"
+            ],
+            "measures": [
+              "amount"
+            ],
+            "compare": true
+          },
+          {
+            "name": "po",
+            "keys": [
+              "Base_PO"
+            ],
+            "measures": [
+              "M1_base",
+              "M1_curr"
+            ],
+            "compare": false,
+            "joins": [
+              {
+                "lookup": "open_po",
+                "left_on": "Base_PO",
+                "right_on": "PO Num",
+                "fields": {
+                  "in_open_po": {
+                    "type": "exists"
+                  },
+                  "gao_booked": {
+                    "type": "exists_where",
+                    "filter": [
+                      {
+                        "col": "GAO Comment",
+                        "op": "startswith",
+                        "val": "GAO"
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "flags": [
+          {
+            "default": "Consistent within $5k",
+            "name": "Observation_Flag",
+            "ordered": [
+              {
+                "if": "M1_base == 0 and M1_curr == 0",
+                "label": "No M1 accrual activity"
+              },
+              {
+                "if": "abs(M1_curr - M1_base) > 5000",
+                "label": "Material movement > $5k"
+              }
+            ],
+            "view": "po"
+          }
+        ],
+        "gates": [
+          {
+            "view": "po",
+            "name": "Exception",
+            "if": "gao_booked and Observation_Flag == 'Material movement > $5k'"
+          }
+        ],
+        "sections": null,
+        "decompose": null,
+        "drivers": {
+          "materiality": {
+            "mode": "abs",
+            "abs": 300000
+          },
+          "top_n": 15,
+          "others_label": "Other items",
+          "measure": "amount",
+          "view": "by_country_account"
+        },
+        "drill": {
+          "top_n": 5,
+          "group_by": "{roles.driver_text}"
+        },
+        "commentary": {
+          "units": "M",
+          "decimals": 1,
+          "verify_tag": "[TO VERIFY]",
+          "sign_style": "plus_minus",
+          "currency_symbol": "$",
+          "max_line_words": 35,
+          "style": "largest_first"
+        },
+        "controls": [
+          {
+            "id": "required_columns",
+            "severity": "stop"
+          },
+          {
+            "id": "periods_present",
+            "severity": "stop"
+          },
+          {
+            "id": "no_duplicate_periods_across_files",
+            "severity": "stop"
+          },
+          {
+            "id": "debit_minus_credit_equals_value",
+            "severity": "warn",
+            "params": {
+              "debit": "Accounted_Dr",
+              "credit": "Accounted_Cr"
+            }
+          },
+          {
+            "id": "new_or_removed_members",
+            "severity": "warn"
+          },
+          {
+            "id": "drivers_reconcile",
+            "severity": "stop"
+          },
+          {
+            "id": "sections_reconcile",
+            "severity": "stop",
+            "tolerance": 0.01
+          },
+          {
+            "id": "flags_sum_to_rows",
+            "severity": "stop"
+          },
+          {
+            "id": "join_unmatched_keys",
+            "severity": "warn"
+          },
+          {
+            "id": "join_fanout",
+            "severity": "stop"
+          },
+          {
+            "id": "classification_coverage",
+            "severity": "warn",
+            "params": {
+              "minimum_percentage": 95
+            }
+          },
+          {
+            "id": "partial_period_used",
+            "severity": "warn"
+          }
+        ]
+      },
+      "actor": "user",
+      "reason": "Updated uploaded source definitions"
+    }
+  ],
+  "redo_stack": [],
+  "created": "2026-10-28T09:34:19.176338+00:00",
+  "mapping_warnings": []
+}

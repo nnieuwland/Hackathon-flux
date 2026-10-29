@@ -1,0 +1,162 @@
+{
+  "id": "rm_flux",
+  "name": "Repairs and maintenance",
+  "version": "1.0.0",
+  "owner": "Controllership",
+  "updated_at": "2026-10-27T00:00:00+00:00",
+  "description": "Quarterly repairs and maintenance variance review with accrual and purchase-order evidence.",
+  "detect_hints": {
+    "header_keywords": ["FAH_Line_Description", "Base_PO", "Po_Number", "FAH_Event_Type"],
+    "text_keywords": ["R&M", "repairs", "maintenance"]
+  },
+  "required_sources": ["primary"],
+  "optional_sources": ["open_po"],
+  "defaults": {
+    "roles": {
+      "value": "Functional_Net",
+      "period": "Period_Name",
+      "scenario": null,
+      "debit": "Accounted_Dr",
+      "credit": "Accounted_Cr",
+      "keys": ["Base_PO"],
+      "dimensions": ["Country", "Account"],
+      "driver_text": ["FAH_Line_Description"]
+    },
+    "value_rules": {"source": "column", "flip_sign_when": []},
+    "periods": {"calendar": "calendar"},
+    "period_format": "MON-YY",
+    "scope": [{"col": "Account", "op": "startswith", "val": "54"}],
+    "derive": [
+      {
+        "name": "Bucket",
+        "type": "rules",
+        "rules": [
+          {"when": {"col": "FAH_Event_Type", "op": "contains", "val": "Reversal"}, "then": "Accrual - Reversal"},
+          {"when": {"col": "FAH_Event_Type", "op": "contains", "val": "Current"}, "then": "Accrual - Current"}
+        ],
+        "default": "Operational"
+      },
+      {
+        "name": "Base_PO",
+        "type": "regex_extract",
+        "source": ["Po_Number", "FAH_Line_Description"],
+        "pattern": "(\\d{6,})",
+        "strip_suffix": "_V\\d+",
+        "default": "UNMATCHED"
+      }
+    ],
+    "joins": [{
+      "source": "open_po",
+      "on": [{"left": "Base_PO", "right": "PO Num"}],
+      "how": "left",
+      "columns": ["GAO Comment"],
+      "prefix": "po_",
+      "key_normalise": ["trim", "upper", "lstrip_zeros"],
+      "dedupe_right": "error",
+      "optional": true
+    }],
+    "classification": {
+      "target_col": "Category",
+      "source_cols": ["FAH_Line_Description"],
+      "rules": [
+        {"keyword": "chlr", "category": "Chillers & Cooling Plant", "match": "contains", "reviewed": true},
+        {"keyword": "cooling", "category": "Chillers & Cooling Plant", "match": "contains", "reviewed": true},
+        {"keyword": "preventive", "category": "Preventive Maintenance", "match": "contains", "reviewed": true},
+        {"keyword": "emergency", "category": "Emergency Repairs", "match": "contains", "reviewed": true},
+        {"keyword": "electrical", "category": "Electrical", "match": "contains", "reviewed": true},
+        {"keyword": "fire", "category": "Fire & Safety", "match": "contains", "reviewed": true}
+      ],
+      "fallback": "Other / General Maintenance",
+      "case_sensitive": false
+    },
+    "comparison": {
+      "type": "QoQ",
+      "base": {"months": ["2026-01", "2026-02", "2026-03"]},
+      "current": {"months": ["2026-04", "2026-05", "2026-06"]}
+    },
+    "measures": {
+      "amount": {"agg": "sum", "col": "{roles.value}"},
+      "M1_base": {
+        "agg": "sum",
+        "col": "{roles.value}",
+        "slice": "base",
+        "filter": [{"col": "__month", "op": "eq", "val": "{base.first_month}"}, {"col": "Bucket", "op": "eq", "val": "Accrual - Current"}]
+      },
+      "M1_curr": {
+        "agg": "sum",
+        "col": "{roles.value}",
+        "slice": "current",
+        "filter": [{"col": "__month", "op": "eq", "val": "{current.first_month}"}, {"col": "Bucket", "op": "in", "val": ["Accrual - Current", "Accrual - Reversal"]}]
+      }
+    },
+    "views": [
+      {"name": "by_country_account", "keys": ["Country", "Account"], "measures": ["amount"], "compare": true},
+      {
+        "name": "po",
+        "keys": ["Base_PO"],
+        "measures": ["M1_base", "M1_curr"],
+        "compare": false,
+        "joins": [
+          {
+            "lookup": "open_po",
+            "optional": true,
+            "key_normalise": ["trim", "upper", "lstrip_zeros"],
+            "left_on": "Base_PO",
+            "right_on": "PO Num",
+            "fields": {
+              "in_open_po": {"type": "exists"},
+              "gao_booked": {
+                "type": "exists_where",
+                "filter": [{"col": "GAO Comment", "op": "startswith", "val": "GAO"}]
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "sections": null,
+    "decompose": null,
+    "flags": [
+      {
+        "view": "po",
+        "name": "Observation_Flag",
+        "ordered": [
+          {"if": "M1_base == 0 and M1_curr == 0", "label": "No M1 accrual activity"},
+          {"if": "abs(M1_curr - M1_base) > 5000", "label": "Material movement > $5k"}
+        ],
+        "default": "Consistent within $5k"
+      }
+    ],
+    "gates": [
+      {"view": "po", "name": "GAO material movement", "if": "gao_booked and Observation_Flag == 'Material movement > $5k'"}
+    ],
+    "drivers": {
+      "view": "by_country_account",
+      "measure": "amount",
+      "materiality": {"mode": "abs", "abs": 300000},
+      "top_n": 15,
+      "others_label": "Other items"
+    },
+    "drill": {"group_by": "{roles.driver_text}", "top_n": 5},
+    "commentary": {
+      "units": "M",
+      "decimals": 1,
+      "style": "largest_first",
+      "verify_tag": "[TO VERIFY]",
+      "forbidden_terms": [],
+      "currency_symbol": "$",
+      "sign_style": "plus_minus",
+      "max_line_words": 35
+    },
+    "controls": [
+      {"id": "required_columns", "severity": "stop"},
+      {"id": "periods_present", "severity": "stop"},
+      {"id": "no_duplicate_periods_across_files", "severity": "stop"},
+      {"id": "new_or_removed_members", "severity": "warn"},
+      {"id": "drivers_reconcile", "severity": "stop"},
+      {"id": "flags_sum_to_rows", "severity": "stop"},
+      {"id": "sections_reconcile", "severity": "stop", "tolerance": 0.01},
+      {"id": "debit_minus_credit_equals_value", "severity": "warn"}
+    ]
+  }
+}

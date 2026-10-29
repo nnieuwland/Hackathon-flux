@@ -1,0 +1,9 @@
+Flask>=3.0
+pandas>=2.2
+openpyxl>=3.1
+requests>=2.31
+jsonschema>=4.21
+python-dotenv>=1.0
+gunicorn>=22.0
+pytest>=8.0
+xlsxwriter>=3.1

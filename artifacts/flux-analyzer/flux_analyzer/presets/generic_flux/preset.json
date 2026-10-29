@@ -1,0 +1,36 @@
+{
+  "id": "generic_flux",
+  "name": "Generic variance",
+  "version": "1.0.0",
+  "owner": "Flux Analyzer",
+  "updated_at": "2026-10-27T00:00:00+00:00",
+  "description": "General-purpose monthly, quarterly, or scenario variance analysis.",
+  "detect_hints": {
+    "header_keywords": ["amount", "value", "period", "month", "scenario"],
+    "text_keywords": ["variance", "actual", "forecast"]
+  },
+  "required_sources": ["primary"],
+  "optional_sources": [],
+  "defaults": {
+    "value_rules": {"source": "column", "flip_sign_when": []},
+    "scope": [],
+    "derive": [],
+    "joins": [],
+    "classification": null,
+    "measures": {},
+    "views": [],
+    "sections": null,
+    "decompose": null,
+    "flags": [],
+    "gates": [],
+    "drivers": {
+      "view": "by_dimension",
+      "measure": "amount",
+      "materiality": {"mode": "abs", "abs": 0},
+      "top_n": 15,
+      "others_label": "Other items"
+    },
+    "drill": {"top_n": 5},
+    "controls": []
+  }
+}

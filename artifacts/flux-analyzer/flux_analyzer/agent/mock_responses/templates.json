@@ -1,0 +1,27 @@
+{
+  "rationale": "Offline test suggestion based on your column names. Check it, and use Undo if it is wrong.",
+  "warnings": ["Mock mode: no data has been sent to the Equinix AI Engine."],
+  "detect_flux": {"preset_id": "generic_flux", "flux_name": "Financial variance", "required_sources": ["primary"], "optional_sources": []},
+  "derive_columns": {"scope": [], "derive": []},
+  "classify_terms": {"mappings": [], "target_col": "Category"},
+  "define_rules": {
+    "measures": {"amount": {"agg": "sum", "col": "{roles.value}"}},
+    "views": [],
+    "sections": null,
+    "decompose": null,
+    "flags": [],
+    "gates": [],
+    "drivers": {"view": "by_dimension", "measure": "amount", "materiality": {"mode": "abs", "abs": 300000}, "top_n": 15, "others_label": "Other items"},
+    "drill": {"group_by": "{roles.driver_text}", "top_n": 5},
+    "commentary": {"units": "M", "decimals": 1, "style": "largest_first", "verify_tag": "[TO VERIFY]"},
+    "controls": [
+      {"id": "required_columns", "severity": "stop"},
+      {"id": "periods_present", "severity": "stop"},
+      {"id": "no_duplicate_periods_across_files", "severity": "stop"},
+      {"id": "new_or_removed_members", "severity": "warn"},
+      {"id": "drivers_reconcile", "severity": "stop"},
+      {"id": "flags_sum_to_rows", "severity": "stop"},
+      {"id": "sections_reconcile", "severity": "stop", "tolerance": 0.01}
+    ]
+  }
+}

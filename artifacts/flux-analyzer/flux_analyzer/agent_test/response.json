@@ -1,0 +1,214 @@
+{
+  "contract_version": "journey-1",
+  "request_id": "dcd52343-ad25-409d-a11c-ffcb26ece742",
+  "step": "write_commentary",
+  "status": "ok",
+  "proposal": {
+    "headline": "Country and IBX movements for review",
+    "lines": [
+      {
+        "driver_id": "d1",
+        "text": "-$0.4M — Brazil / AMER / SP3. Descriptions show Vertiv and Cummins transactions. [TO VERIFY] Confirm the business cause and timing.",
+        "support": "needs_verification",
+        "evidence_refs": [
+          "driver:d1",
+          "text:d1:1",
+          "text:d1:5"
+        ],
+        "claims": [
+          {
+            "type": "observation",
+            "text": "Brazil / AMER / SP3 moved by -$0.4M.",
+            "evidence_refs": [
+              "driver:d1"
+            ]
+          },
+          {
+            "type": "observation",
+            "text": "Line descriptions list Vertiv R&M and Cummins generator transactions.",
+            "evidence_refs": [
+              "text:d1:1",
+              "text:d1:5"
+            ]
+          },
+          {
+            "type": "possible_explanation",
+            "text": "[TO VERIFY] Confirm the business cause and timing.",
+            "evidence_refs": [
+              "driver:d1"
+            ]
+          }
+        ],
+        "confirm_prompt": "Confirm the business cause and timing."
+      },
+      {
+        "driver_id": "d2",
+        "text": "-$0.4M — Germany / EMEA / FR2. Line descriptions cite fire monitoring and semi-annual impedance maintenance. [TO VERIFY] Confirm the business cause.",
+        "support": "needs_verification",
+        "evidence_refs": [
+          "driver:d2",
+          "text:d2:1",
+          "text:d2:3"
+        ],
+        "claims": [
+          {
+            "type": "observation",
+            "text": "Germany / EMEA / FR2 moved by -$0.4M.",
+            "evidence_refs": [
+              "driver:d2"
+            ]
+          },
+          {
+            "type": "observation",
+            "text": "Descriptions list fire monitoring and impedance semi-annual maintenance.",
+            "evidence_refs": [
+              "text:d2:1",
+              "text:d2:3"
+            ]
+          },
+          {
+            "type": "possible_explanation",
+            "text": "[TO VERIFY] Confirm the business cause.",
+            "evidence_refs": [
+              "driver:d2"
+            ]
+          }
+        ],
+        "confirm_prompt": "Confirm the business cause."
+      },
+      {
+        "driver_id": "d3",
+        "text": "-$0.4M — United States / AMER / DC12. Descriptions cite EBM Papst supply fan orders. [TO VERIFY] Confirm whether this reflects delivery timing.",
+        "support": "needs_verification",
+        "evidence_refs": [
+          "driver:d3",
+          "text:d3:1",
+          "text:d3:4"
+        ],
+        "claims": [
+          {
+            "type": "observation",
+            "text": "United States / AMER / DC12 moved by -$0.4M.",
+            "evidence_refs": [
+              "driver:d3"
+            ]
+          },
+          {
+            "type": "observation",
+            "text": "Descriptions cite EBM Papst quote orders and supply fan parts.",
+            "evidence_refs": [
+              "text:d3:1",
+              "text:d3:4"
+            ]
+          },
+          {
+            "type": "possible_explanation",
+            "text": "[TO VERIFY] Confirm whether this reflects delivery timing.",
+            "evidence_refs": [
+              "driver:d3"
+            ]
+          }
+        ],
+        "confirm_prompt": "Confirm whether this reflects delivery timing."
+      },
+      {
+        "driver_id": "d4",
+        "text": "-$0.4M — United States / AMER / NY7. Descriptions include Carrier labor, Orr fire protection, and Nalco water treatment. [TO VERIFY] Confirm the underlying driver.",
+        "support": "needs_verification",
+        "evidence_refs": [
+          "driver:d4",
+          "text:d4:2",
+          "text:d4:3",
+          "text:d4:4"
+        ],
+        "claims": [
+          {
+            "type": "observation",
+            "text": "United States / AMER / NY7 moved by -$0.4M.",
+            "evidence_refs": [
+              "driver:d4"
+            ]
+          },
+          {
+            "type": "observation",
+            "text": "Descriptions cite Carrier labor, fire protection, and chemical services.",
+            "evidence_refs": [
+              "text:d4:2",
+              "text:d4:3",
+              "text:d4:4"
+            ]
+          },
+          {
+            "type": "possible_explanation",
+            "text": "[TO VERIFY] Confirm the underlying driver.",
+            "evidence_refs": [
+              "driver:d4"
+            ]
+          }
+        ],
+        "confirm_prompt": "Confirm the underlying driver."
+      },
+      {
+        "driver_id": "d5",
+        "text": "+$0.3M — Singapore / APAC / SG4. Line descriptions include Eaton UPS models and maintenance services. [TO VERIFY] Confirm the business reason for the increase.",
+        "support": "needs_verification",
+        "evidence_refs": [
+          "driver:d5",
+          "text:d5:1",
+          "text:d5:4"
+        ],
+        "claims": [
+          {
+            "type": "observation",
+            "text": "Singapore / APAC / SG4 moved by +$0.3M.",
+            "evidence_refs": [
+              "driver:d5"
+            ]
+          },
+          {
+            "type": "observation",
+            "text": "Descriptions show Eaton UPS equipment and non-comprehensive maintenance.",
+            "evidence_refs": [
+              "text:d5:1",
+              "text:d5:4"
+            ]
+          },
+          {
+            "type": "possible_explanation",
+            "text": "[TO VERIFY] Confirm the business reason for the increase.",
+            "evidence_refs": [
+              "driver:d5"
+            ]
+          }
+        ],
+        "confirm_prompt": "Confirm the business reason for the increase."
+      },
+      {
+        "driver_id": "others",
+        "text": "-$4.7M — Other items. Remaining movements below the materiality threshold, grouped by the engine.",
+        "support": "supported",
+        "evidence_refs": [
+          "driver:others"
+        ],
+        "claims": [
+          {
+            "type": "observation",
+            "text": "Other items moved by -$4.7M.",
+            "evidence_refs": [
+              "driver:others"
+            ]
+          }
+        ]
+      }
+    ],
+    "others_summary": "Other items reflect the aggregate net movement of lines below the materiality threshold."
+  },
+  "confidence": "high",
+  "rationale": "Commentary drafted for all 5 material drivers and the engine-grouped remainder, noting maintenance and equipment description types with verification tags.",
+  "questions": [],
+  "warnings": [
+    "New or removed dimension members were found; see details."
+  ],
+  "summary": "Drafted commentary for material movements across Brazil, Germany, United States, and Singapore, highlighting maintenance types and flagging items for confirmation.",
+  "changes": []
+}

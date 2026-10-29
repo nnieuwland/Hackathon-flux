@@ -1,0 +1,157 @@
+{
+  "contract_version": "journey-1",
+  "request_id": "84fef105-5016-4bef-a1c0-5065088f072f",
+  "step": "write_commentary",
+  "status": "ok",
+  "proposal": {
+    "headline": "Country and site movements review",
+    "lines": [
+      {
+        "driver_id": "d1",
+        "text": "-$0.4M — Brazil / AMER / SP3. From $0.4M to -$2,367.70.",
+        "support": "supported",
+        "evidence_refs": [
+          "driver:d1"
+        ],
+        "claims": [
+          {
+            "type": "observation",
+            "text": "Brazil / AMER / SP3 changed by -$0.4M from $0.4M to -$2,367.70.",
+            "evidence_refs": [
+              "driver:d1"
+            ]
+          }
+        ]
+      },
+      {
+        "driver_id": "d2",
+        "text": "-$0.4M — Germany / EMEA / FR2. From $1.1M to $0.7M.",
+        "support": "supported",
+        "evidence_refs": [
+          "driver:d2"
+        ],
+        "claims": [
+          {
+            "type": "observation",
+            "text": "Germany / EMEA / FR2 changed by -$0.4M from $1.1M to $0.7M.",
+            "evidence_refs": [
+              "driver:d2"
+            ]
+          }
+        ]
+      },
+      {
+        "driver_id": "d3",
+        "text": "-$0.4M — United States / AMER / DC12. From $0.7M to $0.3M.",
+        "support": "supported",
+        "evidence_refs": [
+          "driver:d3"
+        ],
+        "claims": [
+          {
+            "type": "observation",
+            "text": "United States / AMER / DC12 changed by -$0.4M from $0.7M to $0.3M.",
+            "evidence_refs": [
+              "driver:d3"
+            ]
+          }
+        ]
+      },
+      {
+        "driver_id": "d4",
+        "text": "-$0.4M — United States / AMER / NY7. From $0.3M to -$0.1M.",
+        "support": "supported",
+        "evidence_refs": [
+          "driver:d4"
+        ],
+        "claims": [
+          {
+            "type": "observation",
+            "text": "United States / AMER / NY7 changed by -$0.4M from $0.3M to -$0.1M.",
+            "evidence_refs": [
+              "driver:d4"
+            ]
+          }
+        ]
+      },
+      {
+        "driver_id": "d5",
+        "text": "+$0.3M — Singapore / APAC / SG4. From $0.1M to $0.4M.",
+        "support": "supported",
+        "evidence_refs": [
+          "driver:d5"
+        ],
+        "claims": [
+          {
+            "type": "observation",
+            "text": "Singapore / APAC / SG4 changed by +$0.3M from $0.1M to $0.4M.",
+            "evidence_refs": [
+              "driver:d5"
+            ]
+          }
+        ]
+      },
+      {
+        "driver_id": "others",
+        "text": "-$4.7M — Other items. Remaining movements below the materiality threshold, grouped by the engine.",
+        "support": "supported",
+        "evidence_refs": [
+          "driver:others"
+        ],
+        "claims": [
+          {
+            "type": "observation",
+            "text": "Other items changed by -$4.7M from $24.4M to $19.8M.",
+            "evidence_refs": [
+              "driver:others"
+            ]
+          }
+        ]
+      }
+    ],
+    "others_summary": ""
+  },
+  "confidence": "high",
+  "rationale": "Lines were prepared for all drivers and other items strictly using supplied formatted numbers and references.",
+  "questions": [],
+  "warnings": [],
+  "summary": "Prepared commentary for top movements and remaining items comparing June 2026 with July 2026.",
+  "changes": [],
+  "validation": {
+    "ok": true,
+    "issues": [],
+    "line_results": [
+      {
+        "driver_id": "d1",
+        "ok": true,
+        "issues": []
+      },
+      {
+        "driver_id": "d2",
+        "ok": true,
+        "issues": []
+      },
+      {
+        "driver_id": "d3",
+        "ok": true,
+        "issues": []
+      },
+      {
+        "driver_id": "d4",
+        "ok": true,
+        "issues": []
+      },
+      {
+        "driver_id": "d5",
+        "ok": true,
+        "issues": []
+      },
+      {
+        "driver_id": "others",
+        "ok": true,
+        "issues": []
+      }
+    ]
+  },
+  "applied": true
+}

@@ -1,0 +1,214 @@
+{
+  "contract_version": "journey-1",
+  "request_id": "55b679b0-b6b4-4e3e-89e4-83dcbe88bdad",
+  "step": "write_commentary",
+  "status": "ok",
+  "proposal": {
+    "headline": "Country movements review",
+    "lines": [
+      {
+        "driver_id": "d1",
+        "text": "-$0.4M — Brazil / AMER / SP3 moved from $0.4M to -$2,367.70. Descriptions include Vertiv maintenance and Cummins generator services.",
+        "support": "supported",
+        "evidence_refs": [
+          "driver:d1",
+          "text:d1:1",
+          "text:d1:5"
+        ],
+        "claims": [
+          {
+            "type": "observation",
+            "text": "Brazil / AMER / SP3 moved by -$0.4M from $0.4M to -$2,367.70.",
+            "evidence_refs": [
+              "driver:d1"
+            ]
+          },
+          {
+            "type": "observation",
+            "text": "Descriptions include Vertiv maintenance and Cummins generator services.",
+            "evidence_refs": [
+              "text:d1:1",
+              "text:d1:5"
+            ]
+          }
+        ]
+      },
+      {
+        "driver_id": "d2",
+        "text": "-$0.4M — Germany / EMEA / FR2 moved from $1.1M to $0.7M. Line descriptions include fire monitoring and impedance measurement maintenance entries.",
+        "support": "supported",
+        "evidence_refs": [
+          "driver:d2",
+          "text:d2:1",
+          "text:d2:3"
+        ],
+        "claims": [
+          {
+            "type": "observation",
+            "text": "Germany / EMEA / FR2 moved by -$0.4M from $1.1M to $0.7M.",
+            "evidence_refs": [
+              "driver:d2"
+            ]
+          },
+          {
+            "type": "observation",
+            "text": "Line descriptions include fire monitoring and impedance measurement maintenance entries.",
+            "evidence_refs": [
+              "text:d2:1",
+              "text:d2:3"
+            ]
+          }
+        ]
+      },
+      {
+        "driver_id": "d3",
+        "text": "-$0.4M — United States / AMER / DC12 moved from $0.7M to $0.3M. Descriptions reference EBM Papst supply fan orders.",
+        "support": "supported",
+        "evidence_refs": [
+          "driver:d3",
+          "text:d3:1",
+          "text:d3:4"
+        ],
+        "claims": [
+          {
+            "type": "observation",
+            "text": "United States / AMER / DC12 moved by -$0.4M from $0.7M to $0.3M.",
+            "evidence_refs": [
+              "driver:d3"
+            ]
+          },
+          {
+            "type": "observation",
+            "text": "Descriptions reference EBM Papst supply fan orders.",
+            "evidence_refs": [
+              "text:d3:1",
+              "text:d3:4"
+            ]
+          }
+        ]
+      },
+      {
+        "driver_id": "d4",
+        "text": "-$0.4M — United States / AMER / NY7 moved from $0.3M to -$0.1M. Descriptions include Carrier labor, Orr fire protection, and Nalco water treatment entries.",
+        "support": "supported",
+        "evidence_refs": [
+          "driver:d4",
+          "text:d4:2",
+          "text:d4:3",
+          "text:d4:4"
+        ],
+        "claims": [
+          {
+            "type": "observation",
+            "text": "United States / AMER / NY7 moved by -$0.4M from $0.3M to -$0.1M.",
+            "evidence_refs": [
+              "driver:d4"
+            ]
+          },
+          {
+            "type": "observation",
+            "text": "Descriptions include Carrier labor, Orr fire protection, and Nalco water treatment entries.",
+            "evidence_refs": [
+              "text:d4:2",
+              "text:d4:3",
+              "text:d4:4"
+            ]
+          }
+        ]
+      },
+      {
+        "driver_id": "d5",
+        "text": "+$0.3M — Singapore / APAC / SG4 moved from $0.1M to $0.4M. Descriptions list Eaton UPS units, Rockwell Automation, and LC Engineering services.",
+        "support": "supported",
+        "evidence_refs": [
+          "driver:d5",
+          "text:d5:1",
+          "text:d5:2",
+          "text:d5:3"
+        ],
+        "claims": [
+          {
+            "type": "observation",
+            "text": "Singapore / APAC / SG4 moved by +$0.3M from $0.1M to $0.4M.",
+            "evidence_refs": [
+              "driver:d5"
+            ]
+          },
+          {
+            "type": "observation",
+            "text": "Descriptions list Eaton UPS units, Rockwell Automation, and LC Engineering services.",
+            "evidence_refs": [
+              "text:d5:1",
+              "text:d5:2",
+              "text:d5:3"
+            ]
+          }
+        ]
+      },
+      {
+        "driver_id": "others",
+        "text": "-$4.7M — Other items. Remaining movements below the materiality threshold, grouped by the engine.",
+        "support": "supported",
+        "evidence_refs": [
+          "driver:others"
+        ],
+        "claims": [
+          {
+            "type": "observation",
+            "text": "Other items moved by -$4.7M from $24.4M to $19.8M.",
+            "evidence_refs": [
+              "driver:others"
+            ]
+          }
+        ]
+      }
+    ],
+    "others_summary": "Other items comprise remaining movements below the materiality threshold."
+  },
+  "confidence": "high",
+  "rationale": "Commentary generated strictly following evidence pack drivers, exact format tokens, and controller tone guidelines without unverified causal claims.",
+  "questions": [],
+  "warnings": [
+    "New or removed dimension members were found in the dataset.",
+    "Trend history is limited to the two compared periods."
+  ],
+  "summary": "Commentary generated for the 5 material country movements and the remaining items.",
+  "changes": [],
+  "validation": {
+    "ok": true,
+    "issues": [],
+    "line_results": [
+      {
+        "driver_id": "d1",
+        "ok": true,
+        "issues": []
+      },
+      {
+        "driver_id": "d2",
+        "ok": true,
+        "issues": []
+      },
+      {
+        "driver_id": "d3",
+        "ok": true,
+        "issues": []
+      },
+      {
+        "driver_id": "d4",
+        "ok": true,
+        "issues": []
+      },
+      {
+        "driver_id": "d5",
+        "ok": true,
+        "issues": []
+      },
+      {
+        "driver_id": "others",
+        "ok": true,
+        "issues": []
+      }
+    ]
+  },
+  "applied": true
+}

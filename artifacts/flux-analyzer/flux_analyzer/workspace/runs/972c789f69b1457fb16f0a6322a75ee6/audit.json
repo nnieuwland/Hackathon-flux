@@ -1,0 +1,501 @@
+{
+  "run_stamp": {
+    "run_id": "972c789f69b1457fb16f0a6322a75ee6",
+    "created": "2026-10-28T16:51:25.175131+00:00",
+    "engine_version": "2.0",
+    "spec_sha256": "863da412db73ffc75c225d1e05acf53acd4c1f05fb943edc4e81eabaa93d46fb",
+    "preset": {
+      "id": "generic_flux",
+      "version": "1.0.0"
+    },
+    "input_files": [
+      {
+        "name": "sample_test_run_for_python_scrip_on_fresh_data_AA.xlsx",
+        "sha256": "6304d0f09a8c02d2c3c2cc1dbdfa1df9d6d85a470f495e468f0df99ac8fb8de0",
+        "role": "primary",
+        "definition": {
+          "sheet": "Detail",
+          "header_row": 1,
+          "start_col": "A",
+          "end_col": null,
+          "role": "primary",
+          "name": "sample_test_run_for_python_scrip_on_fresh_data_AA",
+          "combine_sheets": [],
+          "tag_column": null
+        }
+      }
+    ]
+  },
+  "change_log": [
+    {
+      "timestamp": "2026-10-28T16:48:11.816488+00:00",
+      "actor": "user",
+      "reason": "Updated uploaded source definitions",
+      "path": "/sources/lookups",
+      "op": "add",
+      "from": null,
+      "to": {}
+    },
+    {
+      "timestamp": "2026-10-28T16:48:11.816488+00:00",
+      "actor": "user",
+      "reason": "Updated uploaded source definitions",
+      "path": "/sources/primary",
+      "op": "add",
+      "from": null,
+      "to": {
+        "files": [
+          {
+            "file": "sample_test_run_for_python_scrip_on_fresh_data_AA.xlsx",
+            "sheet": "Detail",
+            "header_row": 1,
+            "start_col": "A",
+            "end_col": null
+          }
+        ],
+        "union": {
+          "mode": "stack",
+          "tag_column": null
+        }
+      }
+    },
+    {
+      "timestamp": "2026-10-28T16:49:47.411140+00:00",
+      "actor": "agent",
+      "reason": "Configured month-over-month comparison for July 2026 against June 2026 using Functional Net as the Amount column, grouped by Region, Country, and IBX, with explanations driven by FAH Line Description.",
+      "path": "/comparison/base/months",
+      "op": "replace",
+      "from": [],
+      "to": [
+        "2026-06"
+      ]
+    },
+    {
+      "timestamp": "2026-10-28T16:49:47.411140+00:00",
+      "actor": "agent",
+      "reason": "Configured month-over-month comparison for July 2026 against June 2026 using Functional Net as the Amount column, grouped by Region, Country, and IBX, with explanations driven by FAH Line Description.",
+      "path": "/comparison/current/months",
+      "op": "replace",
+      "from": [],
+      "to": [
+        "2026-07"
+      ]
+    },
+    {
+      "timestamp": "2026-10-28T16:49:47.411140+00:00",
+      "actor": "agent",
+      "reason": "Configured month-over-month comparison for July 2026 against June 2026 using Functional Net as the Amount column, grouped by Region, Country, and IBX, with explanations driven by FAH Line Description.",
+      "path": "/comparison/type",
+      "op": "replace",
+      "from": "QoQ",
+      "to": "MoM"
+    },
+    {
+      "timestamp": "2026-10-28T16:49:47.411140+00:00",
+      "actor": "agent",
+      "reason": "Configured month-over-month comparison for July 2026 against June 2026 using Functional Net as the Amount column, grouped by Region, Country, and IBX, with explanations driven by FAH Line Description.",
+      "path": "/drivers/view",
+      "op": "add",
+      "from": null,
+      "to": "By Region, Country and IBX"
+    },
+    {
+      "timestamp": "2026-10-28T16:49:47.411140+00:00",
+      "actor": "agent",
+      "reason": "Configured month-over-month comparison for July 2026 against June 2026 using Functional Net as the Amount column, grouped by Region, Country, and IBX, with explanations driven by FAH Line Description.",
+      "path": "/measures/amount",
+      "op": "add",
+      "from": null,
+      "to": {
+        "agg": "sum",
+        "col": "Functional_Net"
+      }
+    },
+    {
+      "timestamp": "2026-10-28T16:49:47.411140+00:00",
+      "actor": "agent",
+      "reason": "Configured month-over-month comparison for July 2026 against June 2026 using Functional Net as the Amount column, grouped by Region, Country, and IBX, with explanations driven by FAH Line Description.",
+      "path": "/roles/dimensions",
+      "op": "replace",
+      "from": [],
+      "to": [
+        "Region",
+        "Country",
+        "Ibx_Code"
+      ]
+    },
+    {
+      "timestamp": "2026-10-28T16:49:47.411140+00:00",
+      "actor": "agent",
+      "reason": "Configured month-over-month comparison for July 2026 against June 2026 using Functional Net as the Amount column, grouped by Region, Country, and IBX, with explanations driven by FAH Line Description.",
+      "path": "/roles/driver_text",
+      "op": "replace",
+      "from": [],
+      "to": [
+        "FAH_Line_Description"
+      ]
+    },
+    {
+      "timestamp": "2026-10-28T16:49:47.411140+00:00",
+      "actor": "agent",
+      "reason": "Configured month-over-month comparison for July 2026 against June 2026 using Functional Net as the Amount column, grouped by Region, Country, and IBX, with explanations driven by FAH Line Description.",
+      "path": "/roles/period",
+      "op": "replace",
+      "from": null,
+      "to": "Period_Name"
+    },
+    {
+      "timestamp": "2026-10-28T16:49:47.411140+00:00",
+      "actor": "agent",
+      "reason": "Configured month-over-month comparison for July 2026 against June 2026 using Functional Net as the Amount column, grouped by Region, Country, and IBX, with explanations driven by FAH Line Description.",
+      "path": "/roles/value",
+      "op": "replace",
+      "from": null,
+      "to": "Functional_Net"
+    },
+    {
+      "timestamp": "2026-10-28T16:49:47.411140+00:00",
+      "actor": "agent",
+      "reason": "Configured month-over-month comparison for July 2026 against June 2026 using Functional Net as the Amount column, grouped by Region, Country, and IBX, with explanations driven by FAH Line Description.",
+      "path": "/views",
+      "op": "replace",
+      "from": [],
+      "to": [
+        {
+          "name": "By Region, Country and IBX",
+          "keys": [
+            "Region",
+            "Country",
+            "Ibx_Code"
+          ],
+          "measures": [
+            "amount"
+          ],
+          "compare": true
+        }
+      ]
+    },
+    {
+      "timestamp": "2026-10-28T16:50:44.711977+00:00",
+      "actor": "user",
+      "reason": "Changed the Explain step",
+      "path": "/commentary/style_profile",
+      "op": "add",
+      "from": null,
+      "to": {
+        "audience": "controller",
+        "length": "medium",
+        "structure": {
+          "type": "overall",
+          "split_by": null
+        },
+        "tone": "neutral",
+        "instructions": "Focus on what type of service is described that is driving the variance. ",
+        "example_style": {
+          "summary_of_style": "",
+          "sample_phrases": []
+        },
+        "include": [
+          "to_verify"
+        ],
+        "objective": "",
+        "business_context": ""
+      }
+    }
+  ],
+  "agent_logs": [
+    {
+      "timestamp": "2026-10-28T16:49:47.411444+00:00",
+      "response": {
+        "contract_version": "journey-1",
+        "request_id": "15577a38-3a17-4ee1-a5c4-a1801f852b39",
+        "step": "plan_from_description",
+        "status": "ok",
+        "proposal": {
+          "patch": [
+            {
+              "op": "replace",
+              "path": "/roles",
+              "value": {
+                "value": "Functional_Net",
+                "period": "Period_Name",
+                "scenario": null,
+                "debit": null,
+                "credit": null,
+                "keys": [],
+                "dimensions": [
+                  "Region",
+                  "Country",
+                  "Ibx_Code"
+                ],
+                "driver_text": [
+                  "FAH_Line_Description"
+                ]
+              }
+            },
+            {
+              "op": "replace",
+              "path": "/comparison",
+              "value": {
+                "type": "MoM",
+                "base": {
+                  "months": [
+                    "2026-06"
+                  ]
+                },
+                "current": {
+                  "months": [
+                    "2026-07"
+                  ]
+                }
+              }
+            },
+            {
+              "op": "replace",
+              "path": "/views",
+              "value": [
+                {
+                  "name": "By Region, Country and IBX",
+                  "keys": [
+                    "Region",
+                    "Country",
+                    "Ibx_Code"
+                  ],
+                  "measures": [
+                    "amount"
+                  ],
+                  "compare": true
+                }
+              ]
+            },
+            {
+              "op": "replace",
+              "path": "/measures",
+              "value": {
+                "amount": {
+                  "agg": "sum",
+                  "col": "Functional_Net"
+                }
+              }
+            },
+            {
+              "op": "add",
+              "path": "/drivers/view",
+              "value": "By Region, Country and IBX"
+            }
+          ],
+          "step_states": [
+            {
+              "step": "data",
+              "status": "confident",
+              "summary": "Amount mapped to Functional Net, period to Period Name, and description to FAH Line Description.",
+              "reason": "Specified in your request and matched with available columns.",
+              "question_ids": []
+            },
+            {
+              "step": "compare",
+              "status": "confident",
+              "summary": "Compare July 2026 with June 2026 month over month.",
+              "reason": "Matched the month-over-month request with available periods 2026-06 and 2026-07.",
+              "question_ids": []
+            },
+            {
+              "step": "include",
+              "status": "confident",
+              "summary": "Include all main data rows.",
+              "reason": "No specific filtering or scope criteria were requested.",
+              "question_ids": []
+            },
+            {
+              "step": "group",
+              "status": "confident",
+              "summary": "Group movements by Region, Country, and IBX.",
+              "reason": "Requested grouping dimensions matched to columns Region, Country, and Ibx_Code.",
+              "question_ids": []
+            },
+            {
+              "step": "important",
+              "status": "confident",
+              "summary": "Materiality threshold at 300,000 with top 15 movements.",
+              "reason": "Using the preset materiality and top movements settings.",
+              "question_ids": []
+            },
+            {
+              "step": "explain",
+              "status": "confident",
+              "summary": "Explain movements using FAH Line Description with standard controller review guidelines.",
+              "reason": "Requested explanations based on FAH Line Description.",
+              "question_ids": []
+            }
+          ]
+        },
+        "confidence": "high",
+        "rationale": "Corrected the patch operation for /drivers/view from replace to add since the key was not previously set in spec_so_far, and retained all mapped settings.",
+        "questions": [],
+        "warnings": [],
+        "summary": "Configured month-over-month comparison for July 2026 against June 2026 using Functional Net as the Amount column, grouped by Region, Country, and IBX, with explanations driven by FAH Line Description.",
+        "changes": [
+          {
+            "setting": "/comparison/base/months",
+            "from": "",
+            "to": "2026-06",
+            "reason": "Configured month-over-month comparison for July 2026 against June 2026 using Functional Net as the Amount column, grouped by Region, Country, and IBX, with explanations driven by FAH Line Description."
+          },
+          {
+            "setting": "/comparison/current/months",
+            "from": "",
+            "to": "2026-07",
+            "reason": "Configured month-over-month comparison for July 2026 against June 2026 using Functional Net as the Amount column, grouped by Region, Country, and IBX, with explanations driven by FAH Line Description."
+          },
+          {
+            "setting": "/comparison/type",
+            "from": "QoQ",
+            "to": "MoM",
+            "reason": "Configured month-over-month comparison for July 2026 against June 2026 using Functional Net as the Amount column, grouped by Region, Country, and IBX, with explanations driven by FAH Line Description."
+          },
+          {
+            "setting": "/drivers/view",
+            "from": "not set",
+            "to": "By Region, Country and IBX",
+            "reason": "Configured month-over-month comparison for July 2026 against June 2026 using Functional Net as the Amount column, grouped by Region, Country, and IBX, with explanations driven by FAH Line Description."
+          },
+          {
+            "setting": "/measures/amount",
+            "from": "not set",
+            "to": "agg: sum; col: Functional_Net",
+            "reason": "Configured month-over-month comparison for July 2026 against June 2026 using Functional Net as the Amount column, grouped by Region, Country, and IBX, with explanations driven by FAH Line Description."
+          },
+          {
+            "setting": "/roles/dimensions",
+            "from": "",
+            "to": "Region, Country, Ibx_Code",
+            "reason": "Configured month-over-month comparison for July 2026 against June 2026 using Functional Net as the Amount column, grouped by Region, Country, and IBX, with explanations driven by FAH Line Description."
+          },
+          {
+            "setting": "/roles/driver_text",
+            "from": "",
+            "to": "FAH_Line_Description",
+            "reason": "Configured month-over-month comparison for July 2026 against June 2026 using Functional Net as the Amount column, grouped by Region, Country, and IBX, with explanations driven by FAH Line Description."
+          },
+          {
+            "setting": "/roles/period",
+            "from": "not set",
+            "to": "Period_Name",
+            "reason": "Configured month-over-month comparison for July 2026 against June 2026 using Functional Net as the Amount column, grouped by Region, Country, and IBX, with explanations driven by FAH Line Description."
+          },
+          {
+            "setting": "/roles/value",
+            "from": "not set",
+            "to": "Functional_Net",
+            "reason": "Configured month-over-month comparison for July 2026 against June 2026 using Functional Net as the Amount column, grouped by Region, Country, and IBX, with explanations driven by FAH Line Description."
+          },
+          {
+            "setting": "/views",
+            "from": "",
+            "to": "name: By Region, Country and IBX; keys: Region, Country, Ibx_Code; measures: amount; compare: True",
+            "reason": "Configured month-over-month comparison for July 2026 against June 2026 using Functional Net as the Amount column, grouped by Region, Country, and IBX, with explanations driven by FAH Line Description."
+          }
+        ],
+        "applied": true,
+        "patch": [
+          {
+            "op": "replace",
+            "path": "/comparison/base/months",
+            "value": [
+              "2026-06"
+            ]
+          },
+          {
+            "op": "replace",
+            "path": "/comparison/current/months",
+            "value": [
+              "2026-07"
+            ]
+          },
+          {
+            "op": "replace",
+            "path": "/comparison/type",
+            "value": "MoM"
+          },
+          {
+            "op": "add",
+            "path": "/drivers/view",
+            "value": "By Region, Country and IBX"
+          },
+          {
+            "op": "add",
+            "path": "/measures/amount",
+            "value": {
+              "agg": "sum",
+              "col": "Functional_Net"
+            }
+          },
+          {
+            "op": "replace",
+            "path": "/roles/dimensions",
+            "value": [
+              "Region",
+              "Country",
+              "Ibx_Code"
+            ]
+          },
+          {
+            "op": "replace",
+            "path": "/roles/driver_text",
+            "value": [
+              "FAH_Line_Description"
+            ]
+          },
+          {
+            "op": "replace",
+            "path": "/roles/period",
+            "value": "Period_Name"
+          },
+          {
+            "op": "replace",
+            "path": "/roles/value",
+            "value": "Functional_Net"
+          },
+          {
+            "op": "replace",
+            "path": "/views",
+            "value": [
+              {
+                "name": "By Region, Country and IBX",
+                "keys": [
+                  "Region",
+                  "Country",
+                  "Ibx_Code"
+                ],
+                "measures": [
+                  "amount"
+                ],
+                "compare": true
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "transport_attempt": {
+        "request_id": "15577a38-3a17-4ee1-a5c4-a1801f852b39",
+        "step": "plan_from_description",
+        "envelope_size": 41734,
+        "duration": 12.389,
+        "status": "repair",
+        "response": "{\n \"contract_version\": \"journey-1\",\n \"request_id\": \"15577a38-3a17-4ee1-a5c4-a1801f852b39\",\n \"step\": \"plan_from_description\",\n \"status\": \"ok\",\n \"proposal\": {\n  \"patch\": [\n   {\n    \"op\": \"replace\",\n    \"path\": \"/roles\",\n    \"value\": {\n     \"value\": \"Functional_Net\",\n     \"period\": \"Period_Name\",\n     \"scenario\": null,\n     \"debit\": null,\n     \"credit\": null,\n     \"keys\": [],\n     \"dimensions\": [\n      \"Region\",\n      \"Country\",\n      \"Ibx_Code\"\n     ],\n     \"driver_text\": [\n      \"FAH_Line_Description\"\n     ]\n    }\n   },\n   {\n    \"op\": \"replace\",\n    \"path\": \"/comparison\",\n    \"value\": {\n     \"type\": \"MoM\",\n     \"base\": {\n      \"months\": [\n       \"2026-06\"\n      ]\n     },\n     \"current\": {\n      \"months\": [\n       \"2026-07\"\n      ]\n     }\n    }\n   },\n   {\n    \"op\": \"replace\",\n    \"path\": \"/views\",\n    \"value\": [\n     {\n      \"name\": \"By Region, Country and IBX\",\n      \"keys\": [\n       \"Region\",\n       \"Country\",\n       \"Ibx_Code\"\n      ],\n      \"measures\": [\n       \"amount\"\n      ],\n      \"compare\": true\n     }\n    ]\n   },\n   {\n    \"op\": \"replace\",\n    \"path\": \"/measures\",\n    \"value\": {\n     \"amount\": {\n      \"agg\": \"sum\",\n      \"col\": \"Functional_Net\"\n     }\n    }\n   },\n   {\n    \"op\": \"replace\",\n    \"path\": \"/drivers/view\",\n    \"value\": \"By Region, Country and IBX\"\n   }\n  ],\n  \"step_states\": [\n   {\n    \"step\": \"data\",\n    \"status\": \"confident\",\n    \"summary\": \"Amount mapped to Functional Net, period to Period Name, and description to FAH Line Description.\",\n    \"reason\": \"Specified in your request and matched with available columns.\",\n    \"question_ids\": []\n   },\n   {\n    \"step\": \"compare\",\n    \"status\": \"confident\",\n    \"summary\": \"Compare July 2026 with June 2026 month over month.\",\n    \"reason\": \"Matched the month-over-month request with available periods 2026-06 and 2026-07.\",\n    \"question_ids\": []\n   },\n   {\n    \"step\": \"include\",\n    \"status\": \"confident\",\n    \"summary\": \"Include all main data rows.\",\n    \"reason\": \"No specific filtering or scope criteria were requested.\",\n    \"question_ids\": []\n   },\n   {\n    \"step\": \"group\",\n    \"status\": \"confident\",\n    \"summary\": \"Group movements by Region, Country, and IBX.\",\n    \"reason\": \"Requested grouping dimensions matched to columns Region, Country, and Ibx_Code.\",\n    \"question_ids\": []\n   },\n   {\n    \"step\": \"important\",\n    \"status\": \"confident\",\n    \"summary\": \"Materiality threshold at 300,000 with top 15 movements.\",\n    \"reason\": \"Using the preset materiality and top movements settings.\",\n    \"question_ids\": []\n   },\n   {\n    \"step\": \"explain\",\n    \"status\": \"confident\",\n    \"summary\": \"Explain movements using FAH Line Description with standard controller review guidelines.\",\n    \"reason\": \"Requested explanations based on FAH Line Description.\",\n    \"question_ids\": []\n   }\n  ]\n },\n \"confidence\": \"high\",\n \"rationale\": \"All requested settings (amount column, period comparison, grouping dimensions, and explanation source) mapped directly to available data and months.\",\n \"questions\": [],\n \"warnings\": [],\n \"summary\": \"Configured month-over-month comparison for July 2026 against June 2026 using Functional Net as the Amount column, grouped by Region, Country, and IBX, with explanations driven by FAH Line Description.\",\n \"changes\": [\n  {\n   \"setting\": \"Amount column\",\n   \"from\": \"Unmapped\",\n   \"to\": \"Functional Net\",\n   \"reason\": \"Specified in request\"\n  },\n  {\n   \"setting\": \"Description column\",\n   \"from\": \"Unmapped\",\n   \"to\": \"FAH Line Description\",\n   \"reason\": \"Specified in request\"\n  },\n  {\n   \"setting\": \"Compare with\",\n   \"from\": \"Unset\",\n   \"to\": \"July 2026 vs June 2026 (Month over Month)\",\n   \"reason\": \"Specified month-over-month flux using available months\"\n  },\n  {\n   \"setting\": \"Group by\",\n   \"from\": \"Total\",\n   \"to\": \"Region, Country, and Ibx_Code\",\n   \"reason\": \"Specified in request\"\n  }\n ]\n}"
+      }
+    },
+    {
+      "transport_attempt": {
+        "request_id": "15577a38-3a17-4ee1-a5c4-a1801f852b39",
+        "step": "repair",
+        "envelope_size": 46142,
+        "duration": 16.841,
+        "status": "ok",
+        "response": "{\n \"contract_version\": \"journey-1\",\n \"request_id\": \"15577a38-3a17-4ee1-a5c4-a1801f852b39\",\n \"step\": \"plan_from_description\",\n \"status\": \"ok\",\n \"proposal\": {\n  \"patch\": [\n   {\n    \"op\": \"replace\",\n    \"path\": \"/roles\",\n    \"value\": {\n     \"value\": \"Functional_Net\",\n     \"period\": \"Period_Name\",\n     \"scenario\": null,\n     \"debit\": null,\n     \"credit\": null,\n     \"keys\": [],\n     \"dimensions\": [\n      \"Region\",\n      \"Country\",\n      \"Ibx_Code\"\n     ],\n     \"driver_text\": [\n      \"FAH_Line_Description\"\n     ]\n    }\n   },\n   {\n    \"op\": \"replace\",\n    \"path\": \"/comparison\",\n    \"value\": {\n     \"type\": \"MoM\",\n     \"base\": {\n      \"months\": [\n       \"2026-06\"\n      ]\n     },\n     \"current\": {\n      \"months\": [\n       \"2026-07\"\n      ]\n     }\n    }\n   },\n   {\n    \"op\": \"replace\",\n    \"path\": \"/views\",\n    \"value\": [\n     {\n      \"name\": \"By Region, Country and IBX\",\n      \"keys\": [\n       \"Region\",\n       \"Country\",\n       \"Ibx_Code\"\n      ],\n      \"measures\": [\n       \"amount\"\n      ],\n      \"compare\": true\n     }\n    ]\n   },\n   {\n    \"op\": \"replace\",\n    \"path\": \"/measures\",\n    \"value\": {\n     \"amount\": {\n      \"agg\": \"sum\",\n      \"col\": \"Functional_Net\"\n     }\n    }\n   },\n   {\n    \"op\": \"add\",\n    \"path\": \"/drivers/view\",\n    \"value\": \"By Region, Country and IBX\"\n   }\n  ],\n  \"step_states\": [\n   {\n    \"step\": \"data\",\n    \"status\": \"confident\",\n    \"summary\": \"Amount mapped to Functional Net, period to Period Name, and description to FAH Line Description.\",\n    \"reason\": \"Specified in your request and matched with available columns.\",\n    \"question_ids\": []\n   },\n   {\n    \"step\": \"compare\",\n    \"status\": \"confident\",\n    \"summary\": \"Compare July 2026 with June 2026 month over month.\",\n    \"reason\": \"Matched the month-over-month request with available periods 2026-06 and 2026-07.\",\n    \"question_ids\": []\n   },\n   {\n    \"step\": \"include\",\n    \"status\": \"confident\",\n    \"summary\": \"Include all main data rows.\",\n    \"reason\": \"No specific filtering or scope criteria were requested.\",\n    \"question_ids\": []\n   },\n   {\n    \"step\": \"group\",\n    \"status\": \"confident\",\n    \"summary\": \"Group movements by Region, Country, and IBX.\",\n    \"reason\": \"Requested grouping dimensions matched to columns Region, Country, and Ibx_Code.\",\n    \"question_ids\": []\n   },\n   {\n    \"step\": \"important\",\n    \"status\": \"confident\",\n    \"summary\": \"Materiality threshold at 300,000 with top 15 movements.\",\n    \"reason\": \"Using the preset materiality and top movements settings.\",\n    \"question_ids\": []\n   },\n   {\n    \"step\": \"explain\",\n    \"status\": \"confident\",\n    \"summary\": \"Explain movements using FAH Line Description with standard controller review guidelines.\",\n    \"reason\": \"Requested explanations based on FAH Line Description.\",\n    \"question_ids\": []\n   }\n  ]\n },\n \"confidence\": \"high\",\n \"rationale\": \"Corrected the patch operation for /drivers/view from replace to add since the key was not previously set in spec_so_far, and retained all mapped settings.\",\n \"questions\": [],\n \"warnings\": [],\n \"summary\": \"Configured month-over-month comparison for July 2026 against June 2026 using Functional Net as the Amount column, grouped by Region, Country, and IBX, with explanations driven by FAH Line Description.\",\n \"changes\": [\n  {\n   \"setting\": \"Amount column\",\n   \"from\": \"Unmapped\",\n   \"to\": \"Functional Net\",\n   \"reason\": \"Specified in request\"\n  },\n  {\n   \"setting\": \"Description column\",\n   \"from\": \"Unmapped\",\n   \"to\": \"FAH Line Description\",\n   \"reason\": \"Specified in request\"\n  },\n  {\n   \"setting\": \"Compare with\",\n   \"from\": \"Unset\",\n   \"to\": \"July 2026 vs June 2026 (Month over Month)\",\n   \"reason\": \"Specified month-over-month flux using available months\"\n  },\n  {\n   \"setting\": \"Group by\",\n   \"from\": \"Total\",\n   \"to\": \"Region, Country, and Ibx_Code\",\n   \"reason\": \"Specified in request\"\n  }\n ]\n}"
+      }
+    }
+  ]
+}

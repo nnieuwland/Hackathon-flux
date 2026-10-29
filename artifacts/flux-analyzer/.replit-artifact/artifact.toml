@@ -1,0 +1,23 @@
+kind = "web"
+previewPath = "/"
+title = "Flux Analyzer"
+description = "A Flask and Python financial variance analysis workbench for Equinix finance analysts, with guided source selection, user-approved FluxSpecs and reconcilable Excel exports."
+version = "1.0.0"
+id = "artifacts/flux-analyzer"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 22762
+
+[services.development]
+run = "pnpm --filter @workspace/flux-analyzer run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/flux-analyzer", "run", "build" ]
+run = [ "pnpm", "--filter", "@workspace/flux-analyzer", "run", "serve" ]
+
+[services.env]
+PORT = "22762"
+BASE_PATH = "/"

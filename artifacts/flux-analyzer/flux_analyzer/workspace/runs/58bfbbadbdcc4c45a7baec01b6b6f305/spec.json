@@ -1,0 +1,209 @@
+{
+  "spec_version": "2.0",
+  "preset": {
+    "id": "generic_flux",
+    "version": "1.0.0"
+  },
+  "flux_name": "Untitled analysis",
+  "sources": {
+    "lookups": {},
+    "primary": {
+      "files": [
+        {
+          "file": "sample_test_run_for_python_scrip_on_fresh_data_AA.xlsx",
+          "sheet": "Detail",
+          "header_row": 1,
+          "start_col": "A",
+          "end_col": null
+        }
+      ],
+      "union": {
+        "mode": "stack",
+        "tag_column": null
+      }
+    }
+  },
+  "roles": {
+    "value": "Functional_Net",
+    "period": "Period_Name",
+    "scenario": null,
+    "debit": null,
+    "credit": null,
+    "keys": [],
+    "dimensions": [
+      "Region",
+      "Country",
+      "Ibx_Code"
+    ],
+    "driver_text": [
+      "FAH_Line_Description"
+    ]
+  },
+  "value_rules": {
+    "source": "column",
+    "null_as_zero": true,
+    "flip_sign_when": []
+  },
+  "scope": [],
+  "derive": [],
+  "periods": {
+    "calendar": "calendar"
+  },
+  "period_format": "auto",
+  "partial_periods": [],
+  "comparison": {
+    "type": "MoM",
+    "base": {
+      "months": [
+        "2026-06"
+      ]
+    },
+    "current": {
+      "months": [
+        "2026-07"
+      ]
+    }
+  },
+  "joins": [],
+  "classification": null,
+  "measures": {
+    "amount": {
+      "agg": "sum",
+      "col": "Functional_Net"
+    }
+  },
+  "views": [
+    {
+      "name": "By Region, Country and IBX",
+      "keys": [
+        "Region",
+        "Country",
+        "Ibx_Code"
+      ],
+      "measures": [
+        "amount"
+      ],
+      "compare": true
+    }
+  ],
+  "flags": [],
+  "gates": [],
+  "sections": null,
+  "decompose": null,
+  "drivers": {
+    "materiality": {
+      "mode": "abs",
+      "abs": 300000
+    },
+    "top_n": 15,
+    "others_label": "Other items",
+    "view": "By Region, Country and IBX"
+  },
+  "drill": {
+    "top_n": 5
+  },
+  "commentary": {
+    "units": "M",
+    "decimals": 1,
+    "verify_tag": "[TO VERIFY]",
+    "sign_style": "plus_minus",
+    "currency_symbol": "$",
+    "forbidden_terms": [],
+    "max_line_words": 35,
+    "style_profile": {
+      "audience": "controller",
+      "length": "medium",
+      "structure": {
+        "type": "overall",
+        "split_by": null
+      },
+      "tone": "neutral",
+      "instructions": "Focus on what type of service is described that is driving the variance. ",
+      "example_style": {
+        "summary_of_style": "",
+        "sample_phrases": []
+      },
+      "include": [
+        "to_verify"
+      ],
+      "objective": "",
+      "business_context": ""
+    }
+  },
+  "controls": [
+    {
+      "id": "required_columns",
+      "severity": "stop"
+    },
+    {
+      "id": "periods_present",
+      "severity": "stop"
+    },
+    {
+      "id": "no_duplicate_periods_across_files",
+      "severity": "stop"
+    },
+    {
+      "id": "new_or_removed_members",
+      "severity": "warn"
+    },
+    {
+      "id": "drivers_reconcile",
+      "severity": "stop"
+    },
+    {
+      "id": "flags_sum_to_rows",
+      "severity": "stop"
+    },
+    {
+      "id": "sections_reconcile",
+      "severity": "stop"
+    },
+    {
+      "id": "join_unmatched_keys",
+      "severity": "warn"
+    },
+    {
+      "id": "join_fanout",
+      "severity": "stop"
+    },
+    {
+      "id": "classification_coverage",
+      "severity": "warn",
+      "params": {
+        "minimum_percentage": 95
+      }
+    },
+    {
+      "id": "partial_period_used",
+      "severity": "warn"
+    }
+  ],
+  "run_stamp": {
+    "run_id": "58bfbbadbdcc4c45a7baec01b6b6f305",
+    "created": "2026-10-28T16:58:40.099156+00:00",
+    "engine_version": "2.0",
+    "spec_sha256": "863da412db73ffc75c225d1e05acf53acd4c1f05fb943edc4e81eabaa93d46fb",
+    "preset": {
+      "id": "generic_flux",
+      "version": "1.0.0"
+    },
+    "input_files": [
+      {
+        "name": "sample_test_run_for_python_scrip_on_fresh_data_AA.xlsx",
+        "sha256": "6304d0f09a8c02d2c3c2cc1dbdfa1df9d6d85a470f495e468f0df99ac8fb8de0",
+        "role": "primary",
+        "definition": {
+          "sheet": "Detail",
+          "header_row": 1,
+          "start_col": "A",
+          "end_col": null,
+          "role": "primary",
+          "name": "sample_test_run_for_python_scrip_on_fresh_data_AA",
+          "combine_sheets": [],
+          "tag_column": null
+        }
+      }
+    ]
+  }
+}

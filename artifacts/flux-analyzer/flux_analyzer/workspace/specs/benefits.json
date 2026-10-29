@@ -1,0 +1,25 @@
+{
+  "spec_version": "1.0",
+  "flux_name": "Example — Benefits Actual vs Forecast",
+  "skill": "benefits_flux",
+  "sources": {},
+  "roles": {"value": "Cost", "period": "Period", "scenario": "Scenario", "keys": [], "dimensions": ["Department"], "driver_text": ["Description"]},
+  "scope": [],
+  "derive": [{"name": "Cost_per_head", "type": "ratio", "numerator": "Cost", "denominator": "Headcount"}],
+  "periods": {"calendar": "calendar"},
+  "comparison": {"type": "Actual vs Forecast", "base": {"months": ["2026-01"], "scenario": "Forecast"}, "current": {"months": ["2026-01"], "scenario": "Actual"}},
+  "measures": {
+    "amount": {"agg": "sum", "col": "{roles.value}"},
+    "Headcount": {"agg": "sum", "col": "Headcount"},
+    "Cost_per_head": {"agg": "mean", "col": "Cost_per_head"}
+  },
+  "views": [{"name": "department", "keys": ["Department"], "measures": ["amount", "Headcount", "Cost_per_head"], "compare": true}],
+  "sections": null,
+  "decompose": {"volume": "Headcount", "rate": "Cost_per_head", "method": "volume_at_base_rate"},
+  "flags": [],
+  "gates": [],
+  "drivers": {"view": "department", "measure": "amount", "materiality_abs": 0, "top_n": 15, "others_label": "Other items"},
+  "drill": {"group_by": "{roles.driver_text}", "top_n": 5},
+  "commentary": {"units": "K", "decimals": 1, "verify_tag": "[TO VERIFY]"},
+  "controls": [{"id": "required_columns", "severity": "stop"}, {"id": "periods_present", "severity": "stop"}, {"id": "drivers_reconcile", "severity": "stop"}]
+}

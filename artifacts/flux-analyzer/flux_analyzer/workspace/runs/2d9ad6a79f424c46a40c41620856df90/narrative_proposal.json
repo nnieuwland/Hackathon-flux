@@ -1,0 +1,253 @@
+{
+  "contract_version": "journey-1",
+  "request_id": "83bcfe37-9c21-4975-8623-10013c4c8db6",
+  "step": "write_commentary",
+  "status": "ok",
+  "proposal": {
+    "headline": "Country and IBX movements for review",
+    "lines": [
+      {
+        "driver_id": "d1",
+        "text": "-$0.4M — Brazil / AMER / SP3. Descriptions show manual accruals and open purchase orders with Vertiv and Cummins. [TO VERIFY] Confirm whether this relates to generator and power maintenance.",
+        "support": "needs_verification",
+        "evidence_refs": [
+          "driver:d1",
+          "text:d1:1",
+          "text:d1:5"
+        ],
+        "claims": [
+          {
+            "type": "observation",
+            "text": "Brazil / AMER / SP3 changed by -$0.4M from $0.4M to -$2,367.70.",
+            "evidence_refs": [
+              "driver:d1"
+            ]
+          },
+          {
+            "type": "observation",
+            "text": "Descriptions show manual accruals and open purchase orders with Vertiv and Cummins.",
+            "evidence_refs": [
+              "text:d1:1",
+              "text:d1:5"
+            ]
+          },
+          {
+            "type": "possible_explanation",
+            "text": "[TO VERIFY] Confirm whether this relates to generator and power maintenance.",
+            "evidence_refs": [
+              "text:d1:5"
+            ]
+          }
+        ],
+        "confirm_prompt": "Confirm whether this relates to generator and power maintenance."
+      },
+      {
+        "driver_id": "d2",
+        "text": "-$0.4M — Germany / EMEA / FR2. Descriptions list fire monitoring maintenance from Actemium Cegelec and impedance measurement semi-annual maintenance from Socomec. [TO VERIFY] Confirm the business cause of the decrease.",
+        "support": "needs_verification",
+        "evidence_refs": [
+          "driver:d2",
+          "text:d2:1",
+          "text:d2:3"
+        ],
+        "claims": [
+          {
+            "type": "observation",
+            "text": "Germany / EMEA / FR2 changed by -$0.4M from $1.1M to $0.7M.",
+            "evidence_refs": [
+              "driver:d2"
+            ]
+          },
+          {
+            "type": "observation",
+            "text": "Descriptions list fire monitoring maintenance from Actemium Cegelec and impedance measurement semi-annual maintenance from Socomec.",
+            "evidence_refs": [
+              "text:d2:1",
+              "text:d2:3"
+            ]
+          },
+          {
+            "type": "possible_explanation",
+            "text": "[TO VERIFY] Confirm the business cause of the decrease.",
+            "evidence_refs": [
+              "driver:d2"
+            ]
+          }
+        ],
+        "confirm_prompt": "Confirm the business cause of the decrease."
+      },
+      {
+        "driver_id": "d3",
+        "text": "-$0.4M — United States / AMER / DC12. Descriptions cite supply fan parts and quotes from EBM Papst. [TO VERIFY] Confirm the business reason for the lower spend.",
+        "support": "needs_verification",
+        "evidence_refs": [
+          "driver:d3",
+          "text:d3:1",
+          "text:d3:4"
+        ],
+        "claims": [
+          {
+            "type": "observation",
+            "text": "United States / AMER / DC12 changed by -$0.4M from $0.7M to $0.3M.",
+            "evidence_refs": [
+              "driver:d3"
+            ]
+          },
+          {
+            "type": "observation",
+            "text": "Descriptions cite supply fan parts and quotes from EBM Papst.",
+            "evidence_refs": [
+              "text:d3:1",
+              "text:d3:4"
+            ]
+          },
+          {
+            "type": "possible_explanation",
+            "text": "[TO VERIFY] Confirm the business reason for the lower spend.",
+            "evidence_refs": [
+              "driver:d3"
+            ]
+          }
+        ],
+        "confirm_prompt": "Confirm the business reason for the lower spend."
+      },
+      {
+        "driver_id": "d4",
+        "text": "-$0.4M — United States / AMER / NY7. Descriptions include Carrier labor, Orr fire protection, and Nalco water treatment. [TO VERIFY] Confirm the operational cause for the decline.",
+        "support": "needs_verification",
+        "evidence_refs": [
+          "driver:d4",
+          "text:d4:2",
+          "text:d4:3",
+          "text:d4:4"
+        ],
+        "claims": [
+          {
+            "type": "observation",
+            "text": "United States / AMER / NY7 changed by -$0.4M from $0.3M to -$0.1M.",
+            "evidence_refs": [
+              "driver:d4"
+            ]
+          },
+          {
+            "type": "observation",
+            "text": "Descriptions include Carrier labor, Orr fire protection, and Nalco water treatment.",
+            "evidence_refs": [
+              "text:d4:2",
+              "text:d4:3",
+              "text:d4:4"
+            ]
+          },
+          {
+            "type": "possible_explanation",
+            "text": "[TO VERIFY] Confirm the operational cause for the decline.",
+            "evidence_refs": [
+              "driver:d4"
+            ]
+          }
+        ],
+        "confirm_prompt": "Confirm the operational cause for the decline."
+      },
+      {
+        "driver_id": "d5",
+        "text": "+$0.3M — Singapore / APAC / SG4. Descriptions show Eaton UPS maintenance, Rockwell Automation CPOS, and LC Engineering services. [TO VERIFY] Confirm the reason for the higher maintenance activity.",
+        "support": "needs_verification",
+        "evidence_refs": [
+          "driver:d5",
+          "text:d5:1",
+          "text:d5:2",
+          "text:d5:3"
+        ],
+        "claims": [
+          {
+            "type": "observation",
+            "text": "Singapore / APAC / SG4 changed by +$0.3M from $0.1M to $0.4M.",
+            "evidence_refs": [
+              "driver:d5"
+            ]
+          },
+          {
+            "type": "observation",
+            "text": "Descriptions show Eaton UPS maintenance, Rockwell Automation CPOS, and LC Engineering services.",
+            "evidence_refs": [
+              "text:d5:1",
+              "text:d5:2",
+              "text:d5:3"
+            ]
+          },
+          {
+            "type": "possible_explanation",
+            "text": "[TO VERIFY] Confirm the reason for the higher maintenance activity.",
+            "evidence_refs": [
+              "driver:d5"
+            ]
+          }
+        ],
+        "confirm_prompt": "Confirm the reason for the higher maintenance activity."
+      },
+      {
+        "driver_id": "others",
+        "text": "-$4.7M — Other items. Remaining movements below the materiality threshold, grouped by the engine.",
+        "support": "supported",
+        "evidence_refs": [
+          "driver:others"
+        ],
+        "claims": [
+          {
+            "type": "observation",
+            "text": "Other items changed by -$4.7M from $24.4M to $19.8M.",
+            "evidence_refs": [
+              "driver:others"
+            ]
+          }
+        ]
+      }
+    ],
+    "others_summary": "Other items combine remaining movements below the $0.3M materiality threshold."
+  },
+  "confidence": "high",
+  "rationale": "Drafted commentary for each material driver and the remainder line, identifying the specific vendor and maintenance services indicated in line descriptions while tagging business causes for confirmation.",
+  "questions": [],
+  "warnings": [
+    "New or removed dimension members were found; see details."
+  ],
+  "summary": "Prepared commentary for 5 material IBX locations and the aggregated remainder, highlighting relevant maintenance services and vendor descriptions.",
+  "changes": [],
+  "validation": {
+    "ok": true,
+    "issues": [],
+    "line_results": [
+      {
+        "driver_id": "d1",
+        "ok": true,
+        "issues": []
+      },
+      {
+        "driver_id": "d2",
+        "ok": true,
+        "issues": []
+      },
+      {
+        "driver_id": "d3",
+        "ok": true,
+        "issues": []
+      },
+      {
+        "driver_id": "d4",
+        "ok": true,
+        "issues": []
+      },
+      {
+        "driver_id": "d5",
+        "ok": true,
+        "issues": []
+      },
+      {
+        "driver_id": "others",
+        "ok": true,
+        "issues": []
+      }
+    ]
+  },
+  "applied": true
+}

@@ -1,0 +1,2058 @@
+{
+  "name": "Country movement review",
+  "base": 9480021.57,
+  "current": 10979957.02,
+  "delta": 1499935.45,
+  "delta_pct": 15.822067902742123,
+  "n_drivers": 4,
+  "n_exceptions": 0,
+  "drivers": [
+    {
+      "driver_id": "d1",
+      "label": "United Kingdom",
+      "dimensions": {
+        "Country": "United Kingdom"
+      },
+      "base": 2850000.0,
+      "current": 3840000.0,
+      "delta": 990000.0,
+      "flags": [],
+      "flag_counts": [],
+      "delta_fmt": "+$1.0M",
+      "base_fmt": "$2.9M",
+      "current_fmt": "$3.8M",
+      "top_texts": [
+        {
+          "text": "Data centre cooling maintenance",
+          "delta_fmt": "+$1.0M",
+          "evidence_ref": "text:d1:1"
+        }
+      ],
+      "n_lines": 6,
+      "flags_summary": {},
+      "is_material": true,
+      "trend": {
+        "comparability": "comparable",
+        "pattern": "insufficient_history",
+        "points": [
+          {
+            "period": "2026-01 to 2026-03",
+            "amount_fmt": "$2.9M"
+          },
+          {
+            "period": "2026-04 to 2026-06",
+            "amount_fmt": "$3.8M"
+          }
+        ],
+        "note": "Too few earlier periods are available to tell a one-period change from a continuing pattern.",
+        "evidence_ref": "trend:d1"
+      },
+      "coverage": {
+        "source_lines": 6,
+        "shown_description_count": 1,
+        "truncated": false,
+        "unmatched_lookup_lines": 0,
+        "unclassified_lines": 0,
+        "partial_periods": [],
+        "note": "6 source lines in the compared periods, grouped into 1 descriptions.",
+        "evidence_ref": "coverage:d1"
+      },
+      "evidence_refs": [
+        "driver:d1"
+      ]
+    },
+    {
+      "driver_id": "d2",
+      "label": "Germany",
+      "dimensions": {
+        "Country": "Germany"
+      },
+      "base": 1860000.0,
+      "current": 2730000.0,
+      "delta": 870000.0,
+      "flags": [],
+      "flag_counts": [],
+      "delta_fmt": "+$0.9M",
+      "base_fmt": "$1.9M",
+      "current_fmt": "$2.7M",
+      "top_texts": [
+        {
+          "text": "Emergency generator servicing",
+          "delta_fmt": "+$0.9M",
+          "evidence_ref": "text:d2:1"
+        }
+      ],
+      "n_lines": 6,
+      "flags_summary": {},
+      "is_material": true,
+      "trend": {
+        "comparability": "comparable",
+        "pattern": "insufficient_history",
+        "points": [
+          {
+            "period": "2026-01 to 2026-03",
+            "amount_fmt": "$1.9M"
+          },
+          {
+            "period": "2026-04 to 2026-06",
+            "amount_fmt": "$2.7M"
+          }
+        ],
+        "note": "Too few earlier periods are available to tell a one-period change from a continuing pattern.",
+        "evidence_ref": "trend:d2"
+      },
+      "coverage": {
+        "source_lines": 6,
+        "shown_description_count": 1,
+        "truncated": false,
+        "unmatched_lookup_lines": 0,
+        "unclassified_lines": 0,
+        "partial_periods": [],
+        "note": "6 source lines in the compared periods, grouped into 1 descriptions.",
+        "evidence_ref": "coverage:d2"
+      },
+      "evidence_refs": [
+        "driver:d2"
+      ]
+    },
+    {
+      "driver_id": "d3",
+      "label": "Netherlands",
+      "dimensions": {
+        "Country": "Netherlands"
+      },
+      "base": 2220021.57,
+      "current": 1619957.02,
+      "delta": -600064.55,
+      "flags": [],
+      "flag_counts": [],
+      "delta_fmt": "-$0.6M",
+      "base_fmt": "$2.2M",
+      "current_fmt": "$1.6M",
+      "top_texts": [
+        {
+          "text": "Preventive maintenance contract",
+          "delta_fmt": "-$0.6M",
+          "evidence_ref": "text:d3:1"
+        },
+        {
+          "text": "Cooling accrual — synthetic golden rule example",
+          "delta_fmt": "-$64.55",
+          "evidence_ref": "text:d3:2"
+        }
+      ],
+      "n_lines": 10,
+      "flags_summary": {},
+      "is_material": true,
+      "trend": {
+        "comparability": "comparable",
+        "pattern": "insufficient_history",
+        "points": [
+          {
+            "period": "2026-01 to 2026-03",
+            "amount_fmt": "$2.2M"
+          },
+          {
+            "period": "2026-04 to 2026-06",
+            "amount_fmt": "$1.6M"
+          }
+        ],
+        "note": "Too few earlier periods are available to tell a one-period change from a continuing pattern.",
+        "evidence_ref": "trend:d3"
+      },
+      "coverage": {
+        "source_lines": 10,
+        "shown_description_count": 2,
+        "truncated": false,
+        "unmatched_lookup_lines": 0,
+        "unclassified_lines": 0,
+        "partial_periods": [],
+        "note": "10 source lines in the compared periods, grouped into 2 descriptions.",
+        "evidence_ref": "coverage:d3"
+      },
+      "evidence_refs": [
+        "driver:d3"
+      ]
+    },
+    {
+      "driver_id": "others",
+      "label": "Other items",
+      "dimensions": {},
+      "base": 2550000.0,
+      "current": 2790000.0,
+      "delta": 240000.0,
+      "excluded_dimensions": [
+        {
+          "Country": "United Kingdom"
+        },
+        {
+          "Country": "Germany"
+        },
+        {
+          "Country": "Netherlands"
+        }
+      ],
+      "flags": [],
+      "flag_counts": [],
+      "delta_fmt": "+$0.2M",
+      "base_fmt": "$2.6M",
+      "current_fmt": "$2.8M",
+      "top_texts": [
+        {
+          "text": "Fire safety maintenance",
+          "delta_fmt": "+$0.2M",
+          "evidence_ref": "text:others:1"
+        },
+        {
+          "text": "Electrical inspection",
+          "delta_fmt": "+$0.1M",
+          "evidence_ref": "text:others:2"
+        }
+      ],
+      "n_lines": 12,
+      "flags_summary": {},
+      "is_material": false,
+      "trend": {
+        "comparability": "comparable",
+        "pattern": "insufficient_history",
+        "points": [
+          {
+            "period": "2026-01 to 2026-03",
+            "amount_fmt": "$2.6M"
+          },
+          {
+            "period": "2026-04 to 2026-06",
+            "amount_fmt": "$2.8M"
+          }
+        ],
+        "note": "Too few earlier periods are available to tell a one-period change from a continuing pattern.",
+        "evidence_ref": "trend:others"
+      },
+      "coverage": {
+        "source_lines": 12,
+        "shown_description_count": 2,
+        "truncated": false,
+        "unmatched_lookup_lines": 0,
+        "unclassified_lines": 0,
+        "partial_periods": [],
+        "note": "12 source lines in the compared periods, grouped into 2 descriptions.",
+        "evidence_ref": "coverage:others"
+      },
+      "evidence_refs": [
+        "driver:others"
+      ]
+    }
+  ],
+  "views": {
+    "By Country": [
+      {
+        "Country": "United Kingdom",
+        "amount_base": 2850000.0,
+        "amount_current": 3840000.0,
+        "amount_delta": 990000.0,
+        "amount_delta_pct": 34.73684210526316
+      },
+      {
+        "Country": "Netherlands",
+        "amount_base": 2220021.57,
+        "amount_current": 1619957.02,
+        "amount_delta": -600064.55,
+        "amount_delta_pct": -27.029672058546712
+      },
+      {
+        "Country": "Germany",
+        "amount_base": 1860000.0,
+        "amount_current": 2730000.0,
+        "amount_delta": 870000.0,
+        "amount_delta_pct": 46.774193548387096
+      },
+      {
+        "Country": "France",
+        "amount_base": 1470000.0,
+        "amount_current": 1560000.0,
+        "amount_delta": 90000.0,
+        "amount_delta_pct": 6.122448979591836
+      },
+      {
+        "Country": "Spain",
+        "amount_base": 1080000.0,
+        "amount_current": 1230000.0,
+        "amount_delta": 150000.0,
+        "amount_delta_pct": 13.88888888888889
+      }
+    ]
+  },
+  "drills": {
+    "d1": [
+      {
+        "text": "Data centre cooling maintenance",
+        "base": 2850000.0,
+        "current": 3840000.0,
+        "delta": 990000.0,
+        "n_lines": 6
+      }
+    ],
+    "d2": [
+      {
+        "text": "Emergency generator servicing",
+        "base": 1860000.0,
+        "current": 2730000.0,
+        "delta": 870000.0,
+        "n_lines": 6
+      }
+    ],
+    "d3": [
+      {
+        "text": "Preventive maintenance contract",
+        "base": 2220000.0,
+        "current": 1620000.0,
+        "delta": -600000.0,
+        "n_lines": 6
+      },
+      {
+        "text": "Cooling accrual — synthetic golden rule example",
+        "base": 21.57,
+        "current": -42.98,
+        "delta": -64.55,
+        "n_lines": 4
+      }
+    ],
+    "others": [
+      {
+        "text": "Fire safety maintenance",
+        "base": 1080000.0,
+        "current": 1230000.0,
+        "delta": 150000.0,
+        "n_lines": 6
+      },
+      {
+        "text": "Electrical inspection",
+        "base": 1470000.0,
+        "current": 1560000.0,
+        "delta": 90000.0,
+        "n_lines": 6
+      }
+    ]
+  },
+  "flags": [],
+  "exceptions": [],
+  "sections": [],
+  "controls": [
+    {
+      "id": "required_columns",
+      "status": "pass",
+      "message": "All required columns are available.",
+      "details": {
+        "missing": []
+      }
+    },
+    {
+      "id": "periods_present",
+      "status": "pass",
+      "message": "Both comparison slices contain data.",
+      "details": {
+        "missing": [],
+        "rows": {
+          "base": 17,
+          "current": 17
+        }
+      }
+    },
+    {
+      "id": "no_duplicate_periods_across_files",
+      "status": "pass",
+      "message": "No periods overlap across stacked sources.",
+      "details": {
+        "periods": []
+      }
+    },
+    {
+      "id": "new_or_removed_members",
+      "status": "pass",
+      "message": "Dimension membership is consistent.",
+      "details": {}
+    },
+    {
+      "id": "join_unmatched_keys",
+      "status": "pass",
+      "message": "All lookup keys matched.",
+      "details": {}
+    },
+    {
+      "id": "join_fanout",
+      "status": "pass",
+      "message": "Lookup joins preserve one row per source row.",
+      "details": {}
+    },
+    {
+      "id": "classification_coverage",
+      "status": "pass",
+      "message": "Classification coverage meets the configured minimum.",
+      "details": {}
+    },
+    {
+      "id": "partial_period_used",
+      "status": "pass",
+      "message": "No detected partial months are selected.",
+      "details": {
+        "months": [],
+        "row_counts": {}
+      }
+    },
+    {
+      "id": "drivers_reconcile",
+      "status": "pass",
+      "message": "Drivers and other items reconcile to the movement.",
+      "details": {}
+    },
+    {
+      "id": "flags_sum_to_rows",
+      "status": "pass",
+      "message": "Flag counts reconcile to view rows.",
+      "details": {}
+    },
+    {
+      "id": "sections_reconcile",
+      "status": "pass",
+      "message": "No section split configured.",
+      "details": {}
+    }
+  ],
+  "spec": {
+    "spec_version": "2.0",
+    "preset": {
+      "id": "generic_flux",
+      "version": "1.0.0"
+    },
+    "flux_name": "Country movement review",
+    "sources": {
+      "lookups": {
+        "open_po": {
+          "files": [
+            {
+              "file": "Sample_Open_PO.xlsx",
+              "sheet": "Open PO Report ",
+              "header_row": 1,
+              "start_col": "A",
+              "end_col": null
+            }
+          ]
+        }
+      },
+      "primary": {
+        "files": [
+          {
+            "file": "Sample_GL_2026.csv",
+            "sheet": "(csv)",
+            "header_row": 1,
+            "start_col": "A",
+            "end_col": null
+          }
+        ],
+        "union": {
+          "mode": "stack",
+          "tag_column": null
+        }
+      }
+    },
+    "roles": {
+      "value": "Functional_Net",
+      "period": "Period_Name",
+      "scenario": null,
+      "debit": "Accounted_Dr",
+      "credit": "Accounted_Cr",
+      "keys": [],
+      "dimensions": [
+        "Country"
+      ],
+      "driver_text": [
+        "FAH_Line_Description"
+      ]
+    },
+    "value_rules": {
+      "source": "column",
+      "null_as_zero": true,
+      "flip_sign_when": []
+    },
+    "scope": [],
+    "derive": [],
+    "periods": {
+      "calendar": "calendar"
+    },
+    "period_format": "auto",
+    "partial_periods": [],
+    "comparison": {
+      "type": "period_vs_period",
+      "base": {
+        "months": [
+          "2026-01",
+          "2026-02",
+          "2026-03"
+        ]
+      },
+      "current": {
+        "months": [
+          "2026-04",
+          "2026-05",
+          "2026-06"
+        ]
+      }
+    },
+    "joins": [],
+    "classification": null,
+    "measures": {
+      "amount": {
+        "agg": "sum",
+        "col": "Functional_Net"
+      }
+    },
+    "views": [
+      {
+        "name": "By Country",
+        "keys": [
+          "Country"
+        ],
+        "measures": [
+          "amount"
+        ],
+        "compare": true
+      }
+    ],
+    "flags": [],
+    "gates": [],
+    "sections": null,
+    "decompose": null,
+    "drivers": {
+      "materiality": {
+        "mode": "abs",
+        "abs": 300000
+      },
+      "top_n": 15,
+      "others_label": "Other items",
+      "view": "By Country"
+    },
+    "drill": {
+      "top_n": 5
+    },
+    "commentary": {
+      "units": "M",
+      "decimals": 1,
+      "verify_tag": "[TO VERIFY]",
+      "sign_style": "plus_minus",
+      "currency_symbol": "$",
+      "forbidden_terms": [],
+      "max_line_words": 35
+    },
+    "controls": [
+      {
+        "id": "required_columns",
+        "severity": "stop"
+      },
+      {
+        "id": "periods_present",
+        "severity": "stop"
+      },
+      {
+        "id": "no_duplicate_periods_across_files",
+        "severity": "stop"
+      },
+      {
+        "id": "new_or_removed_members",
+        "severity": "warn"
+      },
+      {
+        "id": "drivers_reconcile",
+        "severity": "stop"
+      },
+      {
+        "id": "flags_sum_to_rows",
+        "severity": "stop"
+      },
+      {
+        "id": "sections_reconcile",
+        "severity": "stop"
+      },
+      {
+        "id": "join_unmatched_keys",
+        "severity": "warn"
+      },
+      {
+        "id": "join_fanout",
+        "severity": "stop"
+      },
+      {
+        "id": "classification_coverage",
+        "severity": "warn",
+        "params": {
+          "minimum_percentage": 95
+        }
+      },
+      {
+        "id": "partial_period_used",
+        "severity": "warn"
+      }
+    ]
+  },
+  "evidence": {
+    "flux_name": "Country movement review",
+    "drivers": [
+      {
+        "driver_id": "d1",
+        "label": "United Kingdom",
+        "dimensions": {
+          "Country": "United Kingdom"
+        },
+        "base": 2850000.0,
+        "current": 3840000.0,
+        "delta": 990000.0,
+        "delta_fmt": "+$1.0M",
+        "base_fmt": "$2.9M",
+        "current_fmt": "$3.8M",
+        "top_texts": [
+          {
+            "text": "Data centre cooling maintenance",
+            "delta_fmt": "+$1.0M",
+            "evidence_ref": "text:d1:1"
+          }
+        ],
+        "n_lines": 6,
+        "flags_summary": {},
+        "is_material": true,
+        "trend": {
+          "comparability": "comparable",
+          "pattern": "insufficient_history",
+          "points": [
+            {
+              "period": "2026-01 to 2026-03",
+              "amount_fmt": "$2.9M"
+            },
+            {
+              "period": "2026-04 to 2026-06",
+              "amount_fmt": "$3.8M"
+            }
+          ],
+          "note": "Too few earlier periods are available to tell a one-period change from a continuing pattern.",
+          "evidence_ref": "trend:d1"
+        },
+        "coverage": {
+          "source_lines": 6,
+          "shown_description_count": 1,
+          "truncated": false,
+          "unmatched_lookup_lines": 0,
+          "unclassified_lines": 0,
+          "partial_periods": [],
+          "note": "6 source lines in the compared periods, grouped into 1 descriptions.",
+          "evidence_ref": "coverage:d1"
+        },
+        "evidence_refs": [
+          "driver:d1"
+        ]
+      },
+      {
+        "driver_id": "d2",
+        "label": "Germany",
+        "dimensions": {
+          "Country": "Germany"
+        },
+        "base": 1860000.0,
+        "current": 2730000.0,
+        "delta": 870000.0,
+        "delta_fmt": "+$0.9M",
+        "base_fmt": "$1.9M",
+        "current_fmt": "$2.7M",
+        "top_texts": [
+          {
+            "text": "Emergency generator servicing",
+            "delta_fmt": "+$0.9M",
+            "evidence_ref": "text:d2:1"
+          }
+        ],
+        "n_lines": 6,
+        "flags_summary": {},
+        "is_material": true,
+        "trend": {
+          "comparability": "comparable",
+          "pattern": "insufficient_history",
+          "points": [
+            {
+              "period": "2026-01 to 2026-03",
+              "amount_fmt": "$1.9M"
+            },
+            {
+              "period": "2026-04 to 2026-06",
+              "amount_fmt": "$2.7M"
+            }
+          ],
+          "note": "Too few earlier periods are available to tell a one-period change from a continuing pattern.",
+          "evidence_ref": "trend:d2"
+        },
+        "coverage": {
+          "source_lines": 6,
+          "shown_description_count": 1,
+          "truncated": false,
+          "unmatched_lookup_lines": 0,
+          "unclassified_lines": 0,
+          "partial_periods": [],
+          "note": "6 source lines in the compared periods, grouped into 1 descriptions.",
+          "evidence_ref": "coverage:d2"
+        },
+        "evidence_refs": [
+          "driver:d2"
+        ]
+      },
+      {
+        "driver_id": "d3",
+        "label": "Netherlands",
+        "dimensions": {
+          "Country": "Netherlands"
+        },
+        "base": 2220021.57,
+        "current": 1619957.02,
+        "delta": -600064.55,
+        "delta_fmt": "-$0.6M",
+        "base_fmt": "$2.2M",
+        "current_fmt": "$1.6M",
+        "top_texts": [
+          {
+            "text": "Preventive maintenance contract",
+            "delta_fmt": "-$0.6M",
+            "evidence_ref": "text:d3:1"
+          },
+          {
+            "text": "Cooling accrual — synthetic golden rule example",
+            "delta_fmt": "-$64.55",
+            "evidence_ref": "text:d3:2"
+          }
+        ],
+        "n_lines": 10,
+        "flags_summary": {},
+        "is_material": true,
+        "trend": {
+          "comparability": "comparable",
+          "pattern": "insufficient_history",
+          "points": [
+            {
+              "period": "2026-01 to 2026-03",
+              "amount_fmt": "$2.2M"
+            },
+            {
+              "period": "2026-04 to 2026-06",
+              "amount_fmt": "$1.6M"
+            }
+          ],
+          "note": "Too few earlier periods are available to tell a one-period change from a continuing pattern.",
+          "evidence_ref": "trend:d3"
+        },
+        "coverage": {
+          "source_lines": 10,
+          "shown_description_count": 2,
+          "truncated": false,
+          "unmatched_lookup_lines": 0,
+          "unclassified_lines": 0,
+          "partial_periods": [],
+          "note": "10 source lines in the compared periods, grouped into 2 descriptions.",
+          "evidence_ref": "coverage:d3"
+        },
+        "evidence_refs": [
+          "driver:d3"
+        ]
+      },
+      {
+        "driver_id": "others",
+        "label": "Other items",
+        "dimensions": {},
+        "base": 2550000.0,
+        "current": 2790000.0,
+        "delta": 240000.0,
+        "delta_fmt": "+$0.2M",
+        "base_fmt": "$2.6M",
+        "current_fmt": "$2.8M",
+        "top_texts": [
+          {
+            "text": "Fire safety maintenance",
+            "delta_fmt": "+$0.2M",
+            "evidence_ref": "text:others:1"
+          },
+          {
+            "text": "Electrical inspection",
+            "delta_fmt": "+$0.1M",
+            "evidence_ref": "text:others:2"
+          }
+        ],
+        "n_lines": 12,
+        "flags_summary": {},
+        "is_material": false,
+        "trend": {
+          "comparability": "comparable",
+          "pattern": "insufficient_history",
+          "points": [
+            {
+              "period": "2026-01 to 2026-03",
+              "amount_fmt": "$2.6M"
+            },
+            {
+              "period": "2026-04 to 2026-06",
+              "amount_fmt": "$2.8M"
+            }
+          ],
+          "note": "Too few earlier periods are available to tell a one-period change from a continuing pattern.",
+          "evidence_ref": "trend:others"
+        },
+        "coverage": {
+          "source_lines": 12,
+          "shown_description_count": 2,
+          "truncated": false,
+          "unmatched_lookup_lines": 0,
+          "unclassified_lines": 0,
+          "partial_periods": [],
+          "note": "12 source lines in the compared periods, grouped into 2 descriptions.",
+          "evidence_ref": "coverage:others"
+        },
+        "evidence_refs": [
+          "driver:others"
+        ]
+      }
+    ],
+    "sections": [],
+    "commentary_rules": {
+      "units": "M",
+      "decimals": 1,
+      "verify_tag": "[TO VERIFY]",
+      "sign_style": "plus_minus",
+      "currency_symbol": "$",
+      "forbidden_terms": [],
+      "max_line_words": 35
+    },
+    "headline_hint": null,
+    "totals": {
+      "base_fmt": "$9.5M",
+      "current_fmt": "$11.0M",
+      "delta_fmt": "+$1.5M",
+      "evidence_ref": "total:movement"
+    },
+    "comparison": {
+      "base": {
+        "months": [
+          "2026-01",
+          "2026-02",
+          "2026-03"
+        ],
+        "version": null
+      },
+      "current": {
+        "months": [
+          "2026-04",
+          "2026-05",
+          "2026-06"
+        ],
+        "version": null
+      }
+    },
+    "description_columns": [
+      "FAH_Line_Description"
+    ],
+    "materiality_policy": "Movements of at least $0.3M are listed individually, up to 15; the rest are combined in 'Other items'. The engine decides this, not the commentary.",
+    "allowed_evidence_refs": [
+      "text:d1:1",
+      "trend:d1",
+      "coverage:d1",
+      "driver:d1",
+      "text:d2:1",
+      "trend:d2",
+      "coverage:d2",
+      "driver:d2",
+      "text:d3:1",
+      "text:d3:2",
+      "trend:d3",
+      "coverage:d3",
+      "driver:d3",
+      "text:others:1",
+      "text:others:2",
+      "trend:others",
+      "coverage:others",
+      "driver:others",
+      "total:movement"
+    ],
+    "allowed_numeric_tokens": [
+      "0",
+      "0.1M",
+      "0.2M",
+      "0.3M",
+      "0.6M",
+      "0.9M",
+      "01",
+      "02",
+      "03",
+      "04",
+      "05",
+      "06",
+      "1",
+      "1.0M",
+      "1.5M",
+      "1.6M",
+      "1.9M",
+      "10",
+      "11.0M",
+      "12",
+      "15",
+      "2",
+      "2.2M",
+      "2.6M",
+      "2.7M",
+      "2.8M",
+      "2.9M",
+      "2026",
+      "3.8M",
+      "5",
+      "6",
+      "64.55",
+      "9.5M"
+    ],
+    "data_quality": [],
+    "coverage_notes": [
+      "Commentary sees grouped descriptions and totals only; individual transactions are not supplied.",
+      "Descriptions come from the column(s) 'FAH_Line_Description'; at most 5 per movement are shown and smaller ones are combined."
+    ],
+    "writing_guidance": {
+      "audience": {
+        "value": "controller",
+        "source": "default"
+      },
+      "length": {
+        "value": "medium",
+        "source": "default"
+      },
+      "tone": {
+        "value": "neutral",
+        "source": "default"
+      },
+      "structure": {
+        "value": {
+          "type": "overall",
+          "split_by": null
+        },
+        "source": "default"
+      },
+      "objective": {
+        "value": "",
+        "source": "default"
+      },
+      "instructions": {
+        "value": "",
+        "source": "default"
+      },
+      "include": {
+        "value": [
+          "to_verify"
+        ],
+        "source": "default"
+      },
+      "example_style": {
+        "value": {
+          "summary_of_style": "",
+          "sample_phrases": []
+        },
+        "source": "default"
+      },
+      "preset_name": "Generic variance"
+    },
+    "business_context": []
+  },
+  "materiality_threshold": 300000.0,
+  "classification": {},
+  "classification_review": [],
+  "join_audit": [],
+  "monthly_row_counts": {
+    "2026-01": 7,
+    "2026-02": 5,
+    "2026-03": 5,
+    "2026-04": 7,
+    "2026-05": 5,
+    "2026-06": 5
+  },
+  "partial_months_used": [],
+  "warnings": [],
+  "id": "5d93fe5b95a24663ab6c619af1ae4d7f",
+  "created": "2026-10-28T14:11:30.849125+00:00",
+  "export_data": {
+    "view": "By Country",
+    "measure": "amount",
+    "keys": [
+      "Country"
+    ],
+    "base_months": [
+      "2026-01",
+      "2026-02",
+      "2026-03"
+    ],
+    "current_months": [
+      "2026-04",
+      "2026-05",
+      "2026-06"
+    ],
+    "base_version": null,
+    "current_version": null,
+    "columns": [
+      "Country",
+      "Month",
+      "Amount"
+    ],
+    "rows": [
+      [
+        "France",
+        "2026-01",
+        487900.0
+      ],
+      [
+        "France",
+        "2026-02",
+        490000.0
+      ],
+      [
+        "France",
+        "2026-03",
+        492100.0
+      ],
+      [
+        "France",
+        "2026-04",
+        517900.0
+      ],
+      [
+        "France",
+        "2026-05",
+        520000.0
+      ],
+      [
+        "France",
+        "2026-06",
+        522100.0
+      ],
+      [
+        "Germany",
+        "2026-01",
+        617900.0
+      ],
+      [
+        "Germany",
+        "2026-02",
+        620000.0
+      ],
+      [
+        "Germany",
+        "2026-03",
+        622100.0
+      ],
+      [
+        "Germany",
+        "2026-04",
+        907900.0
+      ],
+      [
+        "Germany",
+        "2026-05",
+        910000.0
+      ],
+      [
+        "Germany",
+        "2026-06",
+        912100.0
+      ],
+      [
+        "Netherlands",
+        "2026-01",
+        737921.57
+      ],
+      [
+        "Netherlands",
+        "2026-02",
+        740000.0
+      ],
+      [
+        "Netherlands",
+        "2026-03",
+        742100.0
+      ],
+      [
+        "Netherlands",
+        "2026-04",
+        537857.02
+      ],
+      [
+        "Netherlands",
+        "2026-05",
+        540000.0
+      ],
+      [
+        "Netherlands",
+        "2026-06",
+        542100.0
+      ],
+      [
+        "Spain",
+        "2026-01",
+        357900.0
+      ],
+      [
+        "Spain",
+        "2026-02",
+        360000.0
+      ],
+      [
+        "Spain",
+        "2026-03",
+        362100.0
+      ],
+      [
+        "Spain",
+        "2026-04",
+        407900.0
+      ],
+      [
+        "Spain",
+        "2026-05",
+        410000.0
+      ],
+      [
+        "Spain",
+        "2026-06",
+        412100.0
+      ],
+      [
+        "United Kingdom",
+        "2026-01",
+        947900.0
+      ],
+      [
+        "United Kingdom",
+        "2026-02",
+        950000.0
+      ],
+      [
+        "United Kingdom",
+        "2026-03",
+        952100.0
+      ],
+      [
+        "United Kingdom",
+        "2026-04",
+        1277900.0
+      ],
+      [
+        "United Kingdom",
+        "2026-05",
+        1280000.0
+      ],
+      [
+        "United Kingdom",
+        "2026-06",
+        1282100.0
+      ]
+    ],
+    "mode": "formula",
+    "reason": ""
+  },
+  "run_stamp": {
+    "run_id": "5d93fe5b95a24663ab6c619af1ae4d7f",
+    "created": "2026-10-28T14:11:30.849125+00:00",
+    "engine_version": "2.0",
+    "spec_sha256": "4d7399e2708dfd8a7370f3cad14df427136bee08322f8da83cada6570b003fa1",
+    "preset": {
+      "id": "generic_flux",
+      "version": "1.0.0"
+    },
+    "input_files": [
+      {
+        "name": "Sample_GL_2026.csv",
+        "sha256": "0136e4a15d177b4fc05eae2908fe6afed79ef71a1ee4028333e677ccf807b1bd",
+        "role": "primary",
+        "definition": {
+          "sheet": "(csv)",
+          "header_row": 1,
+          "start_col": "A",
+          "end_col": null,
+          "role": "primary",
+          "name": "Sample_GL_2026",
+          "combine_sheets": [],
+          "tag_column": null
+        }
+      },
+      {
+        "name": "Sample_Open_PO.xlsx",
+        "sha256": "e8fb31c9421449ebc6249fe4a4ee9c7791d6fa7b71c60e40741645458ea45e84",
+        "role": "lookup",
+        "definition": {
+          "sheet": "Open PO Report ",
+          "header_row": 1,
+          "start_col": "A",
+          "end_col": null,
+          "role": "lookup",
+          "name": "open_po",
+          "combine_sheets": [],
+          "tag_column": null
+        }
+      }
+    ]
+  },
+  "change_log": [
+    {
+      "timestamp": "2026-10-28T14:10:25.992080+00:00",
+      "actor": "user",
+      "reason": "Updated uploaded source definitions",
+      "path": "/sources/lookups",
+      "op": "add",
+      "from": null,
+      "to": {
+        "open_po": {
+          "files": [
+            {
+              "file": "Sample_Open_PO.xlsx",
+              "sheet": "Open PO Report ",
+              "header_row": 1,
+              "start_col": "A",
+              "end_col": null
+            }
+          ]
+        }
+      }
+    },
+    {
+      "timestamp": "2026-10-28T14:10:25.992080+00:00",
+      "actor": "user",
+      "reason": "Updated uploaded source definitions",
+      "path": "/sources/primary",
+      "op": "add",
+      "from": null,
+      "to": {
+        "files": [
+          {
+            "file": "Sample_GL_2026.csv",
+            "sheet": "(csv)",
+            "header_row": 1,
+            "start_col": "A",
+            "end_col": null
+          }
+        ],
+        "union": {
+          "mode": "stack",
+          "tag_column": null
+        }
+      }
+    },
+    {
+      "timestamp": "2026-10-28T14:11:20.211559+00:00",
+      "actor": "agent",
+      "reason": "Configured the analysis to compare Q2 2026 against Q1 2026 grouped by Country using Functional_Net.",
+      "path": "/comparison/base/months",
+      "op": "replace",
+      "from": [],
+      "to": [
+        "2026-01",
+        "2026-02",
+        "2026-03"
+      ]
+    },
+    {
+      "timestamp": "2026-10-28T14:11:20.211559+00:00",
+      "actor": "agent",
+      "reason": "Configured the analysis to compare Q2 2026 against Q1 2026 grouped by Country using Functional_Net.",
+      "path": "/comparison/current/months",
+      "op": "replace",
+      "from": [],
+      "to": [
+        "2026-04",
+        "2026-05",
+        "2026-06"
+      ]
+    },
+    {
+      "timestamp": "2026-10-28T14:11:20.211559+00:00",
+      "actor": "agent",
+      "reason": "Configured the analysis to compare Q2 2026 against Q1 2026 grouped by Country using Functional_Net.",
+      "path": "/comparison/type",
+      "op": "replace",
+      "from": "QoQ",
+      "to": "period_vs_period"
+    },
+    {
+      "timestamp": "2026-10-28T14:11:20.211559+00:00",
+      "actor": "agent",
+      "reason": "Configured the analysis to compare Q2 2026 against Q1 2026 grouped by Country using Functional_Net.",
+      "path": "/drivers/view",
+      "op": "add",
+      "from": null,
+      "to": "By Country"
+    },
+    {
+      "timestamp": "2026-10-28T14:11:20.211559+00:00",
+      "actor": "agent",
+      "reason": "Configured the analysis to compare Q2 2026 against Q1 2026 grouped by Country using Functional_Net.",
+      "path": "/flux_name",
+      "op": "replace",
+      "from": "Untitled analysis",
+      "to": "Country movement review"
+    },
+    {
+      "timestamp": "2026-10-28T14:11:20.211559+00:00",
+      "actor": "agent",
+      "reason": "Configured the analysis to compare Q2 2026 against Q1 2026 grouped by Country using Functional_Net.",
+      "path": "/measures/amount",
+      "op": "add",
+      "from": null,
+      "to": {
+        "agg": "sum",
+        "col": "Functional_Net"
+      }
+    },
+    {
+      "timestamp": "2026-10-28T14:11:20.211559+00:00",
+      "actor": "agent",
+      "reason": "Configured the analysis to compare Q2 2026 against Q1 2026 grouped by Country using Functional_Net.",
+      "path": "/roles/credit",
+      "op": "replace",
+      "from": null,
+      "to": "Accounted_Cr"
+    },
+    {
+      "timestamp": "2026-10-28T14:11:20.211559+00:00",
+      "actor": "agent",
+      "reason": "Configured the analysis to compare Q2 2026 against Q1 2026 grouped by Country using Functional_Net.",
+      "path": "/roles/debit",
+      "op": "replace",
+      "from": null,
+      "to": "Accounted_Dr"
+    },
+    {
+      "timestamp": "2026-10-28T14:11:20.211559+00:00",
+      "actor": "agent",
+      "reason": "Configured the analysis to compare Q2 2026 against Q1 2026 grouped by Country using Functional_Net.",
+      "path": "/roles/dimensions",
+      "op": "replace",
+      "from": [],
+      "to": [
+        "Country"
+      ]
+    },
+    {
+      "timestamp": "2026-10-28T14:11:20.211559+00:00",
+      "actor": "agent",
+      "reason": "Configured the analysis to compare Q2 2026 against Q1 2026 grouped by Country using Functional_Net.",
+      "path": "/roles/driver_text",
+      "op": "replace",
+      "from": [],
+      "to": [
+        "FAH_Line_Description"
+      ]
+    },
+    {
+      "timestamp": "2026-10-28T14:11:20.211559+00:00",
+      "actor": "agent",
+      "reason": "Configured the analysis to compare Q2 2026 against Q1 2026 grouped by Country using Functional_Net.",
+      "path": "/roles/period",
+      "op": "replace",
+      "from": null,
+      "to": "Period_Name"
+    },
+    {
+      "timestamp": "2026-10-28T14:11:20.211559+00:00",
+      "actor": "agent",
+      "reason": "Configured the analysis to compare Q2 2026 against Q1 2026 grouped by Country using Functional_Net.",
+      "path": "/roles/value",
+      "op": "replace",
+      "from": null,
+      "to": "Functional_Net"
+    },
+    {
+      "timestamp": "2026-10-28T14:11:20.211559+00:00",
+      "actor": "agent",
+      "reason": "Configured the analysis to compare Q2 2026 against Q1 2026 grouped by Country using Functional_Net.",
+      "path": "/views",
+      "op": "replace",
+      "from": [],
+      "to": [
+        {
+          "name": "By Country",
+          "keys": [
+            "Country"
+          ],
+          "measures": [
+            "amount"
+          ],
+          "compare": true
+        }
+      ]
+    }
+  ],
+  "agent_logs": [
+    {
+      "timestamp": "2026-10-28T14:11:20.211752+00:00",
+      "response": {
+        "contract_version": "journey-1",
+        "request_id": "111596ac-2e62-4e8e-b789-581c8bba91f6",
+        "step": "plan_from_description",
+        "status": "ok",
+        "proposal": {
+          "patch": [
+            {
+              "op": "replace",
+              "path": "/roles",
+              "value": {
+                "value": "Functional_Net",
+                "period": "Period_Name",
+                "scenario": null,
+                "debit": "Accounted_Dr",
+                "credit": "Accounted_Cr",
+                "keys": [],
+                "dimensions": [
+                  "Country"
+                ],
+                "driver_text": [
+                  "FAH_Line_Description"
+                ]
+              }
+            },
+            {
+              "op": "replace",
+              "path": "/comparison",
+              "value": {
+                "type": "period_vs_period",
+                "base": {
+                  "months": [
+                    "2026-01",
+                    "2026-02",
+                    "2026-03"
+                  ]
+                },
+                "current": {
+                  "months": [
+                    "2026-04",
+                    "2026-05",
+                    "2026-06"
+                  ]
+                }
+              }
+            },
+            {
+              "op": "replace",
+              "path": "/measures",
+              "value": {
+                "amount": {
+                  "agg": "sum",
+                  "col": "Functional_Net"
+                }
+              }
+            },
+            {
+              "op": "replace",
+              "path": "/views",
+              "value": [
+                {
+                  "name": "By Country",
+                  "keys": [
+                    "Country"
+                  ],
+                  "measures": [
+                    "amount"
+                  ],
+                  "compare": true
+                }
+              ]
+            },
+            {
+              "op": "add",
+              "path": "/drivers/view",
+              "value": "By Country"
+            },
+            {
+              "op": "replace",
+              "path": "/flux_name",
+              "value": "Country movement review"
+            }
+          ],
+          "step_states": [
+            {
+              "step": "data",
+              "status": "confident",
+              "summary": "Mapped Functional_Net as the amount column, Period_Name as the month column, and FAH_Line_Description as transaction details.",
+              "reason": "Functional_Net provides numeric net amounts and Period_Name contains monthly accounting periods.",
+              "question_ids": []
+            },
+            {
+              "step": "compare",
+              "status": "confident",
+              "summary": "Comparing Q2 2026 (April–June) with Q1 2026 (January–March).",
+              "reason": "Available data spans January through June 2026, forming two complete consecutive quarters.",
+              "question_ids": []
+            },
+            {
+              "step": "include",
+              "status": "confident",
+              "summary": "Include all transactions from the primary ledger file.",
+              "reason": "No filters or exclusions were requested.",
+              "question_ids": []
+            },
+            {
+              "step": "group",
+              "status": "confident",
+              "summary": "Group movements by Country.",
+              "reason": "Your instruction requested grouping by country.",
+              "question_ids": []
+            },
+            {
+              "step": "important",
+              "status": "confident",
+              "summary": "Focus on the top 15 material movements above 300,000.",
+              "reason": "Default generic materiality rules are retained.",
+              "question_ids": []
+            },
+            {
+              "step": "explain",
+              "status": "confident",
+              "summary": "Prepare standard controller commentary with verification tags.",
+              "reason": "Standard preset settings applied.",
+              "question_ids": []
+            }
+          ]
+        },
+        "confidence": "high",
+        "rationale": "Mapped Amount to Functional_Net, Month to Period_Name, and grouped by Country. Configured comparison between Q1 2026 and Q2 2026 using an add operation for the view setting.",
+        "questions": [],
+        "warnings": [],
+        "summary": "Configured the analysis to compare Q2 2026 against Q1 2026 grouped by Country using Functional_Net.",
+        "changes": [
+          {
+            "setting": "/comparison/base/months",
+            "from": "",
+            "to": "2026-01, 2026-02, 2026-03",
+            "reason": "Configured the analysis to compare Q2 2026 against Q1 2026 grouped by Country using Functional_Net."
+          },
+          {
+            "setting": "/comparison/current/months",
+            "from": "",
+            "to": "2026-04, 2026-05, 2026-06",
+            "reason": "Configured the analysis to compare Q2 2026 against Q1 2026 grouped by Country using Functional_Net."
+          },
+          {
+            "setting": "/comparison/type",
+            "from": "QoQ",
+            "to": "period_vs_period",
+            "reason": "Configured the analysis to compare Q2 2026 against Q1 2026 grouped by Country using Functional_Net."
+          },
+          {
+            "setting": "/drivers/view",
+            "from": "not set",
+            "to": "By Country",
+            "reason": "Configured the analysis to compare Q2 2026 against Q1 2026 grouped by Country using Functional_Net."
+          },
+          {
+            "setting": "/flux_name",
+            "from": "Untitled analysis",
+            "to": "Country movement review",
+            "reason": "Configured the analysis to compare Q2 2026 against Q1 2026 grouped by Country using Functional_Net."
+          },
+          {
+            "setting": "/measures/amount",
+            "from": "not set",
+            "to": "agg: sum; col: Functional_Net",
+            "reason": "Configured the analysis to compare Q2 2026 against Q1 2026 grouped by Country using Functional_Net."
+          },
+          {
+            "setting": "/roles/credit",
+            "from": "not set",
+            "to": "Accounted_Cr",
+            "reason": "Configured the analysis to compare Q2 2026 against Q1 2026 grouped by Country using Functional_Net."
+          },
+          {
+            "setting": "/roles/debit",
+            "from": "not set",
+            "to": "Accounted_Dr",
+            "reason": "Configured the analysis to compare Q2 2026 against Q1 2026 grouped by Country using Functional_Net."
+          },
+          {
+            "setting": "/roles/dimensions",
+            "from": "",
+            "to": "Country",
+            "reason": "Configured the analysis to compare Q2 2026 against Q1 2026 grouped by Country using Functional_Net."
+          },
+          {
+            "setting": "/roles/driver_text",
+            "from": "",
+            "to": "FAH_Line_Description",
+            "reason": "Configured the analysis to compare Q2 2026 against Q1 2026 grouped by Country using Functional_Net."
+          },
+          {
+            "setting": "/roles/period",
+            "from": "not set",
+            "to": "Period_Name",
+            "reason": "Configured the analysis to compare Q2 2026 against Q1 2026 grouped by Country using Functional_Net."
+          },
+          {
+            "setting": "/roles/value",
+            "from": "not set",
+            "to": "Functional_Net",
+            "reason": "Configured the analysis to compare Q2 2026 against Q1 2026 grouped by Country using Functional_Net."
+          },
+          {
+            "setting": "/views",
+            "from": "",
+            "to": "name: By Country; keys: Country; measures: amount; compare: True",
+            "reason": "Configured the analysis to compare Q2 2026 against Q1 2026 grouped by Country using Functional_Net."
+          }
+        ],
+        "applied": true,
+        "patch": [
+          {
+            "op": "replace",
+            "path": "/comparison/base/months",
+            "value": [
+              "2026-01",
+              "2026-02",
+              "2026-03"
+            ]
+          },
+          {
+            "op": "replace",
+            "path": "/comparison/current/months",
+            "value": [
+              "2026-04",
+              "2026-05",
+              "2026-06"
+            ]
+          },
+          {
+            "op": "replace",
+            "path": "/comparison/type",
+            "value": "period_vs_period"
+          },
+          {
+            "op": "add",
+            "path": "/drivers/view",
+            "value": "By Country"
+          },
+          {
+            "op": "replace",
+            "path": "/flux_name",
+            "value": "Country movement review"
+          },
+          {
+            "op": "add",
+            "path": "/measures/amount",
+            "value": {
+              "agg": "sum",
+              "col": "Functional_Net"
+            }
+          },
+          {
+            "op": "replace",
+            "path": "/roles/credit",
+            "value": "Accounted_Cr"
+          },
+          {
+            "op": "replace",
+            "path": "/roles/debit",
+            "value": "Accounted_Dr"
+          },
+          {
+            "op": "replace",
+            "path": "/roles/dimensions",
+            "value": [
+              "Country"
+            ]
+          },
+          {
+            "op": "replace",
+            "path": "/roles/driver_text",
+            "value": [
+              "FAH_Line_Description"
+            ]
+          },
+          {
+            "op": "replace",
+            "path": "/roles/period",
+            "value": "Period_Name"
+          },
+          {
+            "op": "replace",
+            "path": "/roles/value",
+            "value": "Functional_Net"
+          },
+          {
+            "op": "replace",
+            "path": "/views",
+            "value": [
+              {
+                "name": "By Country",
+                "keys": [
+                  "Country"
+                ],
+                "measures": [
+                  "amount"
+                ],
+                "compare": true
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "transport_attempt": {
+        "request_id": "111596ac-2e62-4e8e-b789-581c8bba91f6",
+        "step": "plan_from_description",
+        "envelope_size": 12546,
+        "duration": 16.186,
+        "status": "repair",
+        "response": "{\n \"contract_version\": \"journey-1\",\n \"request_id\": \"111596ac-2e62-4e8e-b789-581c8bba91f6\",\n \"step\": \"plan_from_description\",\n \"status\": \"ok\",\n \"proposal\": {\n  \"patch\": [\n   {\n    \"op\": \"replace\",\n    \"path\": \"/roles\",\n    \"value\": {\n     \"value\": \"Functional_Net\",\n     \"period\": \"Period_Name\",\n     \"scenario\": null,\n     \"debit\": \"Accounted_Dr\",\n     \"credit\": \"Accounted_Cr\",\n     \"keys\": [],\n     \"dimensions\": [\n      \"Country\"\n     ],\n     \"driver_text\": [\n      \"FAH_Line_Description\"\n     ]\n    }\n   },\n   {\n    \"op\": \"replace\",\n    \"path\": \"/comparison\",\n    \"value\": {\n     \"type\": \"period_vs_period\",\n     \"base\": {\n      \"months\": [\n       \"2026-01\",\n       \"2026-02\",\n       \"2026-03\"\n      ]\n     },\n     \"current\": {\n      \"months\": [\n       \"2026-04\",\n       \"2026-05\",\n       \"2026-06\"\n      ]\n     }\n    }\n   },\n   {\n    \"op\": \"replace\",\n    \"path\": \"/measures\",\n    \"value\": {\n     \"amount\": {\n      \"agg\": \"sum\",\n      \"col\": \"Functional_Net\"\n     }\n    }\n   },\n   {\n    \"op\": \"replace\",\n    \"path\": \"/views\",\n    \"value\": [\n     {\n      \"name\": \"By Country\",\n      \"keys\": [\n       \"Country\"\n      ],\n      \"measures\": [\n       \"amount\"\n      ],\n      \"compare\": true\n     }\n    ]\n   },\n   {\n    \"op\": \"replace\",\n    \"path\": \"/drivers/view\",\n    \"value\": \"By Country\"\n   },\n   {\n    \"op\": \"replace\",\n    \"path\": \"/flux_name\",\n    \"value\": \"Country movement review\"\n   }\n  ],\n  \"step_states\": [\n   {\n    \"step\": \"data\",\n    \"status\": \"confident\",\n    \"summary\": \"Mapped Functional_Net as the amount column, Period_Name as the month column, and FAH_Line_Description as transaction details.\",\n    \"reason\": \"Functional_Net provides numeric net amounts and Period_Name contains monthly accounting periods.\",\n    \"question_ids\": []\n   },\n   {\n    \"step\": \"compare\",\n    \"status\": \"confident\",\n    \"summary\": \"Comparing Q2 2026 (April–June) with Q1 2026 (January–March).\",\n    \"reason\": \"Available data spans January through June 2026, forming two complete consecutive quarters.\",\n    \"question_ids\": []\n   },\n   {\n    \"step\": \"include\",\n    \"status\": \"confident\",\n    \"summary\": \"Include all transactions from the primary ledger file.\",\n    \"reason\": \"No filters or exclusions were requested.\",\n    \"question_ids\": []\n   },\n   {\n    \"step\": \"group\",\n    \"status\": \"confident\",\n    \"summary\": \"Group movements by Country.\",\n    \"reason\": \"Your instruction requested grouping by country.\",\n    \"question_ids\": []\n   },\n   {\n    \"step\": \"important\",\n    \"status\": \"confident\",\n    \"summary\": \"Focus on the top 15 material movements above 300,000.\",\n    \"reason\": \"Default generic materiality rules are retained.\",\n    \"question_ids\": []\n   },\n   {\n    \"step\": \"explain\",\n    \"status\": \"confident\",\n    \"summary\": \"Prepare standard controller commentary with verification tags.\",\n    \"reason\": \"Standard preset settings applied.\",\n    \"question_ids\": []\n   }\n  ]\n },\n \"confidence\": \"high\",\n \"rationale\": \"Mapped Amount to Functional_Net, Month to Period_Name, and grouped by Country. Configured comparison between Q1 2026 and Q2 2026 from available months.\",\n \"questions\": [],\n \"warnings\": [],\n \"summary\": \"Configured the analysis to compare Q2 2026 against Q1 2026 grouped by Country using Functional_Net.\",\n \"changes\": [\n  {\n   \"setting\": \"Amount column\",\n   \"from\": \"Unmapped\",\n   \"to\": \"Functional_Net\",\n   \"reason\": \"Primary net numeric field\"\n  },\n  {\n   \"setting\": \"Description column\",\n   \"from\": \"Unmapped\",\n   \"to\": \"Period_Name\",\n   \"reason\": \"Contains monthly accounting periods\"\n  },\n  {\n   \"setting\": \"Group by\",\n   \"from\": \"None\",\n   \"to\": \"Country\",\n   \"reason\": \"Requested grouping\"\n  },\n  {\n   \"setting\": \"Compare with\",\n   \"from\": \"Not set\",\n   \"to\": \"Q2 2026 vs Q1 2026\",\n   \"reason\": \"Latest quarter versus previous quarter\"\n  }\n ]\n}"
+      }
+    },
+    {
+      "transport_attempt": {
+        "request_id": "111596ac-2e62-4e8e-b789-581c8bba91f6",
+        "step": "repair",
+        "envelope_size": 16957,
+        "duration": 15.397,
+        "status": "ok",
+        "response": "{\n \"contract_version\": \"journey-1\",\n \"request_id\": \"111596ac-2e62-4e8e-b789-581c8bba91f6\",\n \"step\": \"plan_from_description\",\n \"status\": \"ok\",\n \"proposal\": {\n  \"patch\": [\n   {\n    \"op\": \"replace\",\n    \"path\": \"/roles\",\n    \"value\": {\n     \"value\": \"Functional_Net\",\n     \"period\": \"Period_Name\",\n     \"scenario\": null,\n     \"debit\": \"Accounted_Dr\",\n     \"credit\": \"Accounted_Cr\",\n     \"keys\": [],\n     \"dimensions\": [\n      \"Country\"\n     ],\n     \"driver_text\": [\n      \"FAH_Line_Description\"\n     ]\n    }\n   },\n   {\n    \"op\": \"replace\",\n    \"path\": \"/comparison\",\n    \"value\": {\n     \"type\": \"period_vs_period\",\n     \"base\": {\n      \"months\": [\n       \"2026-01\",\n       \"2026-02\",\n       \"2026-03\"\n      ]\n     },\n     \"current\": {\n      \"months\": [\n       \"2026-04\",\n       \"2026-05\",\n       \"2026-06\"\n      ]\n     }\n    }\n   },\n   {\n    \"op\": \"replace\",\n    \"path\": \"/measures\",\n    \"value\": {\n     \"amount\": {\n      \"agg\": \"sum\",\n      \"col\": \"Functional_Net\"\n     }\n    }\n   },\n   {\n    \"op\": \"replace\",\n    \"path\": \"/views\",\n    \"value\": [\n     {\n      \"name\": \"By Country\",\n      \"keys\": [\n       \"Country\"\n      ],\n      \"measures\": [\n       \"amount\"\n      ],\n      \"compare\": true\n     }\n    ]\n   },\n   {\n    \"op\": \"add\",\n    \"path\": \"/drivers/view\",\n    \"value\": \"By Country\"\n   },\n   {\n    \"op\": \"replace\",\n    \"path\": \"/flux_name\",\n    \"value\": \"Country movement review\"\n   }\n  ],\n  \"step_states\": [\n   {\n    \"step\": \"data\",\n    \"status\": \"confident\",\n    \"summary\": \"Mapped Functional_Net as the amount column, Period_Name as the month column, and FAH_Line_Description as transaction details.\",\n    \"reason\": \"Functional_Net provides numeric net amounts and Period_Name contains monthly accounting periods.\",\n    \"question_ids\": []\n   },\n   {\n    \"step\": \"compare\",\n    \"status\": \"confident\",\n    \"summary\": \"Comparing Q2 2026 (April–June) with Q1 2026 (January–March).\",\n    \"reason\": \"Available data spans January through June 2026, forming two complete consecutive quarters.\",\n    \"question_ids\": []\n   },\n   {\n    \"step\": \"include\",\n    \"status\": \"confident\",\n    \"summary\": \"Include all transactions from the primary ledger file.\",\n    \"reason\": \"No filters or exclusions were requested.\",\n    \"question_ids\": []\n   },\n   {\n    \"step\": \"group\",\n    \"status\": \"confident\",\n    \"summary\": \"Group movements by Country.\",\n    \"reason\": \"Your instruction requested grouping by country.\",\n    \"question_ids\": []\n   },\n   {\n    \"step\": \"important\",\n    \"status\": \"confident\",\n    \"summary\": \"Focus on the top 15 material movements above 300,000.\",\n    \"reason\": \"Default generic materiality rules are retained.\",\n    \"question_ids\": []\n   },\n   {\n    \"step\": \"explain\",\n    \"status\": \"confident\",\n    \"summary\": \"Prepare standard controller commentary with verification tags.\",\n    \"reason\": \"Standard preset settings applied.\",\n    \"question_ids\": []\n   }\n  ]\n },\n \"confidence\": \"high\",\n \"rationale\": \"Mapped Amount to Functional_Net, Month to Period_Name, and grouped by Country. Configured comparison between Q1 2026 and Q2 2026 using an add operation for the view setting.\",\n \"questions\": [],\n \"warnings\": [],\n \"summary\": \"Configured the analysis to compare Q2 2026 against Q1 2026 grouped by Country using Functional_Net.\",\n \"changes\": [\n  {\n   \"setting\": \"Amount column\",\n   \"from\": \"Unmapped\",\n   \"to\": \"Functional_Net\",\n   \"reason\": \"Primary net numeric field\"\n  },\n  {\n   \"setting\": \"Description column\",\n   \"from\": \"Unmapped\",\n   \"to\": \"Period_Name\",\n   \"reason\": \"Contains monthly accounting periods\"\n  },\n  {\n   \"setting\": \"Group by\",\n   \"from\": \"None\",\n   \"to\": \"Country\",\n   \"reason\": \"Requested grouping\"\n  },\n  {\n   \"setting\": \"Compare with\",\n   \"from\": \"Not set\",\n   \"to\": \"Q2 2026 vs Q1 2026\",\n   \"reason\": \"Latest quarter versus previous quarter\"\n  }\n ]\n}"
+      }
+    },
+    {
+      "timestamp": "2026-10-28T14:11:59.965742+00:00",
+      "response": {
+        "contract_version": "journey-1",
+        "request_id": "ada9311d-28d9-42ca-b319-a326267243d4",
+        "step": "write_commentary",
+        "status": "ok",
+        "proposal": {
+          "headline": "Country movement review",
+          "lines": [
+            {
+              "driver_id": "d1",
+              "text": "+$1.0M — United Kingdom. Amount changed from $2.9M to $3.8M. Descriptions include Data centre cooling maintenance.",
+              "support": "supported",
+              "evidence_refs": [
+                "driver:d1",
+                "text:d1:1"
+              ],
+              "claims": [
+                {
+                  "type": "observation",
+                  "text": "United Kingdom changed by +$1.0M, from $2.9M to $3.8M.",
+                  "evidence_refs": [
+                    "driver:d1"
+                  ]
+                },
+                {
+                  "type": "observation",
+                  "text": "Descriptions include Data centre cooling maintenance.",
+                  "evidence_refs": [
+                    "text:d1:1"
+                  ]
+                }
+              ]
+            },
+            {
+              "driver_id": "d2",
+              "text": "+$0.9M — Germany. Amount changed from $1.9M to $2.7M. Descriptions include Emergency generator servicing.",
+              "support": "supported",
+              "evidence_refs": [
+                "driver:d2",
+                "text:d2:1"
+              ],
+              "claims": [
+                {
+                  "type": "observation",
+                  "text": "Germany changed by +$0.9M, from $1.9M to $2.7M.",
+                  "evidence_refs": [
+                    "driver:d2"
+                  ]
+                },
+                {
+                  "type": "observation",
+                  "text": "Descriptions include Emergency generator servicing.",
+                  "evidence_refs": [
+                    "text:d2:1"
+                  ]
+                }
+              ]
+            },
+            {
+              "driver_id": "d3",
+              "text": "-$0.6M — Netherlands. Amount changed from $2.2M to $1.6M. Descriptions include Preventive maintenance contract.",
+              "support": "supported",
+              "evidence_refs": [
+                "driver:d3",
+                "text:d3:1"
+              ],
+              "claims": [
+                {
+                  "type": "observation",
+                  "text": "Netherlands changed by -$0.6M, from $2.2M to $1.6M.",
+                  "evidence_refs": [
+                    "driver:d3"
+                  ]
+                },
+                {
+                  "type": "observation",
+                  "text": "Descriptions include Preventive maintenance contract.",
+                  "evidence_refs": [
+                    "text:d3:1"
+                  ]
+                }
+              ]
+            },
+            {
+              "driver_id": "others",
+              "text": "+$0.2M — Other items. Remaining movements below the materiality threshold, grouped by the engine.",
+              "support": "supported",
+              "evidence_refs": [
+                "driver:others"
+              ],
+              "claims": [
+                {
+                  "type": "observation",
+                  "text": "Other items changed by +$0.2M.",
+                  "evidence_refs": [
+                    "driver:others"
+                  ]
+                }
+              ]
+            }
+          ],
+          "others_summary": ""
+        },
+        "confidence": "high",
+        "rationale": "Drafted neutral commentary lines for all material drivers and the engine-grouped remainder, citing verified evidence references without unconfirmed causal claims.",
+        "questions": [],
+        "warnings": [],
+        "summary": "Prepared neutral commentary lines for the material movements across United Kingdom, Germany, Netherlands, and remaining other items.",
+        "changes": [],
+        "validation": {
+          "ok": true,
+          "issues": [],
+          "line_results": [
+            {
+              "driver_id": "d1",
+              "ok": true,
+              "issues": []
+            },
+            {
+              "driver_id": "d2",
+              "ok": true,
+              "issues": []
+            },
+            {
+              "driver_id": "d3",
+              "ok": true,
+              "issues": []
+            },
+            {
+              "driver_id": "others",
+              "ok": true,
+              "issues": []
+            }
+          ]
+        },
+        "applied": false
+      }
+    }
+  ],
+  "commentary": {
+    "text": "Country movement review\n\n+$1.0M — United Kingdom. Amount changed from $2.9M to $3.8M. Descriptions include Data centre cooling maintenance.\n\n+$0.9M — Germany. Amount changed from $1.9M to $2.7M. Descriptions include Emergency generator servicing.\n\n-$0.6M — Netherlands. Amount changed from $2.2M to $1.6M. Descriptions include Preventive maintenance contract.\n\n+$0.2M — Other items. Remaining movements below the materiality threshold, grouped by the engine.",
+    "lines": [
+      {
+        "driver_id": "d1",
+        "text": "+$1.0M — United Kingdom. Amount changed from $2.9M to $3.8M. Descriptions include Data centre cooling maintenance.",
+        "support": "supported",
+        "evidence_refs": [
+          "driver:d1",
+          "text:d1:1"
+        ],
+        "claims": [
+          {
+            "type": "observation",
+            "text": "United Kingdom changed by +$1.0M, from $2.9M to $3.8M.",
+            "evidence_refs": [
+              "driver:d1"
+            ]
+          },
+          {
+            "type": "observation",
+            "text": "Descriptions include Data centre cooling maintenance.",
+            "evidence_refs": [
+              "text:d1:1"
+            ]
+          }
+        ]
+      },
+      {
+        "driver_id": "d2",
+        "text": "+$0.9M — Germany. Amount changed from $1.9M to $2.7M. Descriptions include Emergency generator servicing.",
+        "support": "supported",
+        "evidence_refs": [
+          "driver:d2",
+          "text:d2:1"
+        ],
+        "claims": [
+          {
+            "type": "observation",
+            "text": "Germany changed by +$0.9M, from $1.9M to $2.7M.",
+            "evidence_refs": [
+              "driver:d2"
+            ]
+          },
+          {
+            "type": "observation",
+            "text": "Descriptions include Emergency generator servicing.",
+            "evidence_refs": [
+              "text:d2:1"
+            ]
+          }
+        ]
+      },
+      {
+        "driver_id": "d3",
+        "text": "-$0.6M — Netherlands. Amount changed from $2.2M to $1.6M. Descriptions include Preventive maintenance contract.",
+        "support": "supported",
+        "evidence_refs": [
+          "driver:d3",
+          "text:d3:1"
+        ],
+        "claims": [
+          {
+            "type": "observation",
+            "text": "Netherlands changed by -$0.6M, from $2.2M to $1.6M.",
+            "evidence_refs": [
+              "driver:d3"
+            ]
+          },
+          {
+            "type": "observation",
+            "text": "Descriptions include Preventive maintenance contract.",
+            "evidence_refs": [
+              "text:d3:1"
+            ]
+          }
+        ]
+      },
+      {
+        "driver_id": "others",
+        "text": "+$0.2M — Other items. Remaining movements below the materiality threshold, grouped by the engine.",
+        "support": "supported",
+        "evidence_refs": [
+          "driver:others"
+        ],
+        "claims": [
+          {
+            "type": "observation",
+            "text": "Other items changed by +$0.2M.",
+            "evidence_refs": [
+              "driver:others"
+            ]
+          }
+        ]
+      }
+    ],
+    "headline": "Country movement review",
+    "validation": {
+      "ok": true,
+      "issues": [],
+      "line_results": [
+        {
+          "driver_id": "d1",
+          "ok": true,
+          "issues": []
+        },
+        {
+          "driver_id": "d2",
+          "ok": true,
+          "issues": []
+        },
+        {
+          "driver_id": "d3",
+          "ok": true,
+          "issues": []
+        },
+        {
+          "driver_id": "others",
+          "ok": true,
+          "issues": []
+        }
+      ]
+    },
+    "issues": [],
+    "verified": true,
+    "source": "agent",
+    "mock": false,
+    "pending_replacements": []
+  },
+  "reviews": {
+    "d1": {
+      "run_id": "5d93fe5b95a24663ab6c619af1ae4d7f",
+      "driver_id": "d1",
+      "evidence_hash": "7a6fabbafeeeb88309dbf5bc",
+      "text": "+$1.0M — United Kingdom. Amount changed from $2.9M to $3.8M. Descriptions include Data centre cooling maintenance.",
+      "origin": "user",
+      "evidence_refs": [
+        "driver:d1"
+      ],
+      "confirmed_by": "Niels",
+      "confirmed_at": "2026-10-28T14:12:17.828976+00:00",
+      "updated_by": "Niels",
+      "updated_at": "2026-10-28T14:12:17.828976+00:00"
+    },
+    "d2": {
+      "run_id": "5d93fe5b95a24663ab6c619af1ae4d7f",
+      "driver_id": "d2",
+      "evidence_hash": "f814e4b42fec6262b035a219",
+      "text": "+$0.9M — Germany. Amount changed from $1.9M to $2.7M. Descriptions include Emergency generator servicing.",
+      "origin": "user",
+      "evidence_refs": [
+        "driver:d2"
+      ],
+      "confirmed_by": "Niels",
+      "confirmed_at": "2026-10-28T14:12:17.829141+00:00",
+      "updated_by": "Niels",
+      "updated_at": "2026-10-28T14:12:17.829141+00:00"
+    },
+    "d3": {
+      "run_id": "5d93fe5b95a24663ab6c619af1ae4d7f",
+      "driver_id": "d3",
+      "evidence_hash": "47e681d0e5292127fd4a6ea4",
+      "text": "-$0.6M — Netherlands. Amount changed from $2.2M to $1.6M. Descriptions include Preventive maintenance contract.",
+      "origin": "user",
+      "evidence_refs": [
+        "driver:d3"
+      ],
+      "confirmed_by": "Niels",
+      "confirmed_at": "2026-10-28T14:12:17.829276+00:00",
+      "updated_by": "Niels",
+      "updated_at": "2026-10-28T14:12:17.829276+00:00"
+    }
+  },
+  "review_log": [
+    {
+      "timestamp": "2026-10-28T14:12:17.828976+00:00",
+      "driver_id": "d1",
+      "action": "confirm",
+      "by": "Niels",
+      "from": null,
+      "to": "+$1.0M — United Kingdom. Amount changed from $2.9M to $3.8M. Descriptions include Data centre cooling maintenance."
+    },
+    {
+      "timestamp": "2026-10-28T14:12:17.829141+00:00",
+      "driver_id": "d2",
+      "action": "confirm",
+      "by": "Niels",
+      "from": null,
+      "to": "+$0.9M — Germany. Amount changed from $1.9M to $2.7M. Descriptions include Emergency generator servicing."
+    },
+    {
+      "timestamp": "2026-10-28T14:12:17.829276+00:00",
+      "driver_id": "d3",
+      "action": "confirm",
+      "by": "Niels",
+      "from": null,
+      "to": "-$0.6M — Netherlands. Amount changed from $2.2M to $1.6M. Descriptions include Preventive maintenance contract."
+    }
+  ]
+}

@@ -1,0 +1,217 @@
+{
+  "contract_version": "journey-1",
+  "request_id": "e0d821e3-8539-420d-8368-9acf343e1fca",
+  "step": "write_commentary",
+  "status": "ok",
+  "proposal": {
+    "headline": "Total variance of -$6.0M between June 2026 and July 2026 across material drivers",
+    "lines": [
+      {
+        "driver_id": "d1",
+        "text": "-$0.4M — Brazil / SP3 / AMER changed from $0.4M to -$2,367.70 across 513 source lines. [TO VERIFY] Confirm the business cause.",
+        "support": "needs_verification",
+        "evidence_refs": [
+          "driver:d1",
+          "trend:d1"
+        ],
+        "claims": [
+          {
+            "type": "observation",
+            "text": "Brazil / SP3 / AMER changed by -$0.4M from $0.4M to -$2,367.70.",
+            "evidence_refs": [
+              "driver:d1"
+            ]
+          },
+          {
+            "type": "possible_explanation",
+            "text": "The movement involves maintenance descriptions. [TO VERIFY] Confirm the business cause.",
+            "evidence_refs": [
+              "text:d1:1"
+            ]
+          }
+        ],
+        "confirm_prompt": "Confirm the business cause for this movement."
+      },
+      {
+        "driver_id": "d2",
+        "text": "-$0.4M — Germany / FR2 / EMEA changed from $1.1M to $0.7M across 1,083 source lines. [TO VERIFY] Confirm the business cause.",
+        "support": "needs_verification",
+        "evidence_refs": [
+          "driver:d2",
+          "trend:d2"
+        ],
+        "claims": [
+          {
+            "type": "observation",
+            "text": "Germany / FR2 / EMEA changed by -$0.4M from $1.1M to $0.7M.",
+            "evidence_refs": [
+              "driver:d2"
+            ]
+          },
+          {
+            "type": "possible_explanation",
+            "text": "Descriptions include maintenance items. [TO VERIFY] Confirm the business cause.",
+            "evidence_refs": [
+              "text:d2:1"
+            ]
+          }
+        ],
+        "confirm_prompt": "Confirm the business cause for this movement."
+      },
+      {
+        "driver_id": "d3",
+        "text": "-$0.4M — United States / DC12 / AMER changed from $0.7M to $0.3M across 268 source lines. [TO VERIFY] Confirm the business cause.",
+        "support": "needs_verification",
+        "evidence_refs": [
+          "driver:d3",
+          "trend:d3"
+        ],
+        "claims": [
+          {
+            "type": "observation",
+            "text": "United States / DC12 / AMER changed by -$0.4M from $0.7M to $0.3M.",
+            "evidence_refs": [
+              "driver:d3"
+            ]
+          },
+          {
+            "type": "possible_explanation",
+            "text": "Descriptions reference supply fan parts and quotes. [TO VERIFY] Confirm the business cause.",
+            "evidence_refs": [
+              "text:d3:1"
+            ]
+          }
+        ],
+        "confirm_prompt": "Confirm the business cause for this movement."
+      },
+      {
+        "driver_id": "d4",
+        "text": "-$0.4M — United States / NY7 / AMER changed from $0.3M to -$0.1M across 284 source lines. [TO VERIFY] Confirm the business cause.",
+        "support": "needs_verification",
+        "evidence_refs": [
+          "driver:d4",
+          "trend:d4"
+        ],
+        "claims": [
+          {
+            "type": "observation",
+            "text": "United States / NY7 / AMER changed by -$0.4M from $0.3M to -$0.1M.",
+            "evidence_refs": [
+              "driver:d4"
+            ]
+          },
+          {
+            "type": "possible_explanation",
+            "text": "Descriptions reference carrier and fire protection quotes. [TO VERIFY] Confirm the business cause.",
+            "evidence_refs": [
+              "text:d4:2"
+            ]
+          }
+        ],
+        "confirm_prompt": "Confirm the business cause for this movement."
+      },
+      {
+        "driver_id": "d5",
+        "text": "+$0.3M — Singapore / SG4 / APAC changed from $0.1M to $0.4M across 603 source lines. [TO VERIFY] Confirm the business cause.",
+        "support": "needs_verification",
+        "evidence_refs": [
+          "driver:d5",
+          "trend:d5"
+        ],
+        "claims": [
+          {
+            "type": "observation",
+            "text": "Singapore / SG4 / APAC changed by +$0.3M from $0.1M to $0.4M.",
+            "evidence_refs": [
+              "driver:d5"
+            ]
+          },
+          {
+            "type": "possible_explanation",
+            "text": "Descriptions include UPS maintenance and engineering services. [TO VERIFY] Confirm the business cause.",
+            "evidence_refs": [
+              "text:d5:1"
+            ]
+          }
+        ],
+        "confirm_prompt": "Confirm the business cause for this movement."
+      },
+      {
+        "driver_id": "others",
+        "text": "-$4.7M — Other items changed from $24.4M to $19.8M across smaller descriptions.",
+        "support": "supported",
+        "evidence_refs": [
+          "driver:others",
+          "trend:others"
+        ],
+        "claims": [
+          {
+            "type": "observation",
+            "text": "Other items changed by -$4.7M from $24.4M to $19.8M.",
+            "evidence_refs": [
+              "driver:others"
+            ]
+          }
+        ]
+      }
+    ],
+    "others_summary": "Remaining movements across smaller descriptions contributed -$4.7M in total."
+  },
+  "confidence": "high",
+  "rationale": "Generated commentary strictly adhering to the evidence pack, avoiding unapproved numbers and incorporating necessary verification tags.",
+  "questions": [],
+  "warnings": [],
+  "summary": "Commentary generated successfully for all material drivers and other items.",
+  "changes": [],
+  "validation": {
+    "ok": false,
+    "issues": [
+      "Unsupported numbers: 1,083"
+    ],
+    "line_results": [
+      {
+        "driver_id": "d1",
+        "ok": false,
+        "issues": [
+          "Unsupported numbers: 1,083"
+        ]
+      },
+      {
+        "driver_id": "d2",
+        "ok": false,
+        "issues": [
+          "Unsupported numbers: 1,083"
+        ]
+      },
+      {
+        "driver_id": "d3",
+        "ok": false,
+        "issues": [
+          "Unsupported numbers: 1,083"
+        ]
+      },
+      {
+        "driver_id": "d4",
+        "ok": false,
+        "issues": [
+          "Unsupported numbers: 1,083"
+        ]
+      },
+      {
+        "driver_id": "d5",
+        "ok": false,
+        "issues": [
+          "Unsupported numbers: 1,083"
+        ]
+      },
+      {
+        "driver_id": "others",
+        "ok": false,
+        "issues": [
+          "Unsupported numbers: 1,083"
+        ]
+      }
+    ]
+  },
+  "applied": false
+}

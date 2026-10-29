@@ -1,0 +1,131 @@
+{
+  "project_id": "3c5376dffe2849faa0ec536e85c5d235",
+  "step": "sources",
+  "sources": [],
+  "sample_data": false,
+  "spec": {
+    "spec_version": "2.0",
+    "preset": {
+      "id": "generic_flux",
+      "version": "1.0.0"
+    },
+    "flux_name": "Untitled analysis",
+    "sources": {},
+    "roles": {
+      "value": null,
+      "period": null,
+      "scenario": null,
+      "debit": null,
+      "credit": null,
+      "keys": [],
+      "dimensions": [],
+      "driver_text": []
+    },
+    "value_rules": {
+      "source": "column",
+      "null_as_zero": true,
+      "flip_sign_when": []
+    },
+    "scope": [],
+    "derive": [],
+    "periods": {
+      "calendar": "calendar"
+    },
+    "period_format": "auto",
+    "partial_periods": [],
+    "comparison": {
+      "type": "QoQ",
+      "base": {
+        "months": []
+      },
+      "current": {
+        "months": []
+      }
+    },
+    "joins": [],
+    "classification": null,
+    "measures": {},
+    "views": [],
+    "flags": [],
+    "gates": [],
+    "sections": null,
+    "decompose": null,
+    "drivers": {
+      "materiality": {
+        "mode": "abs",
+        "abs": 300000
+      },
+      "top_n": 15,
+      "others_label": "Other items"
+    },
+    "drill": {
+      "top_n": 5
+    },
+    "commentary": {
+      "units": "M",
+      "decimals": 1,
+      "verify_tag": "[TO VERIFY]",
+      "sign_style": "plus_minus",
+      "currency_symbol": "$",
+      "forbidden_terms": [],
+      "max_line_words": 35
+    },
+    "controls": [
+      {
+        "id": "required_columns",
+        "severity": "stop"
+      },
+      {
+        "id": "periods_present",
+        "severity": "stop"
+      },
+      {
+        "id": "no_duplicate_periods_across_files",
+        "severity": "stop"
+      },
+      {
+        "id": "new_or_removed_members",
+        "severity": "warn"
+      },
+      {
+        "id": "drivers_reconcile",
+        "severity": "stop"
+      },
+      {
+        "id": "flags_sum_to_rows",
+        "severity": "stop"
+      },
+      {
+        "id": "sections_reconcile",
+        "severity": "stop"
+      },
+      {
+        "id": "join_unmatched_keys",
+        "severity": "warn"
+      },
+      {
+        "id": "join_fanout",
+        "severity": "stop"
+      },
+      {
+        "id": "classification_coverage",
+        "severity": "warn",
+        "params": {
+          "minimum_percentage": 95
+        }
+      },
+      {
+        "id": "partial_period_used",
+        "severity": "warn"
+      }
+    ]
+  },
+  "runs": [],
+  "latest_proposal": null,
+  "controls": [],
+  "result": null,
+  "change_log": [],
+  "undo_stack": [],
+  "redo_stack": [],
+  "created": "2026-10-28T12:50:01.968928+00:00"
+}

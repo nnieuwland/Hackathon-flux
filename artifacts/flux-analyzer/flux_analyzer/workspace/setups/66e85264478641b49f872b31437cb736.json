@@ -1,0 +1,355 @@
+{
+  "id": "66e85264478641b49f872b31437cb736",
+  "name": "R&M FLux MoM",
+  "created_at": "2026-10-28T16:56:23.753603+00:00",
+  "created_by": "Niels",
+  "updated_at": "2026-10-28T16:56:38.973271+00:00",
+  "updated_by": "Niels",
+  "current_version": 2,
+  "versions": [
+    {
+      "version": 1,
+      "saved_at": "2026-10-28T16:56:23.753603+00:00",
+      "saved_by": "Niels",
+      "note": "First version",
+      "description": "",
+      "spec": {
+        "spec_version": "2.0",
+        "preset": {
+          "id": "generic_flux",
+          "version": "1.0.0"
+        },
+        "flux_name": "Untitled analysis",
+        "sources": {},
+        "roles": {
+          "value": "Functional_Net",
+          "period": "Period_Name",
+          "scenario": null,
+          "debit": null,
+          "credit": null,
+          "keys": [],
+          "dimensions": [
+            "Region",
+            "Country",
+            "Ibx_Code"
+          ],
+          "driver_text": [
+            "FAH_Line_Description"
+          ]
+        },
+        "value_rules": {
+          "source": "column",
+          "null_as_zero": true,
+          "flip_sign_when": []
+        },
+        "scope": [],
+        "derive": [],
+        "periods": {
+          "calendar": "calendar"
+        },
+        "period_format": "auto",
+        "partial_periods": [],
+        "comparison": {
+          "type": "MoM",
+          "base": {
+            "months": [
+              "2026-06"
+            ]
+          },
+          "current": {
+            "months": [
+              "2026-07"
+            ]
+          }
+        },
+        "joins": [],
+        "classification": null,
+        "measures": {
+          "amount": {
+            "agg": "sum",
+            "col": "Functional_Net"
+          }
+        },
+        "views": [
+          {
+            "name": "By Region, Country and IBX",
+            "keys": [
+              "Region",
+              "Country",
+              "Ibx_Code"
+            ],
+            "measures": [
+              "amount"
+            ],
+            "compare": true
+          }
+        ],
+        "flags": [],
+        "gates": [],
+        "sections": null,
+        "decompose": null,
+        "drivers": {
+          "materiality": {
+            "mode": "abs",
+            "abs": 300000
+          },
+          "top_n": 15,
+          "others_label": "Other items",
+          "view": "By Region, Country and IBX"
+        },
+        "drill": {
+          "top_n": 5
+        },
+        "commentary": {
+          "units": "M",
+          "decimals": 1,
+          "verify_tag": "[TO VERIFY]",
+          "sign_style": "plus_minus",
+          "currency_symbol": "$",
+          "forbidden_terms": [],
+          "max_line_words": 35,
+          "style_profile": {
+            "audience": "controller",
+            "length": "medium",
+            "structure": {
+              "type": "overall",
+              "split_by": null
+            },
+            "tone": "neutral",
+            "instructions": "Focus on what type of service is described that is driving the variance. ",
+            "example_style": {
+              "summary_of_style": "",
+              "sample_phrases": []
+            },
+            "include": [
+              "to_verify"
+            ],
+            "objective": "",
+            "business_context": ""
+          }
+        },
+        "controls": [
+          {
+            "id": "required_columns",
+            "severity": "stop"
+          },
+          {
+            "id": "periods_present",
+            "severity": "stop"
+          },
+          {
+            "id": "no_duplicate_periods_across_files",
+            "severity": "stop"
+          },
+          {
+            "id": "new_or_removed_members",
+            "severity": "warn"
+          },
+          {
+            "id": "drivers_reconcile",
+            "severity": "stop"
+          },
+          {
+            "id": "flags_sum_to_rows",
+            "severity": "stop"
+          },
+          {
+            "id": "sections_reconcile",
+            "severity": "stop"
+          },
+          {
+            "id": "join_unmatched_keys",
+            "severity": "warn"
+          },
+          {
+            "id": "join_fanout",
+            "severity": "stop"
+          },
+          {
+            "id": "classification_coverage",
+            "severity": "warn",
+            "params": {
+              "minimum_percentage": 95
+            }
+          },
+          {
+            "id": "partial_period_used",
+            "severity": "warn"
+          }
+        ]
+      }
+    },
+    {
+      "version": 2,
+      "saved_at": "2026-10-28T16:56:38.971736+00:00",
+      "saved_by": "Niels",
+      "note": "Updated grouping order",
+      "description": "",
+      "spec": {
+        "spec_version": "2.0",
+        "preset": {
+          "id": "generic_flux",
+          "version": "1.0.0"
+        },
+        "flux_name": "Untitled analysis",
+        "sources": {},
+        "roles": {
+          "value": "Functional_Net",
+          "period": "Period_Name",
+          "scenario": null,
+          "debit": null,
+          "credit": null,
+          "keys": [],
+          "dimensions": [
+            "Region",
+            "Country",
+            "Ibx_Code"
+          ],
+          "driver_text": [
+            "FAH_Line_Description"
+          ]
+        },
+        "value_rules": {
+          "source": "column",
+          "null_as_zero": true,
+          "flip_sign_when": []
+        },
+        "scope": [],
+        "derive": [],
+        "periods": {
+          "calendar": "calendar"
+        },
+        "period_format": "auto",
+        "partial_periods": [],
+        "comparison": {
+          "type": "MoM",
+          "base": {
+            "months": [
+              "2026-06"
+            ]
+          },
+          "current": {
+            "months": [
+              "2026-07"
+            ]
+          }
+        },
+        "joins": [],
+        "classification": null,
+        "measures": {
+          "amount": {
+            "agg": "sum",
+            "col": "Functional_Net"
+          }
+        },
+        "views": [
+          {
+            "name": "By Region, Country and IBX",
+            "keys": [
+              "Region",
+              "Country",
+              "Ibx_Code"
+            ],
+            "measures": [
+              "amount"
+            ],
+            "compare": true
+          }
+        ],
+        "flags": [],
+        "gates": [],
+        "sections": null,
+        "decompose": null,
+        "drivers": {
+          "materiality": {
+            "mode": "abs",
+            "abs": 300000
+          },
+          "top_n": 15,
+          "others_label": "Other items",
+          "view": "By Region, Country and IBX"
+        },
+        "drill": {
+          "top_n": 5
+        },
+        "commentary": {
+          "units": "M",
+          "decimals": 1,
+          "verify_tag": "[TO VERIFY]",
+          "sign_style": "plus_minus",
+          "currency_symbol": "$",
+          "forbidden_terms": [],
+          "max_line_words": 35,
+          "style_profile": {
+            "audience": "controller",
+            "length": "medium",
+            "structure": {
+              "type": "overall",
+              "split_by": null
+            },
+            "tone": "neutral",
+            "instructions": "Focus on what type of service is described that is driving the variance. ",
+            "example_style": {
+              "summary_of_style": "",
+              "sample_phrases": []
+            },
+            "include": [
+              "to_verify"
+            ],
+            "objective": "",
+            "business_context": ""
+          }
+        },
+        "controls": [
+          {
+            "id": "required_columns",
+            "severity": "stop"
+          },
+          {
+            "id": "periods_present",
+            "severity": "stop"
+          },
+          {
+            "id": "no_duplicate_periods_across_files",
+            "severity": "stop"
+          },
+          {
+            "id": "new_or_removed_members",
+            "severity": "warn"
+          },
+          {
+            "id": "drivers_reconcile",
+            "severity": "stop"
+          },
+          {
+            "id": "flags_sum_to_rows",
+            "severity": "stop"
+          },
+          {
+            "id": "sections_reconcile",
+            "severity": "stop"
+          },
+          {
+            "id": "join_unmatched_keys",
+            "severity": "warn"
+          },
+          {
+            "id": "join_fanout",
+            "severity": "stop"
+          },
+          {
+            "id": "classification_coverage",
+            "severity": "warn",
+            "params": {
+              "minimum_percentage": 95
+            }
+          },
+          {
+            "id": "partial_period_used",
+            "severity": "warn"
+          }
+        ]
+      }
+    }
+  ]
+}

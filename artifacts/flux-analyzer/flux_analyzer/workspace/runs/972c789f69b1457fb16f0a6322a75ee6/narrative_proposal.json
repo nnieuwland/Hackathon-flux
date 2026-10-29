@@ -1,0 +1,214 @@
+{
+  "contract_version": "journey-1",
+  "request_id": "8cd51977-efd0-4518-99fb-791cae670405",
+  "step": "write_commentary",
+  "status": "ok",
+  "proposal": {
+    "headline": "Regional and IBX movements for review",
+    "lines": [
+      {
+        "driver_id": "d1",
+        "text": "-$0.4M — AMER / Brazil / SP3 from $0.4M to -$2,367.70. Descriptions cite manual accruals, open purchase orders, and R&M with Vertiv Tecnologia do Brasil and Cummins motors.",
+        "support": "supported",
+        "evidence_refs": [
+          "driver:d1",
+          "text:d1:1",
+          "text:d1:5"
+        ],
+        "claims": [
+          {
+            "type": "observation",
+            "text": "AMER / Brazil / SP3 moved by -$0.4M, shifting from $0.4M to -$2,367.70.",
+            "evidence_refs": [
+              "driver:d1"
+            ]
+          },
+          {
+            "type": "observation",
+            "text": "Descriptions list Vertiv Tecnologia do Brasil R&M and Cummins Vendas e Servicos de Motores e Geradores.",
+            "evidence_refs": [
+              "text:d1:1",
+              "text:d1:5"
+            ]
+          }
+        ]
+      },
+      {
+        "driver_id": "d2",
+        "text": "-$0.4M — EMEA / Germany / FR2 from $1.1M to $0.7M. Line descriptions reference fire monitoring maintenance with Actemium Cegelec and semi-annual maintenance with Socomec.",
+        "support": "supported",
+        "evidence_refs": [
+          "driver:d2",
+          "text:d2:1",
+          "text:d2:3"
+        ],
+        "claims": [
+          {
+            "type": "observation",
+            "text": "EMEA / Germany / FR2 decreased by -$0.4M, moving from $1.1M to $0.7M.",
+            "evidence_refs": [
+              "driver:d2"
+            ]
+          },
+          {
+            "type": "observation",
+            "text": "Descriptions cite fire monitoring maintenance from Actemium Cegelec and Socomec semi-annual maintenance.",
+            "evidence_refs": [
+              "text:d2:1",
+              "text:d2:3"
+            ]
+          }
+        ]
+      },
+      {
+        "driver_id": "d3",
+        "text": "-$0.4M — AMER / United States / DC12 from $0.7M to $0.3M. Transaction descriptions cite open purchase orders and supply fan parts with EBM Papst.",
+        "support": "supported",
+        "evidence_refs": [
+          "driver:d3",
+          "text:d3:1",
+          "text:d3:4"
+        ],
+        "claims": [
+          {
+            "type": "observation",
+            "text": "AMER / United States / DC12 moved by -$0.4M, from $0.7M to $0.3M.",
+            "evidence_refs": [
+              "driver:d3"
+            ]
+          },
+          {
+            "type": "observation",
+            "text": "Descriptions refer to open purchase orders and DC12 supply fan parts from EBM Papst.",
+            "evidence_refs": [
+              "text:d3:1",
+              "text:d3:4"
+            ]
+          }
+        ]
+      },
+      {
+        "driver_id": "d4",
+        "text": "-$0.4M — AMER / United States / NY7 from $0.3M to -$0.1M. Descriptions list Carrier Corporation labor quotes, Orr Protection fire protection, and Nalco chemical services.",
+        "support": "supported",
+        "evidence_refs": [
+          "driver:d4",
+          "text:d4:2",
+          "text:d4:3",
+          "text:d4:4"
+        ],
+        "claims": [
+          {
+            "type": "observation",
+            "text": "AMER / United States / NY7 changed by -$0.4M, moving from $0.3M to -$0.1M.",
+            "evidence_refs": [
+              "driver:d4"
+            ]
+          },
+          {
+            "type": "observation",
+            "text": "Service lines indicate Carrier labor, Orr Protection fire systems, and Nalco water treatment.",
+            "evidence_refs": [
+              "text:d4:2",
+              "text:d4:3",
+              "text:d4:4"
+            ]
+          }
+        ]
+      },
+      {
+        "driver_id": "d5",
+        "text": "+$0.3M — APAC / Singapore / SG4 from $0.1M to $0.4M. Descriptions reference Eaton Electric UPS maintenance, Rockwell Automation CPOS support, and LC Engineering services.",
+        "support": "supported",
+        "evidence_refs": [
+          "driver:d5",
+          "text:d5:1",
+          "text:d5:2",
+          "text:d5:3"
+        ],
+        "claims": [
+          {
+            "type": "observation",
+            "text": "APAC / Singapore / SG4 rose by +$0.3M, increasing from $0.1M to $0.4M.",
+            "evidence_refs": [
+              "driver:d5"
+            ]
+          },
+          {
+            "type": "observation",
+            "text": "Recorded descriptions specify Eaton Electric UPS equipment, Rockwell Automation, and LC Engineering services.",
+            "evidence_refs": [
+              "text:d5:1",
+              "text:d5:2",
+              "text:d5:3"
+            ]
+          }
+        ]
+      },
+      {
+        "driver_id": "others",
+        "text": "-$4.7M — Other items from $24.4M to $19.8M. Remaining movements below the materiality threshold, grouped by the engine.",
+        "support": "supported",
+        "evidence_refs": [
+          "driver:others"
+        ],
+        "claims": [
+          {
+            "type": "observation",
+            "text": "Other items moved by -$4.7M, shifting from $24.4M to $19.8M.",
+            "evidence_refs": [
+              "driver:others"
+            ]
+          }
+        ]
+      }
+    ],
+    "others_summary": ""
+  },
+  "confidence": "high",
+  "rationale": "Commentary generated for all five material drivers and the remaining items, referencing specific service types found in the transaction descriptions without causal assumptions.",
+  "questions": [],
+  "warnings": [
+    "New or removed dimension members were found in the dataset.",
+    "History is insufficient to determine whether movements represent recurring patterns or single-period shifts."
+  ],
+  "summary": "Prepared neutral commentary highlighting the specific vendor service descriptions across the material movements for review.",
+  "changes": [],
+  "validation": {
+    "ok": true,
+    "issues": [],
+    "line_results": [
+      {
+        "driver_id": "d1",
+        "ok": true,
+        "issues": []
+      },
+      {
+        "driver_id": "d2",
+        "ok": true,
+        "issues": []
+      },
+      {
+        "driver_id": "d3",
+        "ok": true,
+        "issues": []
+      },
+      {
+        "driver_id": "d4",
+        "ok": true,
+        "issues": []
+      },
+      {
+        "driver_id": "d5",
+        "ok": true,
+        "issues": []
+      },
+      {
+        "driver_id": "others",
+        "ok": true,
+        "issues": []
+      }
+    ]
+  },
+  "applied": true
+}

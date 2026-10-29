@@ -1,0 +1,35 @@
+Period_Name,Functional_Net,Country,Account,Region,Po_Number,FAH_Line_Description,FAH_Event_Type,Accounted_Dr,Accounted_Cr
+JAN-26,947900,United Kingdom,54100,EMEA,700001,Data centre cooling maintenance,Operational,947900,0
+FEB-26,950000,United Kingdom,54100,EMEA,700001,Data centre cooling maintenance,Operational,950000,0
+MAR-26,952100,United Kingdom,54100,EMEA,700001,Data centre cooling maintenance,Operational,952100,0
+JAN-26,737900,Netherlands,54100,EMEA,700002,Preventive maintenance contract,Operational,737900,0
+FEB-26,740000,Netherlands,54100,EMEA,700002,Preventive maintenance contract,Operational,740000,0
+MAR-26,742100,Netherlands,54100,EMEA,700002,Preventive maintenance contract,Operational,742100,0
+JAN-26,617900,Germany,54100,EMEA,700003,Emergency generator servicing,Operational,617900,0
+FEB-26,620000,Germany,54100,EMEA,700003,Emergency generator servicing,Operational,620000,0
+MAR-26,622100,Germany,54100,EMEA,700003,Emergency generator servicing,Operational,622100,0
+JAN-26,487900,France,54100,EMEA,700004,Electrical inspection,Operational,487900,0
+FEB-26,490000,France,54100,EMEA,700004,Electrical inspection,Operational,490000,0
+MAR-26,492100,France,54100,EMEA,700004,Electrical inspection,Operational,492100,0
+JAN-26,357900,Spain,54100,EMEA,700005,Fire safety maintenance,Operational,357900,0
+FEB-26,360000,Spain,54100,EMEA,700005,Fire safety maintenance,Operational,360000,0
+MAR-26,362100,Spain,54100,EMEA,700005,Fire safety maintenance,Operational,362100,0
+APR-26,1277900,United Kingdom,54100,EMEA,700001,Data centre cooling maintenance,Operational,1277900,0
+MAY-26,1280000,United Kingdom,54100,EMEA,700001,Data centre cooling maintenance,Operational,1280000,0
+JUN-26,1282100,United Kingdom,54100,EMEA,700001,Data centre cooling maintenance,Operational,1282100,0
+APR-26,537900,Netherlands,54100,EMEA,700002,Preventive maintenance contract,Operational,537900,0
+MAY-26,540000,Netherlands,54100,EMEA,700002,Preventive maintenance contract,Operational,540000,0
+JUN-26,542100,Netherlands,54100,EMEA,700002,Preventive maintenance contract,Operational,542100,0
+APR-26,907900,Germany,54100,EMEA,700003,Emergency generator servicing,Operational,907900,0
+MAY-26,910000,Germany,54100,EMEA,700003,Emergency generator servicing,Operational,910000,0
+JUN-26,912100,Germany,54100,EMEA,700003,Emergency generator servicing,Operational,912100,0
+APR-26,517900,France,54100,EMEA,700004,Electrical inspection,Operational,517900,0
+MAY-26,520000,France,54100,EMEA,700004,Electrical inspection,Operational,520000,0
+JUN-26,522100,France,54100,EMEA,700004,Electrical inspection,Operational,522100,0
+APR-26,407900,Spain,54100,EMEA,700005,Fire safety maintenance,Operational,407900,0
+MAY-26,410000,Spain,54100,EMEA,700005,Fire safety maintenance,Operational,410000,0
+JUN-26,412100,Spain,54100,EMEA,700005,Fire safety maintenance,Operational,412100,0
+JAN-26,1835.16,Netherlands,54100,EMEA,800001,Cooling accrual — synthetic golden rule example,Accrual - Current,1835.16,0
+JAN-26,-1813.59,Netherlands,54100,EMEA,800001,Cooling accrual — synthetic golden rule example,Accrual - Reversal,0,1813.59
+APR-26,1804.68,Netherlands,54100,EMEA,800001,Cooling accrual — synthetic golden rule example,Accrual - Current,1804.68,0
+APR-26,-1847.66,Netherlands,54100,EMEA,800001,Cooling accrual — synthetic golden rule example,Accrual - Reversal,0,1847.66

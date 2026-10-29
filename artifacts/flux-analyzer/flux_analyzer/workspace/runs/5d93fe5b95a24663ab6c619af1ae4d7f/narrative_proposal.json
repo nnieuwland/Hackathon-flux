@@ -1,0 +1,137 @@
+{
+  "contract_version": "journey-1",
+  "request_id": "ada9311d-28d9-42ca-b319-a326267243d4",
+  "step": "write_commentary",
+  "status": "ok",
+  "proposal": {
+    "headline": "Country movement review",
+    "lines": [
+      {
+        "driver_id": "d1",
+        "text": "+$1.0M — United Kingdom. Amount changed from $2.9M to $3.8M. Descriptions include Data centre cooling maintenance.",
+        "support": "supported",
+        "evidence_refs": [
+          "driver:d1",
+          "text:d1:1"
+        ],
+        "claims": [
+          {
+            "type": "observation",
+            "text": "United Kingdom changed by +$1.0M, from $2.9M to $3.8M.",
+            "evidence_refs": [
+              "driver:d1"
+            ]
+          },
+          {
+            "type": "observation",
+            "text": "Descriptions include Data centre cooling maintenance.",
+            "evidence_refs": [
+              "text:d1:1"
+            ]
+          }
+        ]
+      },
+      {
+        "driver_id": "d2",
+        "text": "+$0.9M — Germany. Amount changed from $1.9M to $2.7M. Descriptions include Emergency generator servicing.",
+        "support": "supported",
+        "evidence_refs": [
+          "driver:d2",
+          "text:d2:1"
+        ],
+        "claims": [
+          {
+            "type": "observation",
+            "text": "Germany changed by +$0.9M, from $1.9M to $2.7M.",
+            "evidence_refs": [
+              "driver:d2"
+            ]
+          },
+          {
+            "type": "observation",
+            "text": "Descriptions include Emergency generator servicing.",
+            "evidence_refs": [
+              "text:d2:1"
+            ]
+          }
+        ]
+      },
+      {
+        "driver_id": "d3",
+        "text": "-$0.6M — Netherlands. Amount changed from $2.2M to $1.6M. Descriptions include Preventive maintenance contract.",
+        "support": "supported",
+        "evidence_refs": [
+          "driver:d3",
+          "text:d3:1"
+        ],
+        "claims": [
+          {
+            "type": "observation",
+            "text": "Netherlands changed by -$0.6M, from $2.2M to $1.6M.",
+            "evidence_refs": [
+              "driver:d3"
+            ]
+          },
+          {
+            "type": "observation",
+            "text": "Descriptions include Preventive maintenance contract.",
+            "evidence_refs": [
+              "text:d3:1"
+            ]
+          }
+        ]
+      },
+      {
+        "driver_id": "others",
+        "text": "+$0.2M — Other items. Remaining movements below the materiality threshold, grouped by the engine.",
+        "support": "supported",
+        "evidence_refs": [
+          "driver:others"
+        ],
+        "claims": [
+          {
+            "type": "observation",
+            "text": "Other items changed by +$0.2M.",
+            "evidence_refs": [
+              "driver:others"
+            ]
+          }
+        ]
+      }
+    ],
+    "others_summary": ""
+  },
+  "confidence": "high",
+  "rationale": "Drafted neutral commentary lines for all material drivers and the engine-grouped remainder, citing verified evidence references without unconfirmed causal claims.",
+  "questions": [],
+  "warnings": [],
+  "summary": "Prepared neutral commentary lines for the material movements across United Kingdom, Germany, Netherlands, and remaining other items.",
+  "changes": [],
+  "validation": {
+    "ok": true,
+    "issues": [],
+    "line_results": [
+      {
+        "driver_id": "d1",
+        "ok": true,
+        "issues": []
+      },
+      {
+        "driver_id": "d2",
+        "ok": true,
+        "issues": []
+      },
+      {
+        "driver_id": "d3",
+        "ok": true,
+        "issues": []
+      },
+      {
+        "driver_id": "others",
+        "ok": true,
+        "issues": []
+      }
+    ]
+  },
+  "applied": true
+}

@@ -1,0 +1,217 @@
+{
+  "spec_version": "2.0",
+  "preset": {
+    "id": "generic_flux",
+    "version": "1.0.0"
+  },
+  "flux_name": "Country movement review",
+  "sources": {
+    "lookups": {
+      "open_po": {
+        "files": [
+          {
+            "file": "Sample_Open_PO.xlsx",
+            "sheet": "Open PO Report ",
+            "header_row": 1,
+            "start_col": "A",
+            "end_col": null
+          }
+        ]
+      }
+    },
+    "primary": {
+      "files": [
+        {
+          "file": "Sample_GL_2026.csv",
+          "sheet": "(csv)",
+          "header_row": 1,
+          "start_col": "A",
+          "end_col": null
+        }
+      ],
+      "union": {
+        "mode": "stack",
+        "tag_column": null
+      }
+    }
+  },
+  "roles": {
+    "value": "Functional_Net",
+    "period": "Period_Name",
+    "scenario": null,
+    "debit": "Accounted_Dr",
+    "credit": "Accounted_Cr",
+    "keys": [],
+    "dimensions": [
+      "Country"
+    ],
+    "driver_text": [
+      "FAH_Line_Description"
+    ]
+  },
+  "value_rules": {
+    "source": "column",
+    "null_as_zero": true,
+    "flip_sign_when": []
+  },
+  "scope": [],
+  "derive": [],
+  "periods": {
+    "calendar": "calendar"
+  },
+  "period_format": "auto",
+  "partial_periods": [],
+  "comparison": {
+    "type": "period_vs_period",
+    "base": {
+      "months": [
+        "2026-01",
+        "2026-02",
+        "2026-03"
+      ]
+    },
+    "current": {
+      "months": [
+        "2026-04",
+        "2026-05",
+        "2026-06"
+      ]
+    }
+  },
+  "joins": [],
+  "classification": null,
+  "measures": {
+    "amount": {
+      "agg": "sum",
+      "col": "Functional_Net"
+    }
+  },
+  "views": [
+    {
+      "name": "By Country",
+      "keys": [
+        "Country"
+      ],
+      "measures": [
+        "amount"
+      ],
+      "compare": true
+    }
+  ],
+  "flags": [],
+  "gates": [],
+  "sections": null,
+  "decompose": null,
+  "drivers": {
+    "materiality": {
+      "mode": "abs",
+      "abs": 300000
+    },
+    "top_n": 15,
+    "others_label": "Other items",
+    "view": "By Country"
+  },
+  "drill": {
+    "top_n": 5
+  },
+  "commentary": {
+    "units": "M",
+    "decimals": 1,
+    "verify_tag": "[TO VERIFY]",
+    "sign_style": "plus_minus",
+    "currency_symbol": "$",
+    "forbidden_terms": [],
+    "max_line_words": 35
+  },
+  "controls": [
+    {
+      "id": "required_columns",
+      "severity": "stop"
+    },
+    {
+      "id": "periods_present",
+      "severity": "stop"
+    },
+    {
+      "id": "no_duplicate_periods_across_files",
+      "severity": "stop"
+    },
+    {
+      "id": "new_or_removed_members",
+      "severity": "warn"
+    },
+    {
+      "id": "drivers_reconcile",
+      "severity": "stop"
+    },
+    {
+      "id": "flags_sum_to_rows",
+      "severity": "stop"
+    },
+    {
+      "id": "sections_reconcile",
+      "severity": "stop"
+    },
+    {
+      "id": "join_unmatched_keys",
+      "severity": "warn"
+    },
+    {
+      "id": "join_fanout",
+      "severity": "stop"
+    },
+    {
+      "id": "classification_coverage",
+      "severity": "warn",
+      "params": {
+        "minimum_percentage": 95
+      }
+    },
+    {
+      "id": "partial_period_used",
+      "severity": "warn"
+    }
+  ],
+  "run_stamp": {
+    "run_id": "5d93fe5b95a24663ab6c619af1ae4d7f",
+    "created": "2026-10-28T14:11:30.849125+00:00",
+    "engine_version": "2.0",
+    "spec_sha256": "4d7399e2708dfd8a7370f3cad14df427136bee08322f8da83cada6570b003fa1",
+    "preset": {
+      "id": "generic_flux",
+      "version": "1.0.0"
+    },
+    "input_files": [
+      {
+        "name": "Sample_GL_2026.csv",
+        "sha256": "0136e4a15d177b4fc05eae2908fe6afed79ef71a1ee4028333e677ccf807b1bd",
+        "role": "primary",
+        "definition": {
+          "sheet": "(csv)",
+          "header_row": 1,
+          "start_col": "A",
+          "end_col": null,
+          "role": "primary",
+          "name": "Sample_GL_2026",
+          "combine_sheets": [],
+          "tag_column": null
+        }
+      },
+      {
+        "name": "Sample_Open_PO.xlsx",
+        "sha256": "e8fb31c9421449ebc6249fe4a4ee9c7791d6fa7b71c60e40741645458ea45e84",
+        "role": "lookup",
+        "definition": {
+          "sheet": "Open PO Report ",
+          "header_row": 1,
+          "start_col": "A",
+          "end_col": null,
+          "role": "lookup",
+          "name": "open_po",
+          "combine_sheets": [],
+          "tag_column": null
+        }
+      }
+    ]
+  }
+}

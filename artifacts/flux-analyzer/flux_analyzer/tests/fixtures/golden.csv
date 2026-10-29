@@ -1,0 +1,9 @@
+Period_Name,Functional_Net,Base_PO,Bucket,Description,Country
+JAN-26,1835.16,800001,Accrual - Current,Cooling accrual,Netherlands
+JAN-26,-1813.59,800001,Accrual - Reversal,Cooling reversal,Netherlands
+FEB-26,0,800001,Operational,No activity,Netherlands
+MAR-26,0,800001,Operational,No activity,Netherlands
+APR-26,1804.68,800001,Accrual - Current,Cooling accrual,Netherlands
+APR-26,-1847.66,800001,Accrual - Reversal,Cooling reversal,Netherlands
+MAY-26,0,800001,Operational,No activity,Netherlands
+JUN-26,0,800001,Operational,No activity,Netherlands

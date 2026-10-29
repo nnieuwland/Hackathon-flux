@@ -1,0 +1,53 @@
+{
+  "id": "benefits_flux",
+  "name": "Employee benefits variance",
+  "version": "1.0.0",
+  "owner": "Finance",
+  "updated_at": "2026-10-27T00:00:00+00:00",
+  "description": "Benefits cost comparison across scenarios, periods, and departments.",
+  "detect_hints": {
+    "header_keywords": ["Headcount", "Department", "Benefits", "Scenario"],
+    "text_keywords": ["employee benefits", "benefits actual", "benefits forecast"]
+  },
+  "required_sources": ["primary"],
+  "optional_sources": [],
+  "defaults": {
+    "roles": {
+      "value": "Cost", "period": "Period", "scenario": "Scenario",
+      "debit": null, "credit": null, "keys": [],
+      "dimensions": ["Department"], "driver_text": ["Description"]
+    },
+    "value_rules": {"source": "column", "flip_sign_when": []},
+    "scope": [],
+    "derive": [{"name": "Cost_per_head", "type": "ratio", "numerator": "Cost", "denominator": "Headcount"}],
+    "periods": {"calendar": "calendar"},
+    "period_format": "YYYY-MM",
+    "comparison": {
+      "type": "Actual vs Forecast",
+      "base": {"months": ["2026-01"], "scenario": "Forecast"},
+      "current": {"months": ["2026-01"], "scenario": "Actual"}
+    },
+    "measures": {
+      "amount": {"agg": "sum", "col": "{roles.value}"},
+      "Headcount": {"agg": "sum", "col": "Headcount"},
+      "Cost_per_head": {"agg": "mean", "col": "Cost_per_head"}
+    },
+    "views": [{"name": "department", "keys": ["Department"], "measures": ["amount", "Headcount", "Cost_per_head"], "compare": true}],
+    "sections": null,
+    "decompose": {"volume": "Headcount", "rate": "Cost_per_head", "method": "volume_at_base_rate", "measure": "amount", "view": "department"},
+    "flags": [],
+    "gates": [],
+    "drivers": {"view": "department", "measure": "amount", "materiality": {"mode": "abs", "abs": 0}, "top_n": 15, "others_label": "Other items"},
+    "drill": {"group_by": "{roles.driver_text}", "top_n": 5},
+    "commentary": {"units": "K", "decimals": 1, "style": "largest_first", "verify_tag": "[TO VERIFY]", "currency_symbol": "$", "sign_style": "plus_minus", "max_line_words": 35, "forbidden_terms": []},
+    "controls": [
+      {"id": "required_columns", "severity": "stop"},
+      {"id": "periods_present", "severity": "stop"},
+      {"id": "no_duplicate_periods_across_files", "severity": "stop"},
+      {"id": "new_or_removed_members", "severity": "warn"},
+      {"id": "drivers_reconcile", "severity": "stop"},
+      {"id": "flags_sum_to_rows", "severity": "stop"},
+      {"id": "sections_reconcile", "severity": "stop", "tolerance": 0.01}
+    ]
+  }
+}

@@ -1,0 +1,26 @@
+# Glossary
+
+- **Flux:** movement between current and base, not a separate engine type.
+- **FluxSpec:** versioned declarative settings controlling a calculation.
+- **Preset:** saved defaults, guidance, source hints and optional categories; no executable code.
+- **Primary fact:** financial records to aggregate.
+- **Lookup:** enrichment table joined by explicit keys.
+- **Role:** mapping from a conceptual field to an uploaded column.
+- **Scope:** AND-combined filters determining included records.
+- **Slice:** selected months, scenario and optional filters for base/current.
+- **Derived column:** deterministic field created from existing columns.
+- **Measure:** named aggregation.
+- **View:** grouped measures, optionally comparing two slices.
+- **Driver:** a grouped movement selected for explanation.
+- **Other items:** all unselected movements combined, never dropped.
+- **Materiality:** presentation threshold, not a filter removing source records.
+- **Classification:** ordered keyword assignment to categories.
+- **Flag:** one ordered label per view row.
+- **Gate:** boolean exception selection.
+- **Fanout:** one fact row becoming several rows after a lookup join.
+- **Evidence pack:** small, preformatted, aggregated facts sent to AI.
+- **Stop:** failed control that blocks results.
+- **Warning:** visible issue requiring review but not blocking calculation.
+- **Patch:** validated add/remove/replace/test operations applied atomically.
+- **SHA-256:** reproducible fingerprint of settings or input-file bytes.
+- **Verified commentary:** mechanical evidence checks passed, not independent verification of every business assertion.

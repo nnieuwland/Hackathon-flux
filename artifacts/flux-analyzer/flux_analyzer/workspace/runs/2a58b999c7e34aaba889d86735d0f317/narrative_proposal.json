@@ -1,0 +1,212 @@
+{
+  "contract_version": "journey-1",
+  "request_id": "67005ccc-0a08-4dca-89f6-59f537be4850",
+  "step": "write_commentary",
+  "status": "ok",
+  "proposal": {
+    "headline": "MoM R&M Flux Analysis: July 2026 vs June 2026",
+    "lines": [
+      {
+        "driver_id": "d1",
+        "text": "-$0.4M — AMER / Brazil / SP3 movement includes Vertiv Tecnologia do Brasil Ltda and Cummins Vendas e Servicos descriptions. [TO VERIFY] Confirm the business cause.",
+        "support": "needs_verification",
+        "evidence_refs": [
+          "driver:d1",
+          "text:d1:1",
+          "text:d1:5"
+        ],
+        "claims": [
+          {
+            "type": "observation",
+            "text": "AMER / Brazil / SP3 changed from $0.4M to -$2,367.70.",
+            "evidence_refs": [
+              "driver:d1"
+            ]
+          },
+          {
+            "type": "possible_explanation",
+            "text": "The movement relates to vendor billing descriptions. [TO VERIFY]",
+            "evidence_refs": [
+              "text:d1:1",
+              "text:d1:5"
+            ]
+          }
+        ],
+        "confirm_prompt": "Confirm the business cause for Brazil SP3."
+      },
+      {
+        "driver_id": "d2",
+        "text": "-$0.4M — EMEA / Germany / FR2 movement includes Actemium Cegelec GmbH and Socomec GmbH maintenance descriptions. [TO VERIFY] Confirm the business cause.",
+        "support": "needs_verification",
+        "evidence_refs": [
+          "driver:d2",
+          "text:d2:1",
+          "text:d2:3"
+        ],
+        "claims": [
+          {
+            "type": "observation",
+            "text": "EMEA / Germany / FR2 changed from $1.1M to $0.7M.",
+            "evidence_refs": [
+              "driver:d2"
+            ]
+          },
+          {
+            "type": "possible_explanation",
+            "text": "The movement relates to maintenance descriptions. [TO VERIFY]",
+            "evidence_refs": [
+              "text:d2:1",
+              "text:d2:3"
+            ]
+          }
+        ],
+        "confirm_prompt": "Confirm the business cause for Germany FR2."
+      },
+      {
+        "driver_id": "d3",
+        "text": "-$0.4M — AMER / United States / DC12 movement includes Ebm Papst Inc descriptions. [TO VERIFY] Confirm the business cause.",
+        "support": "needs_verification",
+        "evidence_refs": [
+          "driver:d3",
+          "text:d3:1",
+          "text:d3:3"
+        ],
+        "claims": [
+          {
+            "type": "observation",
+            "text": "AMER / United States / DC12 changed from $0.7M to $0.3M.",
+            "evidence_refs": [
+              "driver:d3"
+            ]
+          },
+          {
+            "type": "possible_explanation",
+            "text": "The movement relates to supply fan descriptions. [TO VERIFY]",
+            "evidence_refs": [
+              "text:d3:1",
+              "text:d3:3"
+            ]
+          }
+        ],
+        "confirm_prompt": "Confirm the business cause for United States DC12."
+      },
+      {
+        "driver_id": "d4",
+        "text": "-$0.4M — AMER / United States / NY7 movement includes Carrier Corporation and Orr Protection Systems descriptions. [TO VERIFY] Confirm the business cause.",
+        "support": "needs_verification",
+        "evidence_refs": [
+          "driver:d4",
+          "text:d4:2",
+          "text:d4:3"
+        ],
+        "claims": [
+          {
+            "type": "observation",
+            "text": "AMER / United States / NY7 changed from $0.3M to -$0.1M.",
+            "evidence_refs": [
+              "driver:d4"
+            ]
+          },
+          {
+            "type": "possible_explanation",
+            "text": "The movement relates to labor and fire protection descriptions. [TO VERIFY]",
+            "evidence_refs": [
+              "text:d4:2",
+              "text:d4:3"
+            ]
+          }
+        ],
+        "confirm_prompt": "Confirm the business cause for United States NY7."
+      },
+      {
+        "driver_id": "d5",
+        "text": "+$0.3M — APAC / Singapore / SG4 movement includes Eaton Electric Singapore and Rockwell Automation descriptions. [TO VERIFY] Confirm the business cause.",
+        "support": "needs_verification",
+        "evidence_refs": [
+          "driver:d5",
+          "text:d5:1",
+          "text:d5:2"
+        ],
+        "claims": [
+          {
+            "type": "observation",
+            "text": "APAC / Singapore / SG4 changed from $0.1M to $0.4M.",
+            "evidence_refs": [
+              "driver:d5"
+            ]
+          },
+          {
+            "type": "possible_explanation",
+            "text": "The movement relates to UPS and electrical equipment descriptions. [TO VERIFY]",
+            "evidence_refs": [
+              "text:d5:1",
+              "text:d5:2"
+            ]
+          }
+        ],
+        "confirm_prompt": "Confirm the business cause for Singapore SG4."
+      },
+      {
+        "driver_id": "others",
+        "text": "-$4.7M — Other items combined across remaining dimensions changed from $24.4M to $19.8M.",
+        "support": "supported",
+        "evidence_refs": [
+          "driver:others"
+        ],
+        "claims": [
+          {
+            "type": "observation",
+            "text": "Other items changed by -$4.7M.",
+            "evidence_refs": [
+              "driver:others"
+            ]
+          }
+        ]
+      }
+    ],
+    "others_summary": "Remaining movements across other dimensions total -$4.7M, moving from $24.4M to $19.8M."
+  },
+  "confidence": "high",
+  "rationale": "Generated neutral commentary for all material drivers and others between July 2026 and June 2026 following all style and evidence constraints.",
+  "questions": [],
+  "warnings": [],
+  "summary": "Prepared commentary for 5 material country/IBX movements and remaining other items.",
+  "changes": [],
+  "validation": {
+    "ok": true,
+    "issues": [],
+    "line_results": [
+      {
+        "driver_id": "d1",
+        "ok": true,
+        "issues": []
+      },
+      {
+        "driver_id": "d2",
+        "ok": true,
+        "issues": []
+      },
+      {
+        "driver_id": "d3",
+        "ok": true,
+        "issues": []
+      },
+      {
+        "driver_id": "d4",
+        "ok": true,
+        "issues": []
+      },
+      {
+        "driver_id": "d5",
+        "ok": true,
+        "issues": []
+      },
+      {
+        "driver_id": "others",
+        "ok": true,
+        "issues": []
+      }
+    ]
+  },
+  "applied": true
+}

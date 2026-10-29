@@ -1,0 +1,65 @@
+{
+  "spec_version": "1.0",
+  "flux_name": "Example — R&M QoQ",
+  "skill": "rm_flux",
+  "sources": {},
+  "roles": {
+    "value": "Functional_Net",
+    "period": "Period_Name",
+    "scenario": null,
+    "keys": ["Base_PO"],
+    "driver_text": ["FAH_Line_Description"],
+    "dimensions": ["Country", "Account"],
+    "debit": "Accounted_Dr",
+    "credit": "Accounted_Cr"
+  },
+  "scope": [{"col": "Account", "op": "startswith", "val": "54"}],
+  "derive": [
+    {"name": "Bucket", "type": "rules", "rules": [
+      {"when": {"col": "FAH_Event_Type", "op": "contains", "val": "Reversal"}, "then": "Accrual - Reversal"},
+      {"when": {"col": "FAH_Event_Type", "op": "contains", "val": "Current"}, "then": "Accrual - Current"}
+    ], "default": "Operational"},
+    {"name": "Base_PO", "type": "regex_extract", "source": ["Po_Number", "FAH_Line_Description"], "pattern": "(\\d{6,})", "strip_suffix": "_V\\d+", "default": "UNMATCHED"}
+  ],
+  "periods": {"format_in": "MON-YY", "calendar": "calendar"},
+  "comparison": {"type": "QoQ", "base": {"period": "Q1 2026"}, "current": {"period": "Q2 2026"}},
+  "measures": {
+    "amount": {"agg": "sum", "col": "{roles.value}"},
+    "M1_base": {"agg": "sum", "col": "{roles.value}", "slice": "none", "filter": [
+      {"col": "{roles.period}", "op": "eq", "val": "{base.first_month}"},
+      {"col": "Bucket", "op": "eq", "val": "Accrual - Current"}
+    ]},
+    "M1_curr": {"agg": "sum", "col": "{roles.value}", "slice": "none", "filter": [
+      {"col": "{roles.period}", "op": "eq", "val": "{current.first_month}"},
+      {"col": "Bucket", "op": "in", "val": ["Accrual - Current", "Accrual - Reversal"]}
+    ]}
+  },
+  "views": [
+    {"name": "by_country_account", "keys": ["Country", "Account"], "measures": ["amount"], "compare": true},
+    {"name": "po", "keys": ["Base_PO"], "measures": ["M1_base", "M1_curr"], "compare": false,
+      "joins": [{"lookup": "open_po", "left_on": "Base_PO", "right_on": "PO Num",
+        "fields": {"in_open_po": {"type": "exists"}, "gao_booked": {"type": "exists_where", "filter": [{"col": "GAO Comment", "op": "startswith", "val": "GAO"}]}}}]}
+  ],
+  "sections": null,
+  "decompose": null,
+  "flags": [
+    {"view": "po", "name": "Observation_Flag", "ordered": [
+      {"if": "M1_base == 0 and M1_curr == 0", "label": "No M1 accrual activity"},
+      {"if": "abs(M1_curr - M1_base) > 5000", "label": "Material movement > $5k"}
+    ], "default": "Consistent within $5k"}
+  ],
+  "gates": [{"view": "po", "name": "Exception", "if": "gao_booked and Observation_Flag == 'Material movement > $5k'"}],
+  "drivers": {"view": "by_country_account", "measure": "amount", "materiality_abs": 300000, "top_n": 15, "others_label": "Other items"},
+  "drill": {"group_by": "{roles.driver_text}", "top_n": 5},
+  "commentary": {"units": "M", "decimals": 1, "style": "largest_first", "verify_tag": "[TO VERIFY]"},
+  "controls": [
+    {"id": "required_columns", "severity": "stop"},
+    {"id": "periods_present", "severity": "stop"},
+    {"id": "no_duplicate_periods_across_files", "severity": "stop"},
+    {"id": "debit_minus_credit_equals_value", "severity": "warn", "params": {"debit": "Accounted_Dr", "credit": "Accounted_Cr"}},
+    {"id": "new_or_removed_members", "severity": "warn"},
+    {"id": "drivers_reconcile", "severity": "stop"},
+    {"id": "sections_reconcile", "severity": "stop", "tolerance": 0.01},
+    {"id": "flags_sum_to_rows", "severity": "stop"}
+  ]
+}

@@ -1,0 +1,227 @@
+{
+  "run_stamp": {
+    "run_id": "2d9ad6a79f424c46a40c41620856df90",
+    "created": "2026-10-28T14:23:41.711823+00:00",
+    "engine_version": "2.0",
+    "spec_sha256": "0964d7c5009905b14343263bfc4d4611cc49866d5ca11585bbf44538e7815f90",
+    "preset": {
+      "id": "generic_flux",
+      "version": "1.0.0"
+    },
+    "input_files": [
+      {
+        "name": "sample_test_run_for_python_scrip_on_fresh_data_AA.xlsx",
+        "sha256": "6304d0f09a8c02d2c3c2cc1dbdfa1df9d6d85a470f495e468f0df99ac8fb8de0",
+        "role": "primary",
+        "definition": {
+          "sheet": "Detail",
+          "header_row": 1,
+          "start_col": "A",
+          "end_col": null,
+          "role": "primary",
+          "name": "sample_test_run_for_python_scrip_on_fresh_data_AA",
+          "combine_sheets": [],
+          "tag_column": null
+        }
+      }
+    ]
+  },
+  "change_log": [
+    {
+      "timestamp": "2026-10-28T14:20:14.610648+00:00",
+      "actor": "user",
+      "reason": "Updated uploaded source definitions",
+      "path": "/sources/lookups",
+      "op": "add",
+      "from": null,
+      "to": {}
+    },
+    {
+      "timestamp": "2026-10-28T14:20:14.610648+00:00",
+      "actor": "user",
+      "reason": "Updated uploaded source definitions",
+      "path": "/sources/primary",
+      "op": "add",
+      "from": null,
+      "to": {
+        "files": [
+          {
+            "file": "sample_test_run_for_python_scrip_on_fresh_data_AA.xlsx",
+            "sheet": "Detail",
+            "header_row": 1,
+            "start_col": "A",
+            "end_col": null
+          }
+        ],
+        "union": {
+          "mode": "stack",
+          "tag_column": null
+        }
+      }
+    },
+    {
+      "timestamp": "2026-10-28T14:20:45.107921+00:00",
+      "actor": "preset",
+      "reason": "Loaded saved setup 'Untitled analysis' version 1",
+      "path": "/comparison/base/months",
+      "op": "replace",
+      "from": [],
+      "to": [
+        "2026-06"
+      ]
+    },
+    {
+      "timestamp": "2026-10-28T14:20:45.107921+00:00",
+      "actor": "preset",
+      "reason": "Loaded saved setup 'Untitled analysis' version 1",
+      "path": "/comparison/current/months",
+      "op": "replace",
+      "from": [],
+      "to": [
+        "2026-07"
+      ]
+    },
+    {
+      "timestamp": "2026-10-28T14:20:45.107921+00:00",
+      "actor": "preset",
+      "reason": "Loaded saved setup 'Untitled analysis' version 1",
+      "path": "/comparison/type",
+      "op": "replace",
+      "from": "QoQ",
+      "to": "period_vs_period"
+    },
+    {
+      "timestamp": "2026-10-28T14:20:45.107921+00:00",
+      "actor": "preset",
+      "reason": "Loaded saved setup 'Untitled analysis' version 1",
+      "path": "/drill/group_by",
+      "op": "add",
+      "from": null,
+      "to": "{roles.driver_text}"
+    },
+    {
+      "timestamp": "2026-10-28T14:20:45.107921+00:00",
+      "actor": "preset",
+      "reason": "Loaded saved setup 'Untitled analysis' version 1",
+      "path": "/drivers/measure",
+      "op": "add",
+      "from": null,
+      "to": "amount"
+    },
+    {
+      "timestamp": "2026-10-28T14:20:45.107921+00:00",
+      "actor": "preset",
+      "reason": "Loaded saved setup 'Untitled analysis' version 1",
+      "path": "/drivers/view",
+      "op": "add",
+      "from": null,
+      "to": "By country"
+    },
+    {
+      "timestamp": "2026-10-28T14:20:45.107921+00:00",
+      "actor": "preset",
+      "reason": "Loaded saved setup 'Untitled analysis' version 1",
+      "path": "/measures/amount",
+      "op": "add",
+      "from": null,
+      "to": {
+        "agg": "sum",
+        "col": "{roles.value}"
+      }
+    },
+    {
+      "timestamp": "2026-10-28T14:20:45.107921+00:00",
+      "actor": "preset",
+      "reason": "Loaded saved setup 'Untitled analysis' version 1",
+      "path": "/roles/dimensions",
+      "op": "replace",
+      "from": [],
+      "to": [
+        "Country",
+        "Region",
+        "Ibx_Code"
+      ]
+    },
+    {
+      "timestamp": "2026-10-28T14:20:45.107921+00:00",
+      "actor": "preset",
+      "reason": "Loaded saved setup 'Untitled analysis' version 1",
+      "path": "/roles/driver_text",
+      "op": "replace",
+      "from": [],
+      "to": [
+        "FAH_Line_Description"
+      ]
+    },
+    {
+      "timestamp": "2026-10-28T14:20:45.107921+00:00",
+      "actor": "preset",
+      "reason": "Loaded saved setup 'Untitled analysis' version 1",
+      "path": "/roles/period",
+      "op": "replace",
+      "from": null,
+      "to": "Period_Name"
+    },
+    {
+      "timestamp": "2026-10-28T14:20:45.107921+00:00",
+      "actor": "preset",
+      "reason": "Loaded saved setup 'Untitled analysis' version 1",
+      "path": "/roles/value",
+      "op": "replace",
+      "from": null,
+      "to": "Functional_Net"
+    },
+    {
+      "timestamp": "2026-10-28T14:20:45.107921+00:00",
+      "actor": "preset",
+      "reason": "Loaded saved setup 'Untitled analysis' version 1",
+      "path": "/views",
+      "op": "replace",
+      "from": [],
+      "to": [
+        {
+          "name": "By country",
+          "keys": [
+            "Country",
+            "Region",
+            "Ibx_Code"
+          ],
+          "measures": [
+            "amount"
+          ],
+          "compare": true
+        }
+      ]
+    },
+    {
+      "timestamp": "2026-10-28T14:22:56.749160+00:00",
+      "actor": "user",
+      "reason": "Changed the Explain step",
+      "path": "/commentary/style_profile",
+      "op": "add",
+      "from": null,
+      "to": {
+        "audience": "controller",
+        "length": "medium",
+        "structure": {
+          "type": "overall",
+          "split_by": null
+        },
+        "tone": "neutral",
+        "instructions": "Inspect the descriptions and tell us what the line descriptions are for. E.g what type of maintenance. ",
+        "example_style": {
+          "summary_of_style": "",
+          "sample_phrases": []
+        },
+        "include": [
+          "to_verify",
+          "one_offs",
+          "timing"
+        ],
+        "objective": "",
+        "business_context": ""
+      }
+    }
+  ],
+  "agent_logs": []
+}

@@ -1,0 +1,437 @@
+{# Simple-mode guided journey. Advanced mode (the original screens) lives in index.html. #}
+<div class="journey simple-only" x-show="mode==='simple'">
+
+<header class="j-top">
+  <div class="j-brand"><span class="mark" aria-hidden="true"><i></i></span><span>Flux Analyzer</span>
+    <small x-text="(s.loaded_setup && s.loaded_setup.name) || (s.spec||{}).flux_name || 'New analysis'"></small></div>
+  <div class="j-top-actions">
+    <span class="pill" x-show="s.agent_mock" x-cloak title="The assistant is running in offline test mode">Assistant: test mode</span>
+    <button class="btn ghost sm" x-show="s.can_undo" x-cloak :disabled="busy" @click="undoAI()" title="Undo the last change to your setup">Undo</button>
+    <button class="btn ghost sm" @click="helpOpenJ=true">Help</button>
+    <button class="btn ghost sm" @click="openSetups()">Saved setups</button>
+    <button class="btn ghost sm j-hide-sm" @click="jNewProject()">New analysis</button>
+    <div class="j-mode" role="group" aria-label="Mode">
+      <button :class="{on: mode==='simple'}" @click="setMode('simple')">Simple</button>
+      <button :class="{on: mode==='advanced'}" @click="setMode('advanced')">Advanced</button>
+    </div>
+  </div>
+</header>
+
+<nav class="j-progress" aria-label="Progress">
+  <template x-for="([key, label], i) in progressStages()" :key="key">
+    <button class="j-dot" :class="progressState(key)" :disabled="key==='steps' ? !hasData : !canOpen(key)" @click="goStage(key==='steps' ? ((s.journey||{}).first_open || 'data') : key)">
+      <span class="n" x-text="i+1"></span><span class="l" x-text="label"></span>
+    </button>
+  </template>
+</nav>
+
+<main class="j-main">
+
+  <!-- AI working: always visible, always stoppable -->
+  <div class="j-ai-working" x-show="jBusy" x-cloak role="status" aria-live="polite">
+    <span class="spin"></span>
+    <div><b x-text="jLabel"></b><small x-text="jElapsed > 3 ? jElapsed + ' seconds' : 'Starting…'"></small>
+      <small x-show="jElapsed > 20">This is taking longer than usual. You can keep waiting or continue by hand.</small></div>
+    <button class="btn sm" @click="stopAssistant()">Continue without the assistant</button>
+  </div>
+
+  <!-- What the assistant just changed -->
+  <template x-if="lastAI && !jBusy && lastAI.at===stage">
+    <section class="j-ai-result" :class="{bad: !lastAI.applied}">
+      <div class="j-ai-head"><span class="pill ai">AI</span>
+        <b x-text="lastAI.applied ? 'Changed your setup' : (lastAI.obsolete ? 'Not used — your setup changed meanwhile' : 'Nothing changed')"></b>
+        <span class="spacer"></span>
+        <button class="btn ghost sm" x-show="lastAI.applied && s.can_undo" @click="undoAI()">Undo</button>
+        <button class="btn ghost sm" @click="lastAI=null" aria-label="Dismiss">Dismiss</button></div>
+      <p x-text="lastAI.summary"></p>
+      <ul class="j-changes" x-show="lastAI.changes.length">
+        <template x-for="c in lastAI.changes.slice(0,8)"><li><span x-text="c.setting"></span>: <template x-if="c.from && c.from !== 'not set'"><span><s x-text="c.from"></s> → </span></template><b x-text="c.to"></b></li></template>
+      </ul>
+      <template x-for="w in lastAI.warnings"><p class="j-warn" x-text="w"></p></template>
+      <template x-for="q in lastAI.questions"><div class="j-q"><b x-text="q.text"></b>
+        <div class="row"><template x-for="o in (q.options||[])"><button class="chip" @click="answerQuestion(q, o)" x-text="o"></button></template></div></div></template>
+    </section>
+  </template>
+
+  <!-- 1. Upload -->
+  <section x-show="stage==='upload'" class="j-stage">
+    <div class="j-eyebrow">Upload</div>
+    <h1>Start with your ledger extract</h1>
+    <p class="j-lede">Upload a CSV or Excel file with one row per transaction or balance. We find the header row for you.</p>
+    <label class="j-drop" :class="{over: dragging}" @dragover.prevent="dragging=true" @dragleave.prevent="dragging=false" @drop.prevent="dragging=false; jUpload($event.dataTransfer.files)">
+      <input type="file" multiple accept=".csv,.xlsx,.xlsm,.xls" class="sr" @change="jUpload($event.target.files); $event.target.value=''">
+      <b>Drop files here or choose from your computer</b><span>CSV or Excel · several files are fine, e.g. one per month</span>
+    </label>
+    <div class="row j-actions-row"><button class="btn ghost" @click="jDemo()">Try it with sample data</button></div>
+    <template x-if="(s.sources||[]).length">
+      <div class="j-files">
+        <template x-for="src in s.sources" :key="src.id">
+          <div class="j-file">
+            <div><b x-text="src.name"></b><small x-text="src.defined ? (src.n_rows||0).toLocaleString() + ' rows · ' + (src.columns||[]).length + ' columns' : 'Not read yet'"></small></div>
+            <select class="in" :value="src.role || 'primary'" @change="setRole(src, $event.target.value)" aria-label="File type">
+              <option value="primary">Main data</option><option value="forecast">Forecast</option><option value="lookup">Lookup</option></select>
+            <button class="btn ghost sm" @click="jRemoveSource(src)">Remove</button>
+          </div>
+        </template>
+        <p class="j-note" x-show="s.data_warning" x-text="s.data_warning"></p>
+        <p class="j-note" x-show="(s.sources||[]).some(x=>!x.defined)">A file could not be read automatically. <button class="link" @click="setMode('advanced')">Set it up by hand</button></p>
+      </div>
+    </template>
+    <div class="j-foot"><span></span><button class="btn primary" :disabled="!hasData" @click="goStage('path')">Continue</button></div>
+  </section>
+
+  <!-- 2. Choose a path -->
+  <section x-show="stage==='path'" class="j-stage">
+    <div class="j-eyebrow">Describe your flux</div>
+    <h1>What do you want to explain?</h1>
+    <p class="j-lede">Say it the way you would to a colleague. The assistant sets up what it can and marks anything it is unsure about.</p>
+    <label class="sr" for="describe">Describe your flux</label>
+    <textarea id="describe" class="in j-big" rows="3" maxlength="3000" x-model="describeText" placeholder="e.g. Compare Q2 with Q1 by country. Explain movements over 100k, top 10."></textarea>
+    <div class="row j-examples"><span class="muted">Try:</span>
+      <template x-for="e in ['Compare the latest quarter with the previous quarter by country', 'June vs May by account, threshold 50k, top 15', 'Only EMEA, group by country, executive summary']"><button class="chip" @click="describeText=e" x-text="e"></button></template></div>
+    <div class="j-foot">
+      <button class="btn" @click="goStage('data')">Set up step by step</button>
+      <button class="btn primary" :disabled="jBusy || !describeText.trim()" @click="planFromDescription()">Set it up for me</button>
+    </div>
+    <p class="j-fine">Your description and column names (not your rows) are sent to the assistant. Amounts are always calculated by the app.</p>
+  </section>
+
+  <!-- 3. The six steps -->
+  <section x-show="stepIds.includes(stage)" class="j-stage j-step">
+      <div class="j-step-layout">
+        <aside class="j-steplist" :class="{open: mobileSteps}">
+          <button class="j-steplist-toggle" @click="mobileSteps=!mobileSteps" x-text="'Step ' + stepMeta(stage).number + ' of 6 · ' + stepMeta(stage).label"></button>
+          <ol>
+            <template x-for="st in jSteps" :key="st.id">
+              <li><button :class="{current: st.id===stage}" @click="goStage(st.id)">
+                <span class="n" x-text="st.number"></span><span class="l" x-text="st.label"></span>
+                <span class="j-status" :class="st.status" x-text="st.status==='ready' ? 'Ready' : 'Needs input'"></span></button></li>
+            </template>
+          </ol>
+        </aside>
+        <div class="j-step-body">
+          <div class="j-eyebrow" x-text="'Step ' + stepMeta(stage).number + ' of 6 · ' + stepMeta(stage).label"></div>
+          <h1 x-text="stepMeta(stage).question"></h1>
+          <p class="j-lede" x-text="stepMeta(stage).helper"></p>
+          <div class="j-flag" x-show="jStep(stage).status!=='ready'"><b>Needs input.</b> <span x-text="jStep(stage).reason"></span>
+            <button class="btn sm j-suggest" :disabled="jBusy" @click="suggestStep()">Suggest for me</button>
+            <template x-for="q in jStep(stage).questions"><div class="j-q"><b x-text="q.text"></b>
+              <div class="row"><template x-for="o in (q.options||[])"><button class="chip" @click="answerQuestion(q, o)" x-text="o"></button></template></div></div></template></div>
+          <p class="j-prov" x-show="jStep(stage).provenance" x-text="jStep(stage).provenance"></p>
+
+          <!-- Data -->
+          <div x-show="stage==='data'" class="j-form">
+            <div class="j-grid2">
+              <div><label class="f" for="f-amount">Amount column</label>
+                <select id="f-amount" class="in" x-model="fData.amount"><option value="">Choose…</option><template x-for="c in columnNames"><option :value="c" x-text="c" :selected="c===fData.amount"></option></template></select>
+                <small class="j-sample" x-show="column(fData.amount)" x-text="'e.g. ' + ((column(fData.amount)||{}).samples||[]).slice(0,3).join(' · ')"></small></div>
+              <div><label class="f" for="f-month">Month column</label>
+                <select id="f-month" class="in" x-model="fData.month"><option value="">Choose…</option><template x-for="c in columnNames"><option :value="c" x-text="c" :selected="c===fData.month"></option></template></select>
+                <small class="j-sample" x-show="column(fData.month)" x-text="'e.g. ' + ((column(fData.month)||{}).samples||[]).slice(0,3).join(' · ')"></small></div>
+              <div><label class="f" for="f-desc">Description column <span class="muted">(optional)</span></label>
+                <select id="f-desc" class="in" x-model="fData.description"><option value="">None</option><template x-for="c in columnNames"><option :value="c" x-text="c" :selected="c===fData.description"></option></template></select>
+                <small class="j-sample">Used to show what is behind each movement.</small></div>
+            </div>
+            <label class="f">Fields you may want to group by</label>
+            <div class="j-chips"><template x-for="c in columnNames.filter(c => ![fData.amount, fData.month, fData.description].includes(c))"><button class="chip" :class="{on: fData.grouping.includes(c)}" @click="toggle(fData.grouping, c, 8)" x-text="c"></button></template></div>
+            <p class="j-note" x-show="jStep('data').complex_note" x-text="jStep('data').complex_note"></p>
+          </div>
+
+          <!-- Compare -->
+          <div x-show="stage==='compare'" class="j-form">
+            <div class="row j-quick"><span class="muted">Quick choice:</span>
+              <button class="chip" @click="quickCompare('month')">Latest month vs previous</button>
+              <button class="chip" @click="quickCompare('quarter')">Latest full quarter vs previous</button>
+              <button class="chip" @click="quickCompare('year')">Latest month vs same month last year</button></div>
+            <template x-for="side in ['base','current']">
+              <div class="j-months"><label class="f" x-text="side==='current' ? 'Later period (what you are explaining)' : 'Earlier period (what you compare against)'"></label>
+                <div class="j-chips"><template x-for="m in months"><button class="chip month" :class="{on: fCompare[side].includes(m), partial: isPartial(m)}" @click="toggleMonth(side, m)" :title="isPartial(m) ? 'This month has unusually few rows' : ''"><span x-text="monthLabel(m)"></span><small x-show="isPartial(m)"> · few rows</small></button></template></div></div>
+            </template>
+            <div class="j-grid2" x-show="(s.scenarios||[]).length">
+              <div><label class="f" for="f-bs">Earlier version</label><select id="f-bs" class="in" x-model="fCompare.base_scenario"><option value="">All versions</option><template x-for="v in s.scenarios"><option :value="v" x-text="v"></option></template></select></div>
+              <div><label class="f" for="f-cs">Later version</label><select id="f-cs" class="in" x-model="fCompare.current_scenario"><option value="">All versions</option><template x-for="v in s.scenarios"><option :value="v" x-text="v"></option></template></select></div>
+            </div>
+            <p class="j-note" x-show="!months.length">Choose the month column in the Data step first.</p>
+            <p class="j-note" x-show="jStep('compare').complex_note" x-text="jStep('compare').complex_note"></p>
+          </div>
+
+          <!-- Include -->
+          <div x-show="stage==='include'" class="j-form">
+            <p class="j-empty" x-show="!fInclude.length">Every row is included.</p>
+            <template x-for="(f, i) in fInclude" :key="i">
+              <div class="j-filter">
+                <div class="row"><label class="sr" :for="'fc'+i">Column</label>
+                  <select class="in" :id="'fc'+i" x-model="f.col" @change="f.values=[]; loadValues(f.col)"><option value="">Choose a column…</option><template x-for="c in columnNames"><option :value="c" x-text="c" :selected="c===f.col"></option></template></select>
+                  <button class="btn ghost sm" @click="fInclude.splice(i,1)">Remove</button></div>
+                <template x-if="f.col && values[f.col]">
+                  <div><input class="in j-search" placeholder="Search values" x-model="valueSearch[f.col]">
+                    <div class="j-chips scroll"><template x-for="v in filteredValues(f)"><button class="chip" :class="{on: f.values.includes(v.value)}" @click="toggle(f.values, v.value)"><span x-text="v.value"></span> <small x-text="v.rows.toLocaleString()"></small></button></template></div>
+                    <small class="muted" x-text="f.values.length ? 'Only rows where ' + f.col + ' is ' + f.values.join(' or ') : 'Pick one or more values to keep.'"></small></div>
+                </template>
+              </div>
+            </template>
+            <button class="btn sm" @click="addFilter()">Add a filter</button>
+            <p class="j-note" x-show="complexScope" x-text="'This setup also has ' + complexScope + ' advanced filter(s). They are kept; open Advanced mode to change them.'"></p>
+          </div>
+
+          <!-- Group -->
+          <div x-show="stage==='group'" class="j-form">
+            <label class="f">Group movements by (up to four)</label>
+            <div class="j-chips"><template x-for="c in groupingChoices"><button class="chip" :class="{on: fGroup.includes(c)}" @click="toggle(fGroup, c, 4)"><span x-text="c"></span> <small x-text="((column(c)||{}).n_unique||0) + ' values'"></small></button></template></div>
+            <p class="j-sentence" x-show="fGroup.length" x-text="'One movement line per ' + fGroup.join(' and ') + '.'"></p>
+            <p class="j-note" x-show="jStep('group').complex_note" x-text="jStep('group').complex_note"></p>
+          </div>
+
+          <!-- Important -->
+          <div x-show="stage==='important'" class="j-form">
+            <div class="j-grid2">
+              <div><label class="f" for="f-thr">Importance threshold</label>
+                <input id="f-thr" class="in" inputmode="decimal" x-model="fImportant.threshold" :disabled="fImportant.pctRule && !fImportant.replace_rule" placeholder="e.g. 100k">
+                <small class="j-sample">Movements at or above this amount need an explanation. You can type 250k or 1.5m.</small></div>
+              <div><label class="f" for="f-top">Show at most</label>
+                <input id="f-top" class="in" type="number" min="1" max="50" x-model.number="fImportant.top_n"><small class="j-sample">The largest movements are shown first.</small></div>
+              <div><label class="f" for="f-oth">Call everything else</label>
+                <input id="f-oth" class="in" maxlength="60" x-model="fImportant.others_label"><small class="j-sample">Smaller movements are added together so the total still adds up.</small></div>
+            </div>
+            <div class="j-note" x-show="fImportant.pctRule"><span x-text="jStep('important').complex_note"></span>
+              <label class="j-check"><input type="checkbox" x-model="fImportant.replace_rule"> Replace it with a fixed amount</label></div>
+          </div>
+
+          <!-- Explain -->
+          <div x-show="stage==='explain'" class="j-form">
+            <div class="j-grid2">
+              <div><label class="f" for="f-aud">Who will read it</label><select id="f-aud" class="in" x-model="fExplain.audience"><template x-for="(l, k) in meta.audience"><option :value="k" x-text="l" :selected="k===fExplain.audience"></option></template></select></div>
+              <div><label class="f" for="f-len">Length</label><select id="f-len" class="in" x-model="fExplain.length"><template x-for="(l, k) in meta.length"><option :value="k" x-text="l" :selected="k===fExplain.length"></option></template></select></div>
+              <div><label class="f" for="f-tone">Tone</label><select id="f-tone" class="in" x-model="fExplain.tone"><template x-for="(l, k) in meta.tone"><option :value="k" x-text="l" :selected="k===fExplain.tone"></option></template></select></div>
+              <div><label class="f" for="f-split">Structure</label>
+                <select id="f-split" class="in" x-model="fExplain.structure_type"><option value="overall">One overall commentary</option><option value="split">Split into sections</option></select>
+                <select class="in" x-show="fExplain.structure_type==='split'" x-model="fExplain.split_by" aria-label="Split by"><option value="">Split by…</option><template x-for="c in columnNames"><option :value="c" x-text="c" :selected="c===fExplain.split_by"></option></template></select></div>
+            </div>
+            <label class="f">Mention</label>
+            <div class="j-chips"><template x-for="(l, k) in meta.include"><button class="chip" :class="{on: fExplain.include.includes(k)}" @click="toggle(fExplain.include, k)" x-text="l"></button></template></div>
+            <label class="f" for="f-obj">What is the commentary for? <span class="muted">(optional)</span></label>
+            <input id="f-obj" class="in" maxlength="300" x-model="fExplain.objective" placeholder="e.g. Month-end pack for the regional finance director">
+            <label class="f" for="f-ctx">What do you already know? <span class="muted">(optional, one fact per line)</span></label>
+            <textarea id="f-ctx" class="in" rows="2" maxlength="2000" x-model="fExplain.business_context" placeholder="e.g. A new maintenance contract started in Germany this quarter."></textarea>
+            <p class="muted small">The assistant can mention these facts only as “you told us”, never as findings from the data. Leave out amounts — commentary only quotes checked figures.</p>
+            <label class="f" for="f-instr">Anything else? <span class="muted">(optional)</span></label>
+            <textarea id="f-instr" class="in" rows="2" maxlength="3000" x-model="fExplain.instructions" placeholder="e.g. Use “favourable” and “adverse”. Lead with the largest movement."></textarea>
+            <details class="j-example" :open="!fExplain.example">
+              <summary>Learn the style from an example</summary>
+              <template x-if="fExplain.example"><div class="j-learned"><b>Style learned:</b> <span x-text="fExplain.example"></span>
+                <div class="row"><template x-for="p in fExplain.phrases"><span class="pill" x-text="p"></span></template></div>
+                <button class="btn ghost sm" @click="clearStyle()">Forget this style</button></div></template>
+              <textarea class="in" rows="4" maxlength="6000" x-model="exampleText" placeholder="Paste commentary you liked. Only its style is kept — never its names, amounts or dates, and the text itself is not saved."></textarea>
+              <button class="btn sm" :disabled="jBusy || !exampleText.trim()" @click="learnStyle()">Learn this style</button>
+            </details>
+          </div>
+
+          <div class="j-ask">
+            <label class="sr" :for="'ask-'+stage">Ask the assistant to change this step</label>
+            <input class="in" :id="'ask-'+stage" x-model="askText" maxlength="3000" :placeholder="'Or just say it, e.g. “' + (stepMeta(stage).examples||[''])[0] + '”'" @keydown.enter="askStep()">
+            <button class="btn" :disabled="jBusy || !askText.trim()" @click="askStep()">Apply</button>
+          </div>
+
+          <div class="j-foot">
+            <button class="btn ghost" @click="goStage(stage==='data' ? 'path' : stepIds[stepIds.indexOf(stage)-1])">Back</button>
+            <div class="row"><button class="btn" x-show="formDirty(stage)" @click="saveStep(stage)">Save</button>
+              <button class="btn primary" @click="continueStep()" x-text="stage==='explain' ? 'Review' : 'Continue'"></button></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  <!-- Review -->
+  <section x-show="stage==='review'" class="j-stage">
+    <div class="j-eyebrow">Review</div>
+    <h1>Check your setup, then run the report</h1>
+    <p class="j-lede">This is everything the report will do, in plain words. Change any step before you run it.</p>
+    <div class="j-review">
+      <template x-for="st in jSteps" :key="st.id">
+        <div class="j-rcard" :class="st.status">
+          <div class="j-rhead"><b x-text="st.number + '. ' + st.label"></b><span class="j-status" :class="st.status" x-text="st.status==='ready' ? 'Ready' : 'Needs input'"></span>
+            <button class="btn ghost sm" @click="goStage(st.id)">Change</button></div>
+          <template x-for="line in st.summary"><p x-text="line"></p></template>
+          <p class="j-warn" x-show="st.status!=='ready'" x-text="st.reason"></p>
+          <p class="j-note" x-show="st.complex_note" x-text="st.complex_note"></p>
+        </div>
+      </template>
+    </div>
+    <h3 class="j-h3">Data checks</h3>
+    <div class="j-checks">
+      <p class="muted" x-show="!controlsRan">Checking your data…</p>
+      <template x-for="c in controls" :key="c.id">
+        <div class="j-checkrow" :class="c.status"><span class="j-dot2"></span><b x-text="checkLabel(c.id)"></b><span x-text="c.status==='pass' ? 'OK' : c.message"></span></div>
+      </template>
+    </div>
+    <div class="j-foot">
+      <button class="btn ghost" @click="goStage('explain')">Back</button>
+      <button class="btn primary" :disabled="busy || !(s.journey||{}).ready_for_review || stops > 0" @click="jRun()">Run the report</button>
+    </div>
+  </section>
+
+  <!-- Results -->
+  <section x-show="stage==='results'" class="j-stage j-results">
+    <template x-if="result">
+      <div>
+        <div class="j-hero">
+          <div><div class="j-eyebrow" x-text="result.name"></div>
+            <div class="j-hero-num" :class="{neg: result.delta < 0}" x-text="signed(result.delta)"></div>
+            <p x-text="'Total movement, from ' + money(result.base) + ' to ' + money(result.current) + '.'"></p></div>
+          <div class="j-tally">
+            <div class="t red"><b x-text="expCounts.needs_explanation||0"></b><span>need your input</span></div>
+            <div class="t"><b x-text="expCounts.ai_review||0"></b><span>AI drafts to review</span></div>
+            <div class="t ok"><b x-text="expCounts.confirmed||0"></b><span>confirmed</span></div>
+          </div>
+        </div>
+
+        <div class="j-reviewer"><label class="f" for="reviewer">Your name <span class="muted">(recorded with each confirmation; not a verified sign-in)</span></label>
+          <input id="reviewer" class="in" maxlength="80" x-model="reviewer" @change="rememberReviewer()" placeholder="e.g. Ana de Vries"></div>
+
+        <h2 class="j-h2">Needs your input <span class="count" x-text="expBy('needs_explanation').length"></span></h2>
+        <p class="muted" x-show="!expBy('needs_explanation').length">Nothing is waiting for an explanation.</p>
+        <div class="row" x-show="expBy('needs_explanation').length && !expBy('ai_review').length"><button class="btn sm" :disabled="jBusy" @click="draftExplanations()">Draft explanations with AI</button></div>
+        <template x-for="item in expBy('needs_explanation')" :key="item.driver_id">
+          <article class="j-exp need">
+            <div class="j-exp-head"><b x-text="item.label"></b><span class="j-amt" :class="{neg: item.delta < 0}" x-text="item.delta_fmt"></span></div>
+            <p class="muted" x-text="money(item.base) + ' → ' + money(item.current)"></p>
+            <div class="j-evidence" x-show="item.evidence.length"><span class="muted">Largest lines behind it:</span>
+              <template x-for="e in item.evidence"><span class="pill" x-text="e.text + ' ' + e.delta_fmt"></span></template></div>
+            <p class="muted small" x-show="item.history" x-text="'History: ' + item.history"></p>
+            <p class="muted small" x-show="item.confirm_prompt" x-text="'To confirm: ' + item.confirm_prompt"></p>
+            <label class="sr" :for="'exp-'+item.driver_id">Explanation</label>
+            <textarea class="in" rows="2" :id="'exp-'+item.driver_id" x-model="expDrafts[item.driver_id]" :placeholder="item.delta_fmt + ' — ' + item.label + ': what caused it?'"></textarea>
+            <template x-for="issue in item.issues.filter(i => !/TO VERIFY/.test(i))"><p class="j-warn" x-text="issue"></p></template>
+            <div class="row"><button class="btn primary sm" :disabled="!(expDrafts[item.driver_id]||'').trim()" @click="explain(item, 'save')">Save and confirm</button>
+              <small class="muted">Include the amount exactly as shown, e.g. <span x-text="item.delta_fmt"></span>.</small></div>
+          </article>
+        </template>
+
+        <details class="j-group" :open="expOpen.ai" @toggle="expOpen.ai=$event.target.open" x-show="expBy('ai_review').length">
+          <summary><b>Explained by AI — please review</b> <span class="count" x-text="expBy('ai_review').length"></span>
+            <button class="btn sm" @click.prevent="confirmAll()">Confirm all</button></summary>
+          <template x-for="item in expBy('ai_review')" :key="item.driver_id">
+            <article class="j-exp">
+              <div class="j-exp-head"><b x-text="item.label"></b><span class="j-amt" :class="{neg: item.delta < 0}" x-text="item.delta_fmt"></span><span class="pill ai">AI draft</span></div>
+              <textarea class="in" rows="2" x-model="expDrafts[item.driver_id]"></textarea>
+              <p class="muted small" x-show="item.history" x-text="'History: ' + item.history"></p>
+              <div class="j-evidence" x-show="item.evidence.length"><template x-for="e in item.evidence"><span class="pill" x-text="e.text + ' ' + e.delta_fmt"></span></template></div>
+              <div class="row"><button class="btn sm" @click="expDrafts[item.driver_id]===item.text ? explain(item, 'confirm') : explain(item, 'save')" x-text="expDrafts[item.driver_id]===item.text ? 'Confirm' : 'Save and confirm'"></button></div>
+            </article>
+          </template>
+        </details>
+
+        <details class="j-group" :open="expOpen.rest" @toggle="expOpen.rest=$event.target.open">
+          <summary><b>Everything else</b> <span class="count" x-text="expBy('confirmed').length + expBy('below_threshold').length"></span></summary>
+          <template x-for="item in exp.filter(x => ['confirmed','below_threshold'].includes(x.status))" :key="item.driver_id">
+            <article class="j-exp done">
+              <div class="j-exp-head"><b x-text="item.label"></b><span class="j-amt" :class="{neg: item.delta < 0}" x-text="item.delta_fmt"></span><span class="j-status" :class="item.status" x-text="statusLabel(item.status)"></span></div>
+              <p x-show="item.status==='confirmed'" x-text="item.text"></p>
+              <small class="muted" x-show="item.confirmed_by" x-text="'Confirmed by ' + item.confirmed_by + ' · ' + fmtDate(item.confirmed_at)"></small>
+              <template x-if="item.pending_replacement"><div class="j-note">A newer AI draft is available: <i x-text="item.pending_replacement"></i> <button class="link" @click="explain(item, 'use_ai_draft')">Use it</button></div></template>
+            </article>
+          </template>
+        </details>
+
+        <div class="j-ask j-ask-results">
+          <label class="sr" for="ask-results">Ask about these results</label>
+          <input id="ask-results" class="in" x-model="askResult" maxlength="1000" placeholder="Ask about these results, e.g. Which country moved most?" @keydown.enter="jAsk()">
+          <button class="btn" :disabled="jBusy || !askResult.trim()" @click="jAsk()">Ask</button>
+        </div>
+        <div class="j-answer" x-show="answer" x-cloak><b x-text="answer && answer.q"></b><p x-text="answer && answer.a"></p></div>
+
+        <div class="j-downloads">
+          <a class="btn primary" :href="'/download/' + result.id + '/excel'">Download Excel review pack</a>
+          <span class="muted">Overview, commentary, reconciliation and audit trail in one workbook.</span>
+          <a class="link" :href="'/download/' + result.id + '/spec'">Setup file (JSON)</a>
+        </div>
+        <div class="j-foot"><button class="btn ghost" @click="goStage('review')">Back to review</button><button class="btn primary" @click="goStage('save')">Save this setup</button></div>
+      </div>
+    </template>
+    <p x-show="!result" class="muted">No report yet. <button class="link" @click="goStage('review')">Go to review</button></p>
+  </section>
+
+  <!-- Save -->
+  <section x-show="stage==='save'" class="j-stage">
+    <div class="j-eyebrow">Save</div>
+    <h1>Save this setup for next time</h1>
+    <p class="j-lede">Saved setups are shared with everyone using this app. Next month, load it and upload the new file.</p>
+    <div class="j-form j-narrow">
+      <template x-if="s.loaded_setup"><div class="j-note">You loaded <b x-text="s.loaded_setup.name"></b> (version <span x-text="s.loaded_setup.version"></span>).
+        <label class="f" for="sv-note">What changed? <span class="muted">(optional)</span></label><input id="sv-note" class="in" maxlength="300" x-model="setupForm.note">
+        <button class="btn primary sm" @click="saveSetup(true)">Save as a new version</button></div></template>
+      <label class="f" for="sv-name">Name</label><input id="sv-name" class="in" maxlength="120" x-model="setupForm.name" placeholder="e.g. Quarterly R&M by country">
+      <label class="f" for="sv-desc">Description</label><textarea id="sv-desc" class="in" rows="3" maxlength="1000" x-model="setupForm.description"></textarea>
+      <label class="f" for="sv-by">Your name</label><input id="sv-by" class="in" maxlength="80" x-model="reviewer">
+      <div class="j-foot"><button class="btn ghost" :disabled="jBusy" @click="suggestName()">Suggest a name and description</button>
+        <button class="btn" :class="{primary: !s.loaded_setup}" :disabled="busy || !setupForm.name.trim()" @click="saveSetup(false)">Save as a new setup</button></div>
+    </div>
+  </section>
+</main>
+
+<!-- Saved setups drawer -->
+<template x-if="setupsOpenJ">
+  <div>
+    <div class="scrim" @click="setupsOpenJ=false" style="z-index:55"></div>
+    <aside class="drawer" role="dialog" aria-modal="true" aria-labelledby="setups-title">
+      <header class="row"><b id="setups-title" style="flex:1">Saved setups</b><button class="btn ghost sm" @click="setupsOpenJ=false">Close</button></header>
+      <div class="body">
+        <template x-if="!setupDetail">
+          <div>
+            <p class="muted" x-show="!setups.length">No saved setups yet. Run a report, then save its setup.</p>
+            <template x-for="item in setups" :key="item.id">
+              <button class="j-setup" @click="viewSetup(item)"><b x-text="item.name"></b><span x-text="item.description || 'No description'"></span>
+                <small x-text="'Version ' + item.current_version + ' · ' + (item.updated_by || 'Unnamed') + ' · ' + fmtDate(item.updated_at)"></small></button>
+            </template>
+            <label class="btn sm" style="margin-top:16px">Import a setup file<input type="file" accept=".json,application/json" class="sr" @change="importSetupFile($event.target.files[0]); $event.target.value=''"></label>
+          </div>
+        </template>
+        <template x-if="setupDetail">
+          <div>
+            <button class="btn ghost sm" @click="setupDetail=null">← All setups</button>
+            <h3 x-text="setupDetail.name" style="margin-top:12px"></h3>
+            <p x-text="setupDetail.description"></p>
+            <details class="j-tech"><summary>Every rule in this setup</summary>
+              <ul class="j-rules"><template x-for="r in setupDetail.rule_descriptions"><li x-text="r"></li></template></ul></details>
+            <h3>Versions</h3>
+            <template x-for="v in setupDetail.versions.slice().reverse()" :key="v.version">
+              <div class="j-version"><div><b x-text="'Version ' + v.version"></b><small x-text="(v.saved_by||'Unnamed') + ' · ' + fmtDate(v.saved_at) + (v.note ? ' · ' + v.note : '')"></small></div>
+                <div class="row"><button class="btn sm primary" @click="loadSetupVersion(setupDetail, v.version)">Load</button><a class="btn ghost sm" :href="'/setups/' + setupDetail.id + '/export?version=' + v.version">Export</a></div></div>
+            </template>
+            <div class="row" style="margin-top:16px"><button class="btn sm" @click="renameSetup(setupDetail)">Rename</button><button class="btn sm" @click="duplicateSetup(setupDetail)">Duplicate</button></div>
+            <details class="j-danger"><summary>Delete this setup</summary>
+              <p>This removes every version for everyone. Type <b x-text="setupDetail.name"></b> to confirm.</p>
+              <input class="in" x-model="deleteName" aria-label="Type the setup name to confirm">
+              <button class="btn danger sm" :disabled="deleteName !== setupDetail.name" @click="deleteSetup(setupDetail)">Delete</button></details>
+          </div>
+        </template>
+      </div>
+    </aside>
+  </div>
+</template>
+
+<!-- Help drawer -->
+<template x-if="helpOpenJ">
+  <div>
+    <div class="scrim" @click="helpOpenJ=false" style="z-index:55"></div>
+    <aside class="drawer" role="dialog" aria-modal="true" aria-labelledby="help-title">
+      <header class="row"><b id="help-title" style="flex:1">Help</b><button class="btn ghost sm" @click="helpOpenJ=false">Close</button></header>
+      <div class="body">
+        <template x-if="helpStep"><div><h3 x-text="helpStep.label + ': ' + helpStep.question"></h3><p x-text="helpStep.help"></p>
+          <p class="muted">You can type things like:</p><ul><template x-for="e in helpStep.examples"><li x-text="e"></li></template></ul></div></template>
+        <h3>How it works</h3>
+        <p>The app calculates every amount. The assistant can set up your report from a description and draft explanations, and every change it makes can be undone. Only a person can confirm an explanation.</p>
+        <div class="row"><button class="btn sm" @click="restartTour()">Show the walkthrough again</button><a class="btn ghost sm" href="/docs" target="_blank" rel="noopener">Full guide</a></div>
+      </div>
+    </aside>
+  </div>
+</template>
+
+<!-- First-visit walkthrough -->
+<div class="j-tour" x-show="tourStep >= 0" x-cloak role="dialog" aria-live="polite" aria-labelledby="tour-title">
+  <small x-text="(tourStep+1) + ' of ' + tour.length"></small>
+  <b id="tour-title" x-text="(tour[tourStep]||{}).title"></b>
+  <p x-text="(tour[tourStep]||{}).text"></p>
+  <div class="row"><button class="btn ghost sm" @click="tourDone()">Skip</button><button class="btn primary sm" @click="tourNext()" x-text="tourStep === tour.length-1 ? 'Got it' : 'Next'"></button></div>
+</div>
+</div>

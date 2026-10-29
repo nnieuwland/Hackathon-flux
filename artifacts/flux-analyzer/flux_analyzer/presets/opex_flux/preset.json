@@ -1,0 +1,45 @@
+{
+  "id": "opex_flux",
+  "name": "Operating expense variance",
+  "version": "1.0.0",
+  "owner": "Finance",
+  "updated_at": "2026-10-27T00:00:00+00:00",
+  "description": "A general operating-expense period comparison by cost centre and account.",
+  "detect_hints": {
+    "header_keywords": ["Period", "Cost Center", "Account", "Amount"],
+    "text_keywords": ["operating expense", "opex", "cost centre"]
+  },
+  "required_sources": ["primary"],
+  "optional_sources": [],
+  "defaults": {
+    "roles": {
+      "value": "Amount", "period": "Period", "scenario": null,
+      "debit": null, "credit": null, "keys": ["Cost Center"],
+      "dimensions": ["Cost Center", "Account"], "driver_text": ["Description"]
+    },
+    "value_rules": {"source": "column", "flip_sign_when": []},
+    "scope": [],
+    "derive": [],
+    "periods": {"calendar": "calendar"},
+    "period_format": "auto",
+    "comparison": {"type": "MoM", "base": {"months": []}, "current": {"months": []}},
+    "measures": {"amount": {"agg": "sum", "col": "{roles.value}"}},
+    "views": [{"name": "opex_by_cost_center", "keys": ["Cost Center", "Account"], "measures": ["amount"], "compare": true}],
+    "sections": null,
+    "decompose": null,
+    "flags": [],
+    "gates": [],
+    "drivers": {"view": "opex_by_cost_center", "measure": "amount", "materiality": {"mode": "abs", "abs": 0}, "top_n": 15, "others_label": "Other items"},
+    "drill": {"group_by": "{roles.driver_text}", "top_n": 5},
+    "commentary": {"units": "K", "decimals": 1, "style": "largest_first", "verify_tag": "[TO VERIFY]", "currency_symbol": "$", "sign_style": "plus_minus", "max_line_words": 35, "forbidden_terms": []},
+    "controls": [
+      {"id": "required_columns", "severity": "stop"},
+      {"id": "periods_present", "severity": "stop"},
+      {"id": "no_duplicate_periods_across_files", "severity": "stop"},
+      {"id": "new_or_removed_members", "severity": "warn"},
+      {"id": "drivers_reconcile", "severity": "stop"},
+      {"id": "flags_sum_to_rows", "severity": "stop"},
+      {"id": "sections_reconcile", "severity": "stop", "tolerance": 0.01}
+    ]
+  }
+}
